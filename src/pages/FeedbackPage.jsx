@@ -1,33 +1,39 @@
-import { Bug, Lightbulb, MessageSquare, ArrowUpRight } from 'lucide-react'
+import { Bug, Lightbulb, MessageSquare, ArrowUpRight } from "lucide-react";
 
-const GITHUB_ISSUES_URL = 'https://github.com/AditthyaSS/iloveAgents/issues/new'
+const GITHUB_ISSUES_URL =
+  "https://github.com/AditthyaSS/iloveAgents/issues/new";
 
 const feedbackOptions = [
   {
-    title: 'Report a bug',
-    description: "Something isn't working as expected? Let us know what went wrong.",
+    title: "Report a bug",
+    description:
+      "Something isn't working as expected? Let us know what went wrong.",
     icon: Bug,
     url: `${GITHUB_ISSUES_URL}?template=bug_report.yml`,
   },
   {
-    title: 'Suggest a feature',
-    description: 'Have an idea that could make iloveAgents better? Share your suggestion.',
+    title: "Suggest a feature",
+    description:
+      "Have an idea that could make iloveAgents better? Share your suggestion.",
     icon: Lightbulb,
     url: `${GITHUB_ISSUES_URL}?template=feature_request.yml`,
   },
   {
-    title: 'General feedback',
-    description: 'Share your thoughts, experience, or anything else you would like us to know.',
+    title: "General feedback",
+    description:
+      "Share your thoughts, experience, or anything else you would like us to know.",
     icon: MessageSquare,
     url: `${GITHUB_ISSUES_URL}?template=general_feedback.yml`,
   },
-]
+];
 
 export default function FeedbackPage() {
   return (
     <div className="max-w-5xl mx-auto py-6 sm:py-10">
       <div className="max-w-2xl mb-10">
-        <p className="text-sm font-medium text-accent mb-2">We'd love to hear from you</p>
+        <p className="text-sm font-medium text-accent mb-2">
+          We'd love to hear from you
+        </p>
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
           Feedback
         </h1>
@@ -69,8 +75,9 @@ export default function FeedbackPage() {
       </div>
 
       <p className="mt-8 text-sm text-gray-500 dark:text-gray-500 text-center">
-        Feedback will open GitHub so the maintainers can review and respond to it.
+        Feedback will open GitHub so the maintainers can review and respond to
+        it.
       </p>
     </div>
-  )
+  );
 }

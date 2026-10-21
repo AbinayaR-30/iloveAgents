@@ -137,7 +137,7 @@ export const DEFAULT_RECOMMENDATION_WEIGHTS = {
   freeTextDescription: 5,
   experience: 3,
   urgency: 3,
-}
+};
 ```
 
 Expose weights as a parameter to `recommendAgents()` so tests and future experiments can override them without editing scoring code.

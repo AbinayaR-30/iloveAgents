@@ -1,73 +1,73 @@
 const proposalDocumentGenerator = {
-  id: 'proposal-document-generator',
+  id: "proposal-document-generator",
 
-  name: 'Proposal Document Generator',
+  name: "Proposal Document Generator",
 
   description:
-    'Generates professional client proposals with an executive summary, problem statement, solution overview, deliverables, pricing, timeline, expected outcomes, and next steps.',
+    "Generates professional client proposals with an executive summary, problem statement, solution overview, deliverables, pricing, timeline, expected outcomes, and next steps.",
 
-  category: 'Sales',
+  category: "Sales",
 
-  icon: 'FileText',
+  icon: "FileText",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'openai',
+  defaultProvider: "openai",
 
-  model: 'gpt-4o',
+  model: "gpt-4o",
 
   exampleInputs: {
-    clientName: 'BrightPath Healthcare',
-    projectType: 'AI-powered CRM implementation',
+    clientName: "BrightPath Healthcare",
+    projectType: "AI-powered CRM implementation",
     problem:
-      'The client struggles with missed patient follow-ups and manual scheduling workflows.',
+      "The client struggles with missed patient follow-ups and manual scheduling workflows.",
     solution:
-      'Implement an AI-powered CRM platform with automated reminders, appointment scheduling, and workflow dashboards.',
-    pricing: '$12,000 implementation + $500/month subscription',
-    timeline: '6 weeks',
+      "Implement an AI-powered CRM platform with automated reminders, appointment scheduling, and workflow dashboards.",
+    pricing: "$12,000 implementation + $500/month subscription",
+    timeline: "6 weeks",
   },
 
   inputs: [
     {
-      id: 'clientName',
-      label: 'Client Name',
-      type: 'text',
-      placeholder: 'Enter the client or company name...',
+      id: "clientName",
+      label: "Client Name",
+      type: "text",
+      placeholder: "Enter the client or company name...",
       required: true,
     },
     {
-      id: 'projectType',
-      label: 'Project Type',
-      type: 'text',
-      placeholder: 'Describe the type of project or service...',
+      id: "projectType",
+      label: "Project Type",
+      type: "text",
+      placeholder: "Describe the type of project or service...",
       required: true,
     },
     {
-      id: 'problem',
-      label: 'Client Problem',
-      type: 'textarea',
-      placeholder: 'Describe the client problem or business challenge...',
+      id: "problem",
+      label: "Client Problem",
+      type: "textarea",
+      placeholder: "Describe the client problem or business challenge...",
       required: true,
     },
     {
-      id: 'solution',
-      label: 'Proposed Solution',
-      type: 'textarea',
-      placeholder: 'Describe the solution you are proposing...',
+      id: "solution",
+      label: "Proposed Solution",
+      type: "textarea",
+      placeholder: "Describe the solution you are proposing...",
       required: true,
     },
     {
-      id: 'pricing',
-      label: 'Pricing',
-      type: 'textarea',
-      placeholder: 'Enter pricing details, packages, or cost breakdown...',
+      id: "pricing",
+      label: "Pricing",
+      type: "textarea",
+      placeholder: "Enter pricing details, packages, or cost breakdown...",
       required: true,
     },
     {
-      id: 'timeline',
-      label: 'Timeline',
-      type: 'textarea',
-      placeholder: 'Enter the expected project timeline or milestones...',
+      id: "timeline",
+      label: "Timeline",
+      type: "textarea",
+      placeholder: "Enter the expected project timeline or milestones...",
       required: true,
     },
   ],
@@ -121,7 +121,7 @@ Keep the proposal professional, clear, client-focused, and ready to share.
 Do not invent facts, pricing, timelines, guarantees, deliverables, outcomes, or commitments that were not provided by the user.
 `,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default proposalDocumentGenerator;

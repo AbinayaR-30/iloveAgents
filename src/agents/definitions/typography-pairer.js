@@ -10,7 +10,8 @@ export default {
   defaultProvider: "openai",
   model: "gpt-4o",
   exampleInputs: {
-    description: "A luxury skincare brand website that feels premium and editorial.",
+    description:
+      "A luxury skincare brand website that feels premium and editorial.",
     mood: "Luxury",
     outputFormat: "CSS custom properties",
   },
@@ -44,11 +45,7 @@ export default {
       id: "outputFormat",
       label: "Code format",
       type: "select",
-      options: [
-        "CSS custom properties",
-        "Tailwind config",
-        "Both",
-      ],
+      options: ["CSS custom properties", "Tailwind config", "Both"],
       defaultValue: "CSS custom properties",
       required: true,
     },
@@ -69,9 +66,9 @@ For each pairing, show:
 **Best for:** tag1, tag2, tag3
 
 #### Preview
-- **Heading:** [Font Name] — [weight, style note]
-- **Body:** [Font Name] — [weight, style note]
-- **Accent:** [Font Name] — [optional, for captions/labels]
+- **Heading:** [Font Name] ï¿½ [weight, style note]
+- **Body:** [Font Name] ï¿½ [weight, style note]
+- **Accent:** [Font Name] ï¿½ [optional, for captions/labels]
 
 #### Sample Text
 [Show a short heading in the heading font style]

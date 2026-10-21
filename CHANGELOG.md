@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Initial public release of iloveAgents — a community-built, open source platform
 for running AI agents directly in the browser. No sign-up. No backend. Bring your own API key.
 
-###  Core Platform
+### Core Platform
 
 - Config-driven agent registry (`src/agents/registry.js`) — agents are auto-collected from `src/agents/definitions/`
 - Unified LLM adapter (`src/lib/llmAdapter.js`) supporting one-shot and streaming modes
@@ -33,9 +33,10 @@ for running AI agents directly in the browser. No sign-up. No backend. Bring you
 - Copy output, Share, and Download buttons on agent results
 - `ScorecardOutput` component for structured JSON output visualisation
 
-###  Agents Added 
+### Agents Added
 
-####  Engineering 
+#### Engineering
+
 - **Accessibility Audit Generator** — WCAG audit from HTML with issues, severity ratings, and fixes
 - **API Doc Generator** — paste code, get professional API docs with examples
 - **API Error Message Writer** — generate clear, user-friendly API error messages
@@ -53,7 +54,8 @@ for running AI agents directly in the browser. No sign-up. No backend. Bring you
 - **Regex Generator** — plain English → tested regex patterns with breakdowns
 - **Unit Test Generator** — paste a function, get full unit tests with edge cases
 
-####  Business & Product 
+#### Business & Product
+
 - **Competitive Analysis Generator** — structured competitive analysis from product and competitor names
 - **Proposal Document Generator** — generate professional project or business proposals
 - **Sales Discovery Call Script Generator** — tailored discovery call scripts for B2B sales
@@ -62,13 +64,15 @@ for running AI agents directly in the browser. No sign-up. No backend. Bring you
 - **User Story Writer** — feature descriptions → user stories with acceptance criteria and edge cases
 - **Win-Loss Analysis Report Generator** — structured win/loss analysis from deal notes
 
-####  Data & ML 
+#### Data & ML
+
 - **Data Cleaning Plan Generator** — generate a data cleaning strategy from dataset descriptions
 - **Dataset Description Generator** — generate metadata and descriptions for datasets
 - **Mock Data Generator** — generate realistic mock data for testing
 - **ML Experiment Report Generator** — document ML experiments with metrics and conclusions
 
-####  Marketing & Content 
+#### Marketing & Content
+
 - **Blog Post SEO Optimizer** — optimise blog posts for search with keyword and structure suggestions
 - **Cold Email Writer** — personalised B2B cold emails with tone and length control
 - **LinkedIn Outreach Message Writer** — personalised LinkedIn connection messages
@@ -77,51 +81,57 @@ for running AI agents directly in the browser. No sign-up. No backend. Bring you
 - **Social Media Thread Writer** — X/Twitter threads with hooks and call to action
 - **SEO Keyword Planner** — keyword research and content strategy from a topic
 
-####  HR 
+#### HR
+
 - **Cover Letter Writer** — tailored cover letters from job description and background
 - **Performance Review Writer** — structured, fair performance reviews from bullet notes
 - **Resume Screener** — evaluate candidates against job descriptions with visual scorecard
 - **GitHub Issue Claim Comment Generator** — generate well-structured issue claim comments for open source
 
-####  Education 
+#### Education
+
 - **ELI5 Explainer** — explain complex topics at your chosen difficulty level
 - **Flashcard Generator** — paste study material, get Q&A flashcards for Anki or Quizlet
 - **Grant Proposal Writer** — structured grant proposals with problem statement and methodology
 
-####  Health 
+#### Health
+
 - **Health & Wellness Plan Generator** — personalised wellness plans from health goals
 - **Medication Interaction Explainer** — explain potential medication interactions in plain language
 - **Patient Discharge Summary Writer** — structured discharge summaries from clinical notes
 
-####  Finance & Legal 
+#### Finance & Legal
+
 - **Personal Budget Analyzer** — analyse spending and generate a budget plan
 - **Privacy Policy Generator** — comprehensive privacy policy draft from app description
 - **Technical Debt Report Generator** — document and prioritise technical debt
 
-####  Productivity 
+#### Productivity
+
 - **Email Reply Writer** — paste any email, describe intent, get a polished reply
 - **Invoice Description Generator** — turn work notes into polished invoice line items
 - **Meeting Notes Summarizer** — raw meeting notes → clean summaries with decisions and action items
 - **PDF Summarizer** — structured summaries with key points and action items from PDF text
 
-####  Research 
+#### Research
+
 - **Persona Generator** — detailed realistic user personas with goals and frustrations
 - **Research Agent** — comprehensive research on any topic with configurable depth
 
-###  Tech Stack
+### Tech Stack
 
-| Technology | Version | Purpose |
-|---|---|---|
-| React | 18.3.1 | Component framework |
-| Vite | 6.0.1 | Build tool and dev server |
-| Tailwind CSS | 3.4.15 | Styling |
-| React Router | 6.28.0 | Client-side routing |
-| Lucide React | 0.468.0 | Icons |
-| react-markdown | 9.0.1 | Markdown rendering |
-| react-syntax-highlighter | 15.6.1 | Code highlighting |
-| Supabase JS | 2.105.4 | (Auth/DB — optional integration) |
+| Technology               | Version | Purpose                          |
+| ------------------------ | ------- | -------------------------------- |
+| React                    | 18.3.1  | Component framework              |
+| Vite                     | 6.0.1   | Build tool and dev server        |
+| Tailwind CSS             | 3.4.15  | Styling                          |
+| React Router             | 6.28.0  | Client-side routing              |
+| Lucide React             | 0.468.0 | Icons                            |
+| react-markdown           | 9.0.1   | Markdown rendering               |
+| react-syntax-highlighter | 15.6.1  | Code highlighting                |
+| Supabase JS              | 2.105.4 | (Auth/DB — optional integration) |
 
-###  Documentation & Community Files
+### Documentation & Community Files
 
 - `README.md` — full setup, architecture, contributing guide, and agent table
 - `CONTRIBUTING.md` — how to add an agent in 3 steps
@@ -143,4 +153,4 @@ Adding a new agent takes about 5 minutes — just add one config object to `src/
 
 ---
 
-*Built with ❤️ by [@AditthyaSS](https://github.com/AditthyaSS) and the open source community.*
+_Built with ❤️ by [@AditthyaSS](https://github.com/AditthyaSS) and the open source community._

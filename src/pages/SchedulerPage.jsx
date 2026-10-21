@@ -1,58 +1,76 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
-  Clock, Play, Trash2, ToggleLeft, ToggleRight,
-  ChevronDown, ChevronRight, AlertCircle, CheckCircle2,
-  Calendar, Zap, Loader2, X
-} from 'lucide-react'
-import { useScheduler, SCHEDULE_OPTIONS } from '../lib/useScheduler'
-import OutputRenderer from '../components/OutputRenderer'
-import { useDocumentTitle } from '../lib/useDocumentTitle'
+  Clock,
+  Play,
+  Trash2,
+  ToggleLeft,
+  ToggleRight,
+  ChevronDown,
+  ChevronRight,
+  AlertCircle,
+  CheckCircle2,
+  Calendar,
+  Zap,
+  Loader2,
+  X,
+} from "lucide-react";
+import { useScheduler, SCHEDULE_OPTIONS } from "../lib/useScheduler";
+import OutputRenderer from "../components/OutputRenderer";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 function formatNextRun(nextRunAt) {
-  if (!nextRunAt) return '—'
-  const diff = nextRunAt - Date.now()
-  if (diff <= 0) return 'Due now'
-  const mins = Math.floor(diff / 60_000)
-  const hrs = Math.floor(mins / 60)
-  const days = Math.floor(hrs / 24)
-  if (days > 0) return `in ${days}d ${hrs % 24}h`
-  if (hrs > 0) return `in ${hrs}h ${mins % 60}m`
-  return `in ${mins}m`
+  if (!nextRunAt) return "—";
+  const diff = nextRunAt - Date.now();
+  if (diff <= 0) return "Due now";
+  const mins = Math.floor(diff / 60_000);
+  const hrs = Math.floor(mins / 60);
+  const days = Math.floor(hrs / 24);
+  if (days > 0) return `in ${days}d ${hrs % 24}h`;
+  if (hrs > 0) return `in ${hrs}h ${mins % 60}m`;
+  return `in ${mins}m`;
 }
 
 function formatDate(ts) {
-  if (!ts) return 'Never'
+  if (!ts) return "Never";
   return new Date(ts).toLocaleString(undefined, {
-    month: 'short', day: 'numeric',
-    hour: '2-digit', minute: '2-digit',
-  })
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 function formatDuration(ms) {
-  if (!ms) return ''
-  if (ms < 1000) return `${ms}ms`
-  return `${(ms / 1000).toFixed(1)}s`
+  if (!ms) return "";
+  if (ms < 1000) return `${ms}ms`;
+  return `${(ms / 1000).toFixed(1)}s`;
 }
 
 export default function SchedulerPage() {
-  useDocumentTitle('Scheduled Agents')
+  useDocumentTitle("Scheduled Agents");
 
   const {
-    jobs, results, running,
-    toggleJob, deleteJob, runJob,
-    deleteResult, clearResultsForJob,
-  } = useScheduler()
+    jobs,
+    results,
+    running,
+    toggleJob,
+    deleteJob,
+    runJob,
+    deleteResult,
+    clearResultsForJob,
+  } = useScheduler();
 
-  const [expandedJob, setExpandedJob] = useState(null)
-  const [expandedResult, setExpandedResult] = useState(null)
-  const [confirmDelete, setConfirmDelete] = useState(null)
+  const [expandedJob, setExpandedJob] = useState(null);
+  const [expandedResult, setExpandedResult] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
   const handleRequestNotification = () => {
-    if (!('Notification' in window)) return
-    Notification.requestPermission()
-  }
+    if (!("Notification" in window)) return;
+    Notification.requestPermission();
+  };
 
-  const notifStatus = 'Notification' in window ? Notification.permission : 'unsupported'
+  const notifStatus =
+    "Notification" in window ? Notification.permission : "unsupported";
 
   return (
     <div className="max-w-3xl mx-auto animate-fade-in">
@@ -66,12 +84,13 @@ export default function SchedulerPage() {
             </h1>
           </div>
           <p className="text-xs dark:text-text-secondary text-gray-500">
-            Agents you've scheduled to run automatically. Results are saved here and delivered via browser notifications.
+            Agents you've scheduled to run automatically. Results are saved here
+            and delivered via browser notifications.
           </p>
         </div>
 
         {/* Notification permission banner */}
-        {notifStatus === 'default' && (
+        {notifStatus === "default" && (
           <button
             onClick={handleRequestNotification}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium
@@ -81,7 +100,7 @@ export default function SchedulerPage() {
             Enable notifications
           </button>
         )}
-        {notifStatus === 'denied' && (
+        {notifStatus === "denied" && (
           <div className="flex items-center gap-1.5 text-xs text-amber-500">
             <AlertCircle size={13} />
             Notifications blocked
@@ -99,7 +118,8 @@ export default function SchedulerPage() {
             No scheduled agents yet
           </h3>
           <p className="text-xs dark:text-text-secondary text-gray-500 max-w-xs mx-auto">
-            Open any agent, fill in your inputs, then click "Schedule" to set it to run automatically.
+            Open any agent, fill in your inputs, then click "Schedule" to set it
+            to run automatically.
           </p>
         </div>
       )}
@@ -107,11 +127,13 @@ export default function SchedulerPage() {
       {/* Jobs list */}
       {jobs.length > 0 && (
         <div className="space-y-3 mb-8">
-          {jobs.map(job => {
-            const jobResults = results.filter(r => r.jobId === job.id)
-            const isRunning = running[job.id]
-            const scheduleLabel = SCHEDULE_OPTIONS.find(s => s.value === job.schedule)?.label ?? job.schedule
-            const isExpanded = expandedJob === job.id
+          {jobs.map((job) => {
+            const jobResults = results.filter((r) => r.jobId === job.id);
+            const isRunning = running[job.id];
+            const scheduleLabel =
+              SCHEDULE_OPTIONS.find((s) => s.value === job.schedule)?.label ??
+              job.schedule;
+            const isExpanded = expandedJob === job.id;
 
             return (
               <div
@@ -124,10 +146,14 @@ export default function SchedulerPage() {
                   {/* Toggle */}
                   <button
                     onClick={() => toggleJob(job.id)}
-                    className={`flex-shrink-0 transition-colors ${job.enabled ? 'text-accent' : 'dark:text-text-muted text-gray-300'}`}
-                    title={job.enabled ? 'Disable' : 'Enable'}
+                    className={`flex-shrink-0 transition-colors ${job.enabled ? "text-accent" : "dark:text-text-muted text-gray-300"}`}
+                    title={job.enabled ? "Disable" : "Enable"}
                   >
-                    {job.enabled ? <ToggleRight size={22} /> : <ToggleLeft size={22} />}
+                    {job.enabled ? (
+                      <ToggleRight size={22} />
+                    ) : (
+                      <ToggleLeft size={22} />
+                    )}
                   </button>
 
                   {/* Info */}
@@ -171,10 +197,14 @@ export default function SchedulerPage() {
                         dark:text-text-secondary text-gray-500 hover:text-accent
                         disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                      {isRunning
-                        ? <Loader2 size={15} className="animate-spin text-accent" />
-                        : <Play size={15} />
-                      }
+                      {isRunning ? (
+                        <Loader2
+                          size={15}
+                          className="animate-spin text-accent"
+                        />
+                      ) : (
+                        <Play size={15} />
+                      )}
                     </button>
 
                     {/* Expand results */}
@@ -184,17 +214,22 @@ export default function SchedulerPage() {
                       className="p-1.5 rounded-md dark:hover:bg-surface-hover hover:bg-gray-100 transition-colors
                         dark:text-text-secondary text-gray-500"
                     >
-                      {isExpanded
-                        ? <ChevronDown size={15} />
-                        : <ChevronRight size={15} />
-                      }
+                      {isExpanded ? (
+                        <ChevronDown size={15} />
+                      ) : (
+                        <ChevronRight size={15} />
+                      )}
                     </button>
 
                     {/* Delete */}
                     {confirmDelete === job.id ? (
                       <div className="flex items-center gap-1">
                         <button
-                          onClick={() => { deleteJob(job.id); clearResultsForJob(job.id); setConfirmDelete(null) }}
+                          onClick={() => {
+                            deleteJob(job.id);
+                            clearResultsForJob(job.id);
+                            setConfirmDelete(null);
+                          }}
                           className="text-[10px] font-medium text-red-500 hover:text-red-600 px-2 py-1 rounded-md bg-red-500/10 transition-colors"
                         >
                           Confirm
@@ -230,7 +265,8 @@ export default function SchedulerPage() {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-[11px] font-semibold uppercase tracking-wider dark:text-text-muted text-gray-400">
-                            {jobResults.length} result{jobResults.length !== 1 ? 's' : ''}
+                            {jobResults.length} result
+                            {jobResults.length !== 1 ? "s" : ""}
                           </span>
                           <button
                             onClick={() => clearResultsForJob(job.id)}
@@ -239,12 +275,16 @@ export default function SchedulerPage() {
                             Clear all
                           </button>
                         </div>
-                        {jobResults.map(result => (
+                        {jobResults.map((result) => (
                           <ResultCard
                             key={result.id}
                             result={result}
                             expanded={expandedResult === result.id}
-                            onToggle={() => setExpandedResult(expandedResult === result.id ? null : result.id)}
+                            onToggle={() =>
+                              setExpandedResult(
+                                expandedResult === result.id ? null : result.id,
+                              )
+                            }
                             onDelete={() => deleteResult(result.id)}
                           />
                         ))}
@@ -253,31 +293,32 @@ export default function SchedulerPage() {
                   </div>
                 )}
               </div>
-            )
+            );
           })}
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function ResultCard({ result, expanded, onToggle, onDelete }) {
   return (
     <div className="rounded-lg border dark:border-border border-gray-100 dark:bg-surface-hover bg-gray-50 overflow-hidden">
       <div className="flex items-center gap-2 px-3 py-2">
-        {result.error
-          ? <AlertCircle size={13} className="text-red-400 flex-shrink-0" />
-          : <CheckCircle2 size={13} className="text-emerald-400 flex-shrink-0" />
-        }
+        {result.error ? (
+          <AlertCircle size={13} className="text-red-400 flex-shrink-0" />
+        ) : (
+          <CheckCircle2 size={13} className="text-emerald-400 flex-shrink-0" />
+        )}
         <span className="text-[11px] dark:text-text-secondary text-gray-600 flex-1">
           {formatDate(result.ranAt)}
-          {result.duration ? ` · ${formatDuration(result.duration)}` : ''}
+          {result.duration ? ` · ${formatDuration(result.duration)}` : ""}
         </span>
         <button
           onClick={onToggle}
           className="text-[10px] text-accent hover:underline"
         >
-          {expanded ? 'Hide' : 'View'}
+          {expanded ? "Hide" : "View"}
         </button>
         <button
           onClick={onDelete}
@@ -304,5 +345,5 @@ function ResultCard({ result, expanded, onToggle, onDelete }) {
         </div>
       )}
     </div>
-  )
+  );
 }

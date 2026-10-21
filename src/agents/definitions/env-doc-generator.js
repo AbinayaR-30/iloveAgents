@@ -4,8 +4,8 @@ export default {
   name: "Env Doc Generator",
 
   description:
-  "Generate clean markdown documentation tables from .env.example files with descriptions, defaults, and usage examples.",
-  
+    "Generate clean markdown documentation tables from .env.example files with descriptions, defaults, and usage examples.",
+
   category: "Engineering",
   icon: "FileText",
   provider: "any",

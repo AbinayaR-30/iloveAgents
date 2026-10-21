@@ -1,19 +1,20 @@
-import { useState } from 'react'
-import { ChevronDown, CheckCircle2, XCircle, Timer } from 'lucide-react'
-import { formatDuration } from '../lib/executionTrace'
+import { useState } from "react";
+import { ChevronDown, CheckCircle2, XCircle, Timer } from "lucide-react";
+import { formatDuration } from "../lib/executionTrace";
 
 const BAR_COLORS = {
-  done: 'bg-emerald-400/70',
-  failed: 'bg-red-400/70',
-}
+  done: "bg-emerald-400/70",
+  failed: "bg-red-400/70",
+};
 
 function StepStatusIcon({ status }) {
-  if (status === 'failed') return <XCircle size={14} className="text-red-400" />
-  return <CheckCircle2 size={14} className="text-emerald-400" />
+  if (status === "failed")
+    return <XCircle size={14} className="text-red-400" />;
+  return <CheckCircle2 size={14} className="text-emerald-400" />;
 }
 
 function TraceStep({ step, index, defaultOpen }) {
-  const [open, setOpen] = useState(defaultOpen)
+  const [open, setOpen] = useState(defaultOpen);
 
   return (
     <div
@@ -33,7 +34,9 @@ function TraceStep({ step, index, defaultOpen }) {
           <span className="text-sm font-medium dark:text-text-primary text-gray-900 truncate block">
             {step.stepName}
           </span>
-          <span className="text-[11px] dark:text-text-muted text-gray-400">{step.stepType}</span>
+          <span className="text-[11px] dark:text-text-muted text-gray-400">
+            {step.stepType}
+          </span>
         </div>
         <span
           className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium
@@ -45,7 +48,7 @@ function TraceStep({ step, index, defaultOpen }) {
         <StepStatusIcon status={step.status} />
         <ChevronDown
           size={14}
-          className={`dark:text-text-muted text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`dark:text-text-muted text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -54,7 +57,9 @@ function TraceStep({ step, index, defaultOpen }) {
           {step.error && (
             <div className="p-2.5 rounded-md bg-red-500/10 border border-red-500/20">
               <p className="text-xs font-medium text-red-400 mb-0.5">Error</p>
-              <p className="text-xs text-red-400/80 break-words">{step.error}</p>
+              <p className="text-xs text-red-400/80 break-words">
+                {step.error}
+              </p>
             </div>
           )}
           <TracePayload label="Input" value={step.input} />
@@ -62,11 +67,11 @@ function TraceStep({ step, index, defaultOpen }) {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function TracePayload({ label, value }) {
-  if (value == null || value === '') return null
+  if (value == null || value === "") return null;
   return (
     <div>
       <p className="text-[11px] font-semibold uppercase tracking-wide mb-1 dark:text-text-muted text-gray-400">
@@ -79,7 +84,7 @@ function TracePayload({ label, value }) {
         {value}
       </pre>
     </div>
-  )
+  );
 }
 
 /**
@@ -93,10 +98,10 @@ export default function TraceViewer({ trace }) {
       <p className="text-xs dark:text-text-muted text-gray-400 py-3">
         No trace recorded for this run yet.
       </p>
-    )
+    );
   }
 
-  const totalMs = trace.steps.reduce((sum, s) => sum + (s.durationMs || 0), 0)
+  const totalMs = trace.steps.reduce((sum, s) => sum + (s.durationMs || 0), 0);
 
   return (
     <div className="space-y-3">
@@ -115,8 +120,14 @@ export default function TraceViewer({ trace }) {
             <div
               key={i}
               title={`${step.stepName}: ${formatDuration(step.durationMs)}`}
-              className={`${BAR_COLORS[step.status] || 'bg-gray-300'} min-w-[4px]`}
-              style={{ width: totalMs > 0 ? `${((step.durationMs || 0) / totalMs) * 100}%` : 'auto', flexGrow: totalMs > 0 ? 0 : 1 }}
+              className={`${BAR_COLORS[step.status] || "bg-gray-300"} min-w-[4px]`}
+              style={{
+                width:
+                  totalMs > 0
+                    ? `${((step.durationMs || 0) / totalMs) * 100}%`
+                    : "auto",
+                flexGrow: totalMs > 0 ? 0 : 1,
+              }}
             />
           ))}
         </div>
@@ -125,9 +136,14 @@ export default function TraceViewer({ trace }) {
       {/* Step accordion */}
       <div className="space-y-2">
         {trace.steps.map((step, i) => (
-          <TraceStep key={i} step={step} index={i} defaultOpen={step.status === 'failed'} />
+          <TraceStep
+            key={i}
+            step={step}
+            index={i}
+            defaultOpen={step.status === "failed"}
+          />
         ))}
       </div>
     </div>
-  )
+  );
 }

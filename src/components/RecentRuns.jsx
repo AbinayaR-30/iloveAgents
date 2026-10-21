@@ -1,5 +1,5 @@
-import React from 'react';
-import { RotateCcw, Copy, Trash2, History } from 'lucide-react';
+import React from "react";
+import { RotateCcw, Copy, Trash2, History } from "lucide-react";
 
 const RecentRuns = ({ history, onRerun, onCopy, onDelete, onClearAll }) => {
   if (!history || history.length === 0) {
@@ -11,12 +11,16 @@ const RecentRuns = ({ history, onRerun, onCopy, onDelete, onClearAll }) => {
             Recent Runs
           </h2>
         </div>
-        <div className="p-8 border border-dashed rounded-xl text-center flex flex-col items-center justify-center gap-3
-          dark:border-border dark:bg-surface-card/50 bg-gray-50 border-gray-200">
+        <div
+          className="p-8 border border-dashed rounded-xl text-center flex flex-col items-center justify-center gap-3
+          dark:border-border dark:bg-surface-card/50 bg-gray-50 border-gray-200"
+        >
           <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mb-1">
             <RotateCcw size={20} className="text-accent opacity-80" />
           </div>
-          <h3 className="text-sm font-bold dark:text-text-primary text-gray-800">No history yet</h3>
+          <h3 className="text-sm font-bold dark:text-text-primary text-gray-800">
+            No history yet
+          </h3>
           <p className="text-xs dark:text-text-secondary text-gray-500 max-w-[200px] leading-relaxed">
             Runs will automatically appear here once you start using agents.
           </p>
@@ -26,16 +30,19 @@ const RecentRuns = ({ history, onRerun, onCopy, onDelete, onClearAll }) => {
   }
 
   const getProviderStyle = (provider) => {
-    const p = provider?.toLowerCase() || '';
-    if (p.includes('gpt') || p.includes('openai')) return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
-    if (p.includes('claude') || p.includes('anthropic')) return 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20';
-    if (p.includes('gemini') || p.includes('google')) return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20';
-    return 'bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20';
+    const p = provider?.toLowerCase() || "";
+    if (p.includes("gpt") || p.includes("openai"))
+      return "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";
+    if (p.includes("claude") || p.includes("anthropic"))
+      return "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20";
+    if (p.includes("gemini") || p.includes("google"))
+      return "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20";
+    return "bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20";
   };
 
   const formatTimeAgo = (timestamp) => {
     const seconds = Math.floor((Date.now() - timestamp) / 1000);
-    if (seconds < 60) return 'Just now';
+    if (seconds < 60) return "Just now";
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes}m ago`;
     const hours = Math.floor(minutes / 60);
@@ -81,8 +88,10 @@ const RecentRuns = ({ history, onRerun, onCopy, onDelete, onClearAll }) => {
                   {run.agentName}
                 </h3>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className={`text-[9px] px-2 py-0.5 rounded-md border font-bold uppercase tracking-wider ${getProviderStyle(run.provider)}`}>
-                    {run.provider || 'Unknown'}
+                  <span
+                    className={`text-[9px] px-2 py-0.5 rounded-md border font-bold uppercase tracking-wider ${getProviderStyle(run.provider)}`}
+                  >
+                    {run.provider || "Unknown"}
                   </span>
                   <span className="text-[10px] font-medium dark:text-text-muted text-gray-400 flex items-center gap-1">
                     <div className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600" />

@@ -17,6 +17,7 @@
 </div>
 
 ---
+
 ## Table of Contents
 
 - [Repository Highlights](#repository-highlights)
@@ -46,6 +47,7 @@
 - [License](#license)
 
 ---
+
 ## Repository Highlights
 
 - **Open-source and community-driven** — built and run entirely by contributors
@@ -63,15 +65,14 @@
 
 A quick side-by-side look at the platform's core features:
 
-| Feature | Purpose | Requires API Key | Requires Supabase | Supports Multiple Providers |
-|---|---|:---:|:---:|:---:|
-| Individual Agents | Run a single AI agent | ✅ | ❌ | ✅ |
-| Battle Mode | Compare responses from multiple AI providers | ✅ | ❌ | ✅ |
-| Workflow Builder | Chain multiple AI agents together | ✅ | ✅ | ✅ |
-| Scheduled Automations | Run agents on recurring schedules with email alerts | ✅ | ✅ | ✅ |
+| Feature               | Purpose                                             | Requires API Key | Requires Supabase | Supports Multiple Providers |
+| --------------------- | --------------------------------------------------- | :--------------: | :---------------: | :-------------------------: |
+| Individual Agents     | Run a single AI agent                               |        ✅        |        ❌         |             ✅              |
+| Battle Mode           | Compare responses from multiple AI providers        |        ✅        |        ❌         |             ✅              |
+| Workflow Builder      | Chain multiple AI agents together                   |        ✅        |        ✅         |             ✅              |
+| Scheduled Automations | Run agents on recurring schedules with email alerts |        ✅        |        ✅         |             ✅              |
 
 ---
-
 
 ## What is iloveAgents?
 
@@ -102,18 +103,18 @@ The complete list of agents has been moved to [AGENTS.md](./AGENTS.md) for bette
 
 The repository contains AI agents for a wide variety of real-world use cases. The table below highlights the major categories available, helping new users quickly discover the project's capabilities.
 
-| Category | Description |
-|----------|-------------|
-| 🛠️ Engineering | Code generation, debugging, API documentation, testing, DevOps, and software architecture |
-| 📚 Education | Study planning, quizzes, flashcards, DSA explanations, and learning resources |
-| 📈 Productivity | Meeting notes, email writing, planning, workflows, and personal productivity |
-| 📢 Marketing | SEO, blog writing, LinkedIn posts, social media, and content creation |
-| 💼 Sales & Business | Lead qualification, proposals, competitive analysis, outreach, and business planning |
-| 🎨 Design | UI/UX support, color palettes, typography, image prompts, and creative assets |
-| 🏥 Healthcare | Wellness planning, medical summaries, patient documentation, and healthcare assistance |
-| 🔬 Research & Data | Research, data science, dataset analysis, and machine learning support |
-| 🔐 Security | Cybersecurity analysis, phishing detection, password reviews, and threat intelligence |
-| 🌐 Specialized Domains | HR, Finance, Legal, Real Estate, Gaming, Product, Web3, and many more |
+| Category               | Description                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| 🛠️ Engineering         | Code generation, debugging, API documentation, testing, DevOps, and software architecture |
+| 📚 Education           | Study planning, quizzes, flashcards, DSA explanations, and learning resources             |
+| 📈 Productivity        | Meeting notes, email writing, planning, workflows, and personal productivity              |
+| 📢 Marketing           | SEO, blog writing, LinkedIn posts, social media, and content creation                     |
+| 💼 Sales & Business    | Lead qualification, proposals, competitive analysis, outreach, and business planning      |
+| 🎨 Design              | UI/UX support, color palettes, typography, image prompts, and creative assets             |
+| 🏥 Healthcare          | Wellness planning, medical summaries, patient documentation, and healthcare assistance    |
+| 🔬 Research & Data     | Research, data science, dataset analysis, and machine learning support                    |
+| 🔐 Security            | Cybersecurity analysis, phishing detection, password reviews, and threat intelligence     |
+| 🌐 Specialized Domains | HR, Finance, Legal, Real Estate, Gaming, Product, Web3, and many more                     |
 
 > **Note:** The repository currently contains **160+ AI agents** spanning Engineering, Education, Marketing, Healthcare, Web3, Cybersecurity, and many other domains. For the complete list of agents and detailed descriptions, see **[AGENTS.md](./AGENTS.md)**.
 
@@ -121,11 +122,11 @@ The repository contains AI agents for a wide variety of real-world use cases. Th
 
 ## Supported Providers
 
-| Provider | Logo | Models | Get Your Key |
-|----------|------|--------|--------------|
-| OpenAI | <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg" width="80"/> | GPT-4o, GPT-4o-mini | [platform.openai.com](https://platform.openai.com/api-keys) |
-| Anthropic | <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Anthropic_logo.svg" width="80"/> | Claude Opus, Claude Sonnet | [console.anthropic.com](https://console.anthropic.com/) |
-| Google Gemini | <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg" width="80"/> | Gemini 2.5 Flash | [aistudio.google.com](https://aistudio.google.com/apikey) |
+| Provider      | Logo                                                                                               | Models                     | Get Your Key                                                |
+| ------------- | -------------------------------------------------------------------------------------------------- | -------------------------- | ----------------------------------------------------------- |
+| OpenAI        | <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg" width="80"/>        | GPT-4o, GPT-4o-mini        | [platform.openai.com](https://platform.openai.com/api-keys) |
+| Anthropic     | <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Anthropic_logo.svg" width="80"/>     | Claude Opus, Claude Sonnet | [console.anthropic.com](https://console.anthropic.com/)     |
+| Google Gemini | <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg" width="80"/> | Gemini 2.5 Flash           | [aistudio.google.com](https://aistudio.google.com/apikey)   |
 
 You can switch providers on any agent at runtime from the dropdown. No restart needed.
 
@@ -144,7 +145,7 @@ Battle Mode has its own dark, dramatic UI with color-coded provider columns (gol
 
 ---
 
-## 🔗 AI Workflow Builder  *(New)*
+## 🔗 AI Workflow Builder _(New)_
 
 > **Chain multiple agents together and automate your entire process in one run.**
 
@@ -187,12 +188,12 @@ If any step fails, the workflow stops at that step and shows you exactly what we
 
 ### Navigation
 
-| Route | What it does |
-|---|---|
-| `/workflows` | Browse community workflow library |
-| `/workflows/build` | Create and save a new workflow |
-| `/workflows/:id` | View full details of a workflow |
-| `/workflows/:id/run` | Run a workflow step-by-step |
+| Route                | What it does                      |
+| -------------------- | --------------------------------- |
+| `/workflows`         | Browse community workflow library |
+| `/workflows/build`   | Create and save a new workflow    |
+| `/workflows/:id`     | View full details of a workflow   |
+| `/workflows/:id/run` | Run a workflow step-by-step       |
 
 ---
 
@@ -243,9 +244,9 @@ Scheduled Automations allow you to schedule any agent in the registry to run aut
 
 ### Navigation
 
-| Route | What it does |
-|---|---|
-| `/automations` | List active automations and schedule a new agent run |
+| Route              | What it does                                                       |
+| ------------------ | ------------------------------------------------------------------ |
+| `/automations`     | List active automations and schedule a new agent run               |
 | `/automations/:id` | View execution history, status logs, and outputs for an automation |
 
 ---
@@ -290,10 +291,10 @@ npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
-No API provider keys are required in a `.env` file because 
+No API provider keys are required in a `.env` file because
 they are entered at runtime and never stored anywhere.
 
-However, local development requires a `.env.local` file 
+However, local development requires a `.env.local` file
 for Supabase features like Workflows.
 
 Create a `.env.local` file in the root directory:
@@ -303,7 +304,7 @@ VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-Note: AI provider API keys are still entered at runtime 
+Note: AI provider API keys are still entered at runtime
 and are never stored anywhere.
 
 ## Troubleshooting
@@ -399,19 +400,21 @@ src/
 6. **No backend** — Every API call goes directly from your browser to the provider. Nothing passes through our servers because there are no servers.
 
 ---
+
 ## Project Structure Overview
 
-| Directory | Purpose |
-|-----------|---------|
-| `src/agents/` | AI agent definitions and registry |
-| `src/components/` | Reusable React components |
-| `src/pages/` | Application pages |
-| `src/hooks/` | Custom React hooks |
-| `src/lib/` | Shared utilities and API adapters |
-| `src/assets/` | Images, icons, and other bundled assets |
-| `public/` | Static files served directly by the app |
+| Directory         | Purpose                                 |
+| ----------------- | --------------------------------------- |
+| `src/agents/`     | AI agent definitions and registry       |
+| `src/components/` | Reusable React components               |
+| `src/pages/`      | Application pages                       |
+| `src/hooks/`      | Custom React hooks                      |
+| `src/lib/`        | Shared utilities and API adapters       |
+| `src/assets/`     | Images, icons, and other bundled assets |
+| `public/`         | Static files served directly by the app |
 
 ---
+
 ## Contributing
 
 iloveAgents is built by the community. Every contribution matters — whether it is a new agent, a bug fix, a UI improvement, or just fixing a typo.
@@ -422,26 +425,26 @@ iloveAgents is built by the community. Every contribution matters — whether it
 
 ```js
 export default {
-  id: 'your-agent-id',
-  name: 'Your Agent Name',
-  description: 'One-line description.',
-  category: 'Category',
-  icon: 'IconName',               // from lucide.dev/icons
-  provider: 'any',                // 'openai' | 'anthropic' | 'gemini' | 'any'
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "your-agent-id",
+  name: "Your Agent Name",
+  description: "One-line description.",
+  category: "Category",
+  icon: "IconName", // from lucide.dev/icons
+  provider: "any", // 'openai' | 'anthropic' | 'gemini' | 'any'
+  defaultProvider: "openai",
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'field_id',
-      label: 'Field Label',
-      type: 'textarea',           // text | textarea | code | select | multiselect
-      placeholder: 'Hint text...',
+      id: "field_id",
+      label: "Field Label",
+      type: "textarea", // text | textarea | code | select | multiselect
+      placeholder: "Hint text...",
       required: true,
     },
   ],
   systemPrompt: `Your system prompt here.`,
-  outputType: 'markdown',         // markdown | text | json
-}
+  outputType: "markdown", // markdown | text | json
+};
 ```
 
 The registry auto-collects it — no need to edit `registry.js`.
@@ -464,19 +467,19 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
 ## Tech Stack
 
-| Technology | Purpose |
-|-----------|---------|
-| [React 18](https://react.dev) | Component framework |
-| [Vite 6](https://vitejs.dev) | Build tool and dev server |
-| [Tailwind CSS 3](https://tailwindcss.com) | Styling |
-| [React Router 6](https://reactrouter.com) | Client-side routing |
-| [Lucide React](https://lucide.dev) | Icons |
-| [react-markdown](https://github.com/remarkjs/react-markdown) | Markdown rendering |
-| [react-syntax-highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter) | Code highlighting |
-| [Supabase](https://supabase.com) | Database, Auth & Realtime for Workflows and Automations |
-| [pgsodium](https://github.com/michelp/pgsodium) | Secure cryptographic encryption for automation keys |
-| [Resend](https://resend.com) | Email delivery for scheduled automation reports |
-| [Vercel Cron & Functions](https://vercel.com/docs/cron-jobs) | Scheduled background execution & serverless endpoints |
+| Technology                                                                                       | Purpose                                                 |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| [React 18](https://react.dev)                                                                    | Component framework                                     |
+| [Vite 6](https://vitejs.dev)                                                                     | Build tool and dev server                               |
+| [Tailwind CSS 3](https://tailwindcss.com)                                                        | Styling                                                 |
+| [React Router 6](https://reactrouter.com)                                                        | Client-side routing                                     |
+| [Lucide React](https://lucide.dev)                                                               | Icons                                                   |
+| [react-markdown](https://github.com/remarkjs/react-markdown)                                     | Markdown rendering                                      |
+| [react-syntax-highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter) | Code highlighting                                       |
+| [Supabase](https://supabase.com)                                                                 | Database, Auth & Realtime for Workflows and Automations |
+| [pgsodium](https://github.com/michelp/pgsodium)                                                  | Secure cryptographic encryption for automation keys     |
+| [Resend](https://resend.com)                                                                     | Email delivery for scheduled automation reports         |
+| [Vercel Cron & Functions](https://vercel.com/docs/cron-jobs)                                     | Scheduled background execution & serverless endpoints   |
 
 ---
 

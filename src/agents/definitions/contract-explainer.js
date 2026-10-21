@@ -33,7 +33,7 @@ contract SimpleToken {
     require(msg.sender == owner, "Not owner");
     balanceOf[to] += amount;
   }
-}`
+}`,
   },
   inputs: [
     {
@@ -55,7 +55,11 @@ contract SimpleToken {
       id: "detail",
       label: "Explanation level",
       type: "select",
-      options: ["High-level summary", "Function-by-function (detailed)", "Permissions & threat summary"],
+      options: [
+        "High-level summary",
+        "Function-by-function (detailed)",
+        "Permissions & threat summary",
+      ],
       defaultValue: "Function-by-function (detailed)",
       required: true,
     },

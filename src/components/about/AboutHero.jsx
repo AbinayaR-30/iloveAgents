@@ -1,9 +1,12 @@
-import { Link } from 'react-router-dom'
-import { Sparkles, Github, ArrowRight, Heart } from 'lucide-react'
+import { Link } from "react-router-dom";
+import { Sparkles, Github, ArrowRight, Heart } from "lucide-react";
 
 export default function AboutHero() {
   return (
-    <section aria-labelledby="about-hero-title" className="relative overflow-hidden rounded-3xl border border-white/40 dark:border-white/10 bg-white/60 dark:bg-[#101014]/60 p-6 sm:p-10 md:p-12 shadow-xl backdrop-blur-xl mb-12">
+    <section
+      aria-labelledby="about-hero-title"
+      className="relative overflow-hidden rounded-3xl border border-white/40 dark:border-white/10 bg-white/60 dark:bg-[#101014]/60 p-6 sm:p-10 md:p-12 shadow-xl backdrop-blur-xl mb-12"
+    >
       {/* Background glow accents */}
       <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-fuchsia-500/20 blur-3xl" />
@@ -16,13 +19,22 @@ export default function AboutHero() {
         </div>
 
         {/* Project Title */}
-        <h1 id="about-hero-title" className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight dark:text-white text-gray-900 leading-tight">
-          Welcome to <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">iloveAgents</span>
+        <h1
+          id="about-hero-title"
+          className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight dark:text-white text-gray-900 leading-tight"
+        >
+          Welcome to{" "}
+          <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            iloveAgents
+          </span>
         </h1>
 
         {/* Short Project Overview & Mission Statement */}
         <p className="text-base sm:text-lg dark:text-text-secondary text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          <strong>iloveAgents</strong> is an open-source platform designed to make AI tools accessible, transparent, and effortlessly executable directly inside your browser. Bring your own API key, keep 100% data privacy, and explore specialized agents built for real-world tasks.
+          <strong>iloveAgents</strong> is an open-source platform designed to
+          make AI tools accessible, transparent, and effortlessly executable
+          directly inside your browser. Bring your own API key, keep 100% data
+          privacy, and explore specialized agents built for real-world tasks.
         </p>
 
         {/* Mission Card */}
@@ -36,7 +48,10 @@ export default function AboutHero() {
                 Our Mission
               </h2>
               <p className="text-xs sm:text-sm dark:text-text-secondary text-gray-600 leading-relaxed">
-                To democratize AI automation by fostering a global community of developers, creators, and students who build, chain, and share open-source AI tools without paywalls, telemetry, or server lock-in.
+                To democratize AI automation by fostering a global community of
+                developers, creators, and students who build, chain, and share
+                open-source AI tools without paywalls, telemetry, or server
+                lock-in.
               </p>
             </div>
           </div>
@@ -74,23 +89,39 @@ export default function AboutHero() {
         {/* Quick Highlights / Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t dark:border-white/10 border-gray-200/80">
           <div className="p-3 text-center">
-            <div className="text-2xl sm:text-3xl font-extrabold text-accent">129+</div>
-            <div className="text-xs dark:text-text-secondary text-gray-500 font-medium">Ready-to-use Agents</div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-accent">
+              129+
+            </div>
+            <div className="text-xs dark:text-text-secondary text-gray-500 font-medium">
+              Ready-to-use Agents
+            </div>
           </div>
           <div className="p-3 text-center">
-            <div className="text-2xl sm:text-3xl font-extrabold text-accent">3+</div>
-            <div className="text-xs dark:text-text-secondary text-gray-500 font-medium">AI Providers</div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-accent">
+              3+
+            </div>
+            <div className="text-xs dark:text-text-secondary text-gray-500 font-medium">
+              AI Providers
+            </div>
           </div>
           <div className="p-3 text-center">
-            <div className="text-2xl sm:text-3xl font-extrabold text-accent">100%</div>
-            <div className="text-xs dark:text-text-secondary text-gray-500 font-medium">Browser Privacy</div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-accent">
+              100%
+            </div>
+            <div className="text-xs dark:text-text-secondary text-gray-500 font-medium">
+              Browser Privacy
+            </div>
           </div>
           <div className="p-3 text-center">
-            <div className="text-2xl sm:text-3xl font-extrabold text-accent">GSSoC '26</div>
-            <div className="text-xs dark:text-text-secondary text-gray-500 font-medium">Official Project</div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-accent">
+              GSSoC '26
+            </div>
+            <div className="text-xs dark:text-text-secondary text-gray-500 font-medium">
+              Official Project
+            </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

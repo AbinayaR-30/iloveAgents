@@ -27,7 +27,7 @@ const sections = [
     icon: ShieldAlert,
     title: "No Warranty",
     content:
-      "iLoveAgents is provided \"as is\" and \"as available\" without warranties of any kind, either express or implied. We do not guarantee that the platform will be uninterrupted, error-free, or completely secure.",
+      'iLoveAgents is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not guarantee that the platform will be uninterrupted, error-free, or completely secure.',
   },
   {
     icon: Ban,
@@ -45,7 +45,7 @@ const sections = [
     icon: RefreshCw,
     title: "Changes to These Terms",
     content:
-      "These Terms of Service may be updated periodically to reflect new features, improvements, or legal requirements. The \"Last Updated\" date at the top of this page indicates the most recent revision. Continued use of the platform after changes constitutes acceptance of the revised terms.",
+      'These Terms of Service may be updated periodically to reflect new features, improvements, or legal requirements. The "Last Updated" date at the top of this page indicates the most recent revision. Continued use of the platform after changes constitutes acceptance of the revised terms.',
   },
   {
     icon: Mail,
@@ -118,13 +118,9 @@ export default function TermsOfService() {
                   <Icon className="text-cyan-400" size={28} />
                 </div>
 
-                <h2 className="text-2xl font-semibold mb-4">
-                  {section.title}
-                </h2>
+                <h2 className="text-2xl font-semibold mb-4">{section.title}</h2>
 
-                <p className="text-slate-400 leading-8">
-                  {section.content}
-                </p>
+                <p className="text-slate-400 leading-8">{section.content}</p>
               </div>
             );
           })}
@@ -137,9 +133,9 @@ export default function TermsOfService() {
 
           <p className="text-slate-400 max-w-3xl mx-auto leading-8">
             iLoveAgents is an open-source project built and maintained by its
-            community. If anything in these terms is unclear, or if you'd
-            like to suggest a change, please reach out through the official
-            GitHub repository.
+            community. If anything in these terms is unclear, or if you'd like
+            to suggest a change, please reach out through the official GitHub
+            repository.
           </p>
         </div>
       </div>

@@ -1,33 +1,35 @@
 const memoryCardBuilder = {
-  id: 'memory-card-builder',
-  name: 'Memory Card Builder',
-  description: 'Transforms study notes or raw learning material into active recall cards with prompts, hints, answers, and self-test questions for better memory retention.',
-  category: 'Education',
-  icon: 'BrainCircuit',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "memory-card-builder",
+  name: "Memory Card Builder",
+  description:
+    "Transforms study notes or raw learning material into active recall cards with prompts, hints, answers, and self-test questions for better memory retention.",
+  category: "Education",
+  icon: "BrainCircuit",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'study_notes',
-      label: 'Study Notes or Learning Material',
-      type: 'textarea',
-      placeholder: 'Paste your notes, textbook excerpt, or any learning content here...',
+      id: "study_notes",
+      label: "Study Notes or Learning Material",
+      type: "textarea",
+      placeholder:
+        "Paste your notes, textbook excerpt, or any learning content here...",
       required: true,
     },
     {
-      id: 'subject',
-      label: 'Subject or Topic Name',
-      type: 'text',
-      placeholder: 'e.g. Photosynthesis, World War II, Binary Trees...',
+      id: "subject",
+      label: "Subject or Topic Name",
+      type: "text",
+      placeholder: "e.g. Photosynthesis, World War II, Binary Trees...",
       required: false,
     },
     {
-      id: 'difficulty',
-      label: 'Difficulty Level',
-      type: 'select',
-      options: ['Beginner', 'Intermediate', 'Advanced'],
-      placeholder: 'Select difficulty',
+      id: "difficulty",
+      label: "Difficulty Level",
+      type: "select",
+      options: ["Beginner", "Intermediate", "Advanced"],
+      placeholder: "Select difficulty",
       required: false,
     },
   ],
@@ -53,7 +55,7 @@ Rules:
 - Focus on key concepts, not trivial details.
 - Write prompts that test understanding, not just memorization.
 - Use clean Markdown throughout.`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default memoryCardBuilder;

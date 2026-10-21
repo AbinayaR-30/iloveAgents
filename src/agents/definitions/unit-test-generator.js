@@ -20,8 +20,7 @@ export default {
       id: "code",
       label: "Code to test",
       type: "code",
-      placeholder:
-        "Paste the function, class, or module you want tests for...",
+      placeholder: "Paste the function, class, or module you want tests for...",
       required: true,
     },
     {

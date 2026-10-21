@@ -11,12 +11,14 @@ you deserve to be treated with respect here.
 Be kind. Be helpful. Be patient.
 
 Good behavior looks like:
+
 - Being friendly and welcoming to new contributors
 - Respecting different opinions and ideas
 - Giving honest, helpful feedback
 - Owning your mistakes and learning from them
 
 Bad behavior looks like:
+
 - Insulting or attacking other people
 - Harassment of any kind
 - Sharing someone's private information without permission

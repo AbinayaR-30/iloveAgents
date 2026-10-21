@@ -181,9 +181,9 @@ export default function VoiceInput({
         <span className="absolute inline-flex h-full w-full rounded-md bg-red-500/30 animate-ping" />
       )}
       {isRecording ? (
-  <MicOff size={14} className="relative" />
-   ) : (
-  <Mic size={14} className="relative" />
+        <MicOff size={14} className="relative" />
+      ) : (
+        <Mic size={14} className="relative" />
       )}
     </button>
   );

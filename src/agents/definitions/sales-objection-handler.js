@@ -1,34 +1,34 @@
 const salesObjectionHandler = {
-  id: 'sales-objection-handler',
+  id: "sales-objection-handler",
 
-  name: 'Sales Objection Handler',
+  name: "Sales Objection Handler",
 
   description:
-    'Generates empathetic, direct, and data-driven responses to customer objections.',
+    "Generates empathetic, direct, and data-driven responses to customer objections.",
 
-  category: 'Sales',
+  category: "Sales",
 
-  icon: 'BadgeDollarSign',
+  icon: "BadgeDollarSign",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'openai',
+  defaultProvider: "openai",
 
-  model: 'gpt-4o',
+  model: "gpt-4o",
 
   inputs: [
     {
-      id: 'product',
-      label: 'Product Name',
-      type: 'text',
-      placeholder: 'Enter the product or service name...',
+      id: "product",
+      label: "Product Name",
+      type: "text",
+      placeholder: "Enter the product or service name...",
       required: true,
     },
     {
-      id: 'objection',
-      label: 'Customer Objection',
-      type: 'textarea',
-      placeholder: 'Example: The product is too expensive.',
+      id: "objection",
+      label: "Customer Objection",
+      type: "textarea",
+      placeholder: "Example: The product is too expensive.",
       required: true,
     },
   ],
@@ -50,7 +50,7 @@ Also explain when each response style should be used.
 Keep responses professional, persuasive, and practical.
 `,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default salesObjectionHandler;

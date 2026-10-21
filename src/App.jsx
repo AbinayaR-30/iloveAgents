@@ -1,52 +1,64 @@
-import { useState, Suspense, lazy } from 'react'
-import { Routes, Route, Outlet ,Link} from 'react-router-dom'
-import { Loader2 ,MessageSquare} from 'lucide-react'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
-import CustomCursor from './components/CustomCursor'
-import ScrollToTopButton from './components/ScrollToTopButton'
-import ScrollToBottom from './components/ScrollToBottom'
-import ErrorBoundary from './components/ErrorBoundary'
-import OnboardingTour from './components/OnboardingTour'
-import { useOnboarding } from './lib/useOnboarding'
+import { useState, Suspense, lazy } from "react";
+import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { Loader2, MessageSquare } from "lucide-react";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import CustomCursor from "./components/CustomCursor";
+import ScrollToTopButton from "./components/ScrollToTopButton";
+import ScrollToBottom from "./components/ScrollToBottom";
+import ErrorBoundary from "./components/ErrorBoundary";
+import OnboardingTour from "./components/OnboardingTour";
+import { useOnboarding } from "./lib/useOnboarding";
 
-const HomePage = lazy(() => import('./pages/HomePage'))
-const AgentPage = lazy(() => import('./pages/AgentPage'))
-const BattleModeLanding = lazy(() => import('./pages/BattleModeLanding'))
-const BattleModeSetup = lazy(() => import('./pages/BattleModeSetup'))
-const BattleModeArena = lazy(() => import('./pages/BattleModeArena'))
-const BattleModeWinner = lazy(() => import('./pages/BattleModeWinner'))
-const WorkflowLibrary = lazy(() => import('./pages/WorkflowLibrary'))
-const WorkflowBuilder = lazy(() => import('./pages/WorkflowBuilder'))
-const WorkflowDetail = lazy(() => import('./pages/WorkflowDetail'))
-const WorkflowRunner = lazy(() => import('./pages/WorkflowRunner'))
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
-const SuitesPage = lazy(() => import('./pages/SuitesPage'))
-const CollectionsPage = lazy(() => import('./pages/CollectionsPage'))
-const CollectionDetailPage = lazy(() => import('./pages/CollectionDetailPage'))
-const AutomationsPage = lazy(() => import('./pages/AutomationsPage'))
-const AutomationDetailPage = lazy(() => import('./pages/AutomationDetailPage'))
-const MarketplacePage = lazy(() => import('./pages/MarketplacePage'))
-const Privacy = lazy(() => import('./pages/Privacy'))
-const TermsOfService = lazy(() => import('./pages/TermsOfService'))
-const SettingsPage = lazy(() => import('./pages/SettingsPage'))
-const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'))
-const AboutPage = lazy(() => import('./pages/AboutPage'))
-const FeedbackPage = lazy(() => import('./pages/FeedbackPage'))
+const HomePage = lazy(() => import("./pages/HomePage"));
+const AgentPage = lazy(() => import("./pages/AgentPage"));
+const BattleModeLanding = lazy(() => import("./pages/BattleModeLanding"));
+const BattleModeSetup = lazy(() => import("./pages/BattleModeSetup"));
+const BattleModeArena = lazy(() => import("./pages/BattleModeArena"));
+const BattleModeWinner = lazy(() => import("./pages/BattleModeWinner"));
+const WorkflowLibrary = lazy(() => import("./pages/WorkflowLibrary"));
+const WorkflowBuilder = lazy(() => import("./pages/WorkflowBuilder"));
+const WorkflowDetail = lazy(() => import("./pages/WorkflowDetail"));
+const WorkflowRunner = lazy(() => import("./pages/WorkflowRunner"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const SuitesPage = lazy(() => import("./pages/SuitesPage"));
+const CollectionsPage = lazy(() => import("./pages/CollectionsPage"));
+const CollectionDetailPage = lazy(() => import("./pages/CollectionDetailPage"));
+const AutomationsPage = lazy(() => import("./pages/AutomationsPage"));
+const AutomationDetailPage = lazy(() => import("./pages/AutomationDetailPage"));
+const MarketplacePage = lazy(() => import("./pages/MarketplacePage"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
+const AnalyticsPage = lazy(() => import("./pages/AnalyticsPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const FeedbackPage = lazy(() => import("./pages/FeedbackPage"));
 
 function PageLoader() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
       <Loader2 size={32} className="animate-spin text-accent" />
-      <p className="text-sm dark:text-text-secondary text-gray-500">Loading...</p>
+      <p className="text-sm dark:text-text-secondary text-gray-500">
+        Loading...
+      </p>
     </div>
-  )
+  );
 }
 
-function MainLayout({ sidebarOpen, setSidebarOpen, onStartTour, isTourActive, onTourEnd }) {
+function MainLayout({
+  sidebarOpen,
+  setSidebarOpen,
+  onStartTour,
+  isTourActive,
+  onTourEnd,
+}) {
   return (
     <>
-      <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} onStartTour={onStartTour} />
+      <Navbar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        onStartTour={onStartTour}
+      />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <CustomCursor />
       <Link
@@ -77,12 +89,12 @@ function MainLayout({ sidebarOpen, setSidebarOpen, onStartTour, isTourActive, on
         setSidebarOpen={setSidebarOpen}
       />
     </>
-  )
+  );
 }
 
 export default function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { isTourActive, startTour, endTour } = useOnboarding()
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isTourActive, startTour, endTour } = useOnboarding();
 
   return (
     <div className="min-h-screen transition-theme dark:bg-surface bg-gray-50">
@@ -91,15 +103,17 @@ export default function App() {
       <ErrorBoundary>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            <Route element={
-              <MainLayout
-                sidebarOpen={sidebarOpen}
-                setSidebarOpen={setSidebarOpen}
-                onStartTour={startTour}
-                isTourActive={isTourActive}
-                onTourEnd={endTour}
-              />
-            }>
+            <Route
+              element={
+                <MainLayout
+                  sidebarOpen={sidebarOpen}
+                  setSidebarOpen={setSidebarOpen}
+                  onStartTour={startTour}
+                  isTourActive={isTourActive}
+                  onTourEnd={endTour}
+                />
+              }
+            >
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/feedback" element={<FeedbackPage />} />
@@ -109,10 +123,16 @@ export default function App() {
               <Route path="/agent/:id" element={<AgentPage />} />
               <Route path="/suites" element={<SuitesPage />} />
               <Route path="/collections" element={<CollectionsPage />} />
-              <Route path="/collections/:id" element={<CollectionDetailPage />} />
+              <Route
+                path="/collections/:id"
+                element={<CollectionDetailPage />}
+              />
               <Route path="/scheduler" element={<AutomationsPage />} />
               <Route path="/automations" element={<AutomationsPage />} />
-              <Route path="/automations/:id" element={<AutomationDetailPage />} />
+              <Route
+                path="/automations/:id"
+                element={<AutomationDetailPage />}
+              />
               <Route path="/marketplace" element={<MarketplacePage />} />
               <Route path="/analytics" element={<AnalyticsPage />} />
               <Route path="/workflows" element={<WorkflowLibrary />} />
@@ -129,5 +149,5 @@ export default function App() {
         </Suspense>
       </ErrorBoundary>
     </div>
-  )
+  );
 }

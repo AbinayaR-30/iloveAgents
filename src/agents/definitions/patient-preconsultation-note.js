@@ -32,14 +32,11 @@ export default {
     medicalHistory:
       "History of migraines. No diabetes or blood pressure issues.",
 
-    medications:
-      "Paracetamol twice daily.",
+    medications: "Paracetamol twice daily.",
 
-    allergies:
-      "Penicillin",
+    allergies: "Penicillin",
 
-    additionalNotes:
-      "Recently traveled and had poor sleep.",
+    additionalNotes: "Recently traveled and had poor sleep.",
   },
 
   inputs: [
@@ -107,8 +104,7 @@ export default {
       id: "medications",
       label: "Current medications",
       type: "textarea",
-      placeholder:
-        "e.g. vitamin supplements, prescribed medicines",
+      placeholder: "e.g. vitamin supplements, prescribed medicines",
     },
 
     {
@@ -224,5 +220,3 @@ Rules:
 
   outputType: "markdown",
 };
-
-

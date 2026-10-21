@@ -1,68 +1,68 @@
 export default {
-  id: 'slo-sla-designer',
-  createdAt: '2026-09-01',
-  name: 'SLO/SLA Designer',
+  id: "slo-sla-designer",
+  createdAt: "2026-09-01",
+  name: "SLO/SLA Designer",
   description:
-    'Describe a service and its criticality to get practical SLIs, SLO targets, error budgets, and starter Prometheus and Grafana alerting rules.',
-  category: 'Engineering',
-  icon: 'Gauge',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o-mini',
+    "Describe a service and its criticality to get practical SLIs, SLO targets, error budgets, and starter Prometheus and Grafana alerting rules.",
+  category: "Engineering",
+  icon: "Gauge",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o-mini",
   exampleInputs: {
     service_description:
-      'Public checkout API that creates orders and charges cards. It runs on Kubernetes behind an API gateway and depends on PostgreSQL, Redis, and Stripe.',
-    criticality: 'Tier 1 - Revenue-critical customer-facing service',
+      "Public checkout API that creates orders and charges cards. It runs on Kubernetes behind an API gateway and depends on PostgreSQL, Redis, and Stripe.",
+    criticality: "Tier 1 - Revenue-critical customer-facing service",
     traffic_profile:
-      'About 80 requests/second normally and 300 requests/second during sales. The p99 latency is usually 450 ms.',
+      "About 80 requests/second normally and 300 requests/second during sales. The p99 latency is usually 450 ms.",
     dependencies:
-      'PostgreSQL primary database, Redis cache, Stripe payment API, Kubernetes ingress, and a Kafka order-events topic.',
-    monitoring_stack: 'Prometheus, Grafana, Alertmanager, and PagerDuty',
+      "PostgreSQL primary database, Redis cache, Stripe payment API, Kubernetes ingress, and a Kafka order-events topic.",
+    monitoring_stack: "Prometheus, Grafana, Alertmanager, and PagerDuty",
   },
   inputs: [
     {
-      id: 'service_description',
-      label: 'Service description',
-      type: 'textarea',
+      id: "service_description",
+      label: "Service description",
+      type: "textarea",
       placeholder:
-        'What does the service do, who uses it, and what are its critical user journeys? Include its APIs, jobs, or data flows.',
+        "What does the service do, who uses it, and what are its critical user journeys? Include its APIs, jobs, or data flows.",
       required: true,
     },
     {
-      id: 'criticality',
-      label: 'Service criticality',
-      type: 'select',
+      id: "criticality",
+      label: "Service criticality",
+      type: "select",
       options: [
-        'Tier 0 - Safety, legal, or platform control plane',
-        'Tier 1 - Revenue-critical customer-facing service',
-        'Tier 2 - Important customer-facing or internal service',
-        'Tier 3 - Non-critical internal or batch service',
+        "Tier 0 - Safety, legal, or platform control plane",
+        "Tier 1 - Revenue-critical customer-facing service",
+        "Tier 2 - Important customer-facing or internal service",
+        "Tier 3 - Non-critical internal or batch service",
       ],
-      defaultValue: 'Tier 2 - Important customer-facing or internal service',
+      defaultValue: "Tier 2 - Important customer-facing or internal service",
       required: true,
     },
     {
-      id: 'traffic_profile',
-      label: 'Traffic and performance profile',
-      type: 'textarea',
+      id: "traffic_profile",
+      label: "Traffic and performance profile",
+      type: "textarea",
       placeholder:
-        'e.g. 40 requests/second normally, 250 at peak, p99 latency target under 800 ms, and a nightly batch job.',
+        "e.g. 40 requests/second normally, 250 at peak, p99 latency target under 800 ms, and a nightly batch job.",
       required: true,
     },
     {
-      id: 'dependencies',
-      label: 'Dependencies and failure boundaries',
-      type: 'textarea',
+      id: "dependencies",
+      label: "Dependencies and failure boundaries",
+      type: "textarea",
       placeholder:
-        'List databases, queues, third-party APIs, upstream services, and deployment infrastructure. Include known single points of failure.',
+        "List databases, queues, third-party APIs, upstream services, and deployment infrastructure. Include known single points of failure.",
       required: false,
     },
     {
-      id: 'monitoring_stack',
-      label: 'Monitoring and alerting stack',
-      type: 'text',
+      id: "monitoring_stack",
+      label: "Monitoring and alerting stack",
+      type: "text",
       placeholder:
-        'e.g. Prometheus, Grafana, Alertmanager, PagerDuty, Datadog, or CloudWatch',
+        "e.g. Prometheus, Grafana, Alertmanager, PagerDuty, Datadog, or CloudWatch",
       required: false,
     },
   ],
@@ -122,5 +122,5 @@ Rules:
 - Treat maintenance windows, client cancellations, and planned experiments explicitly instead of silently excluding them.
 - Tailor all examples to the stated criticality, traffic profile, dependencies, and monitoring stack.
 - If Prometheus is not named, still provide the rule format as an optional Prometheus-compatible starter and say it must be adapted to the actual platform.`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };

@@ -22,7 +22,8 @@ import { useDocumentTitle } from "../lib/useDocumentTitle";
 // Timeout configuration for LLM requests (in milliseconds)
 // Prevents runaway API calls from indefinitely blocking the UI
 const LLM_REQUEST_TIMEOUT_MS = 60000; // 60 seconds - reasonable for most LLM calls
-const TIMEOUT_ERROR_MESSAGE = "Request timed out - the LLM took too long to respond. Please try again.";
+const TIMEOUT_ERROR_MESSAGE =
+  "Request timed out - the LLM took too long to respond. Please try again.";
 
 export const PROVIDERS = [
   {
@@ -153,7 +154,7 @@ export default function BattleModeArena() {
   // without a configured key resolve immediately to a key missing state.
   const runProvider = useCallback(
     (prov) => {
-      const configuredKey = (apiKeys?.[prov.id] || '').trim()
+      const configuredKey = (apiKeys?.[prov.id] || "").trim();
       if (!configuredKey) {
         setResults((prev) => ({
           ...prev,
@@ -164,7 +165,7 @@ export default function BattleModeArena() {
             duration: null,
           },
         }));
-        return
+        return;
       }
 
       const userMessage = buildUserMessage(agent, inputs);
@@ -186,15 +187,18 @@ export default function BattleModeArena() {
         controller.abort();
       }, LLM_REQUEST_TIMEOUT_MS);
 
-      runAgent({
-        provider: prov.id,
-        model: prov.model,
-        apiKey: configuredKey,
-        systemPrompt: agent.systemPrompt,
-        userMessage,
-      }, {
-        signal: controller.signal, // Pass the abort signal to runAgent
-      })
+      runAgent(
+        {
+          provider: prov.id,
+          model: prov.model,
+          apiKey: configuredKey,
+          systemPrompt: agent.systemPrompt,
+          userMessage,
+        },
+        {
+          signal: controller.signal, // Pass the abort signal to runAgent
+        },
+      )
         .then((result) => {
           clearTimeout(timeoutId);
           recordAnalyticsRun({
@@ -245,7 +249,7 @@ export default function BattleModeArena() {
 
     // Cleanup: abort all pending requests when component unmounts
     return () => {
-      Object.values(abortControllersRef.current).forEach(controller => {
+      Object.values(abortControllersRef.current).forEach((controller) => {
         controller.abort();
       });
     };
@@ -259,7 +263,12 @@ export default function BattleModeArena() {
 
     setResults((prev) => ({
       ...prev,
-      [providerId]: { loading: true, content: null, error: null, duration: null },
+      [providerId]: {
+        loading: true,
+        content: null,
+        error: null,
+        duration: null,
+      },
     }));
 
     runProvider(prov);
@@ -302,7 +311,7 @@ export default function BattleModeArena() {
   if (!agent) return null;
 
   return (
-  <div className="min-h-screen transition-colors duration-300 dark:bg-surface bg-gray-50 dark:text-text-primary text-gray-900 battle-page-transition">
+    <div className="min-h-screen transition-colors duration-300 dark:bg-surface bg-gray-50 dark:text-text-primary text-gray-900 battle-page-transition">
       <style>{`
         @keyframes battleCardPulse {
           0%, 100% { transform: scale(1); box-shadow: 0 0 0px 0px var(--glow-color, transparent); }
@@ -373,7 +382,9 @@ export default function BattleModeArena() {
           </h1>
           <p className="text-base dark:text-text-primary text-gray-900">
             Running{" "}
-            <span className="dark:text-text-primary text-gray-900 font-semibold">{agent.name}</span>{" "}
+            <span className="dark:text-text-primary text-gray-900 font-semibold">
+              {agent.name}
+            </span>{" "}
             across your configured providers
           </p>
         </div>
@@ -396,9 +407,15 @@ export default function BattleModeArena() {
               Prompt Comparison Viewer
             </span>
             {promptViewerOpen ? (
-              <ChevronDown size={18} className=" dark:text-text-muted text-gray-700" />
+              <ChevronDown
+                size={18}
+                className=" dark:text-text-muted text-gray-700"
+              />
             ) : (
-              <ChevronRight size={18} className=" dark:text-text-muted text-gray-700" />
+              <ChevronRight
+                size={18}
+                className=" dark:text-text-muted text-gray-700"
+              />
             )}
           </button>
 

@@ -1,23 +1,24 @@
 const mlExperimentAutopsy = {
-  id: 'ml-experiment-autopsy',
-  name: 'Model Meltdown Detective',
-  description: 'Diagnose failed or underperforming ML experiments using model details, dataset context, metrics, hyperparameters, and code snippets.',
-  category: 'Engineering',
-  icon: 'ChartSpline',
+  id: "ml-experiment-autopsy",
+  name: "Model Meltdown Detective",
+  description:
+    "Diagnose failed or underperforming ML experiments using model details, dataset context, metrics, hyperparameters, and code snippets.",
+  category: "Engineering",
+  icon: "ChartSpline",
 
-  provider: 'any',
-  supportedProviders: ['openai', 'anthropic', 'google', 'mistral'],
-  defaultProvider: 'anthropic',
+  provider: "any",
+  supportedProviders: ["openai", "anthropic", "google", "mistral"],
+  defaultProvider: "anthropic",
   defaultModels: {
-    openai: 'gpt-4o',
-    anthropic: 'claude-sonnet-4-20250514',
-    google: 'gemini-1.5-pro',
-    mistral: 'mistral-large-latest',
+    openai: "gpt-4o",
+    anthropic: "claude-sonnet-4-20250514",
+    google: "gemini-1.5-pro",
+    mistral: "mistral-large-latest",
   },
-  model: 'claude-sonnet-4-20250514',
+  model: "claude-sonnet-4-20250514",
 
   exampleInputs: {
-    model_type: 'CNN (Convolutional Neural Network)',
+    model_type: "CNN (Convolutional Neural Network)",
 
     problem_description: `Trying to classify chest X-rays into 3 categories: Normal, Pneumonia, COVID-19.
 Model accuracy is stuck at 54% after 25 epochs. Expected at least 88%.
@@ -37,7 +38,7 @@ Epoch 15: train_loss=0.11, val_loss=2.34, val_acc=0.53
 Epoch 20: train_loss=0.05, val_loss=2.71, val_acc=0.54
 Epoch 25: train_loss=0.03, val_loss=2.98, val_acc=0.54`,
 
-    validation_accuracy: 'val_accuracy: 0.54, val_loss: 2.98',
+    validation_accuracy: "val_accuracy: 0.54, val_loss: 2.98",
 
     hyperparameters: `learning_rate: 0.01
 batch_size: 16
@@ -70,91 +71,96 @@ X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2)`,
 
   inputs: [
     {
-      id: 'model_type',
-      label: 'Model Type',
-      type: 'text',
-      placeholder: 'e.g. CNN, BERT, XGBoost, LightGBM, LSTM, Random Forest...',
+      id: "model_type",
+      label: "Model Type",
+      type: "text",
+      placeholder: "e.g. CNN, BERT, XGBoost, LightGBM, LSTM, Random Forest...",
       required: true,
     },
     {
-      id: 'problem_description',
-      label: 'Problem Description',
-      type: 'textarea',
-      placeholder: 'Describe what went wrong or what you were trying to achieve...\n\nExample:\nTrying to classify medical images into 3 categories. Model accuracy stuck at 52% after 20 epochs. Expected at least 85%.',
+      id: "problem_description",
+      label: "Problem Description",
+      type: "textarea",
+      placeholder:
+        "Describe what went wrong or what you were trying to achieve...\n\nExample:\nTrying to classify medical images into 3 categories. Model accuracy stuck at 52% after 20 epochs. Expected at least 85%.",
       required: true,
     },
     {
-      id: 'dataset_description',
-      label: 'Dataset Description',
-      type: 'textarea',
-      placeholder: 'Describe your dataset...\n\nExample:\n- 5,000 images (4,200 train / 800 val)\n- 3 classes: benign, malignant, normal\n- Class distribution: 70% benign, 20% normal, 10% malignant\n- Preprocessed: resized to 224x224, no normalization applied',
+      id: "dataset_description",
+      label: "Dataset Description",
+      type: "textarea",
+      placeholder:
+        "Describe your dataset...\n\nExample:\n- 5,000 images (4,200 train / 800 val)\n- 3 classes: benign, malignant, normal\n- Class distribution: 70% benign, 20% normal, 10% malignant\n- Preprocessed: resized to 224x224, no normalization applied",
       required: true,
     },
     {
-      id: 'training_metrics',
-      label: 'Training Metrics / Logs',
-      type: 'textarea',
-      placeholder: 'Paste your training logs or metrics per epoch...\n\nExample:\nEpoch 1: train_loss=1.2, val_loss=1.18, val_acc=0.41\nEpoch 5: train_loss=0.4, val_loss=1.35, val_acc=0.49\nEpoch 10: train_loss=0.1, val_loss=1.89, val_acc=0.52',
+      id: "training_metrics",
+      label: "Training Metrics / Logs",
+      type: "textarea",
+      placeholder:
+        "Paste your training logs or metrics per epoch...\n\nExample:\nEpoch 1: train_loss=1.2, val_loss=1.18, val_acc=0.41\nEpoch 5: train_loss=0.4, val_loss=1.35, val_acc=0.49\nEpoch 10: train_loss=0.1, val_loss=1.89, val_acc=0.52",
       required: false,
     },
     {
-      id: 'validation_accuracy',
-      label: 'Validation Accuracy / Loss',
-      type: 'text',
-      placeholder: 'e.g. val_accuracy: 0.52, val_loss: 1.89',
+      id: "validation_accuracy",
+      label: "Validation Accuracy / Loss",
+      type: "text",
+      placeholder: "e.g. val_accuracy: 0.52, val_loss: 1.89",
       required: false,
     },
     {
-      id: 'hyperparameters',
-      label: 'Hyperparameters Used',
-      type: 'textarea',
-      placeholder: 'List the hyperparameters you used...\n\nExample:\nlearning_rate: 0.01\nbatch_size: 32\nepochs: 20\noptimizer: SGD\ndropout: 0.0\nweight_decay: 0.0',
+      id: "hyperparameters",
+      label: "Hyperparameters Used",
+      type: "textarea",
+      placeholder:
+        "List the hyperparameters you used...\n\nExample:\nlearning_rate: 0.01\nbatch_size: 32\nepochs: 20\noptimizer: SGD\ndropout: 0.0\nweight_decay: 0.0",
       required: false,
     },
     {
-      id: 'code_snippet',
-      label: 'Code Snippet (Optional)',
-      type: 'code',
-      placeholder: '# Paste relevant code: model definition, training loop, preprocessing steps...\n\n# Example:\nmodel = Sequential([\n  Conv2D(32, (3,3), activation="relu"),\n  Flatten(),\n  Dense(3, activation="softmax")\n])\nmodel.compile(optimizer="sgd", loss="categorical_crossentropy")',
+      id: "code_snippet",
+      label: "Code Snippet (Optional)",
+      type: "code",
+      placeholder:
+        '# Paste relevant code: model definition, training loop, preprocessing steps...\n\n# Example:\nmodel = Sequential([\n  Conv2D(32, (3,3), activation="relu"),\n  Flatten(),\n  Dense(3, activation="softmax")\n])\nmodel.compile(optimizer="sgd", loss="categorical_crossentropy")',
       required: false,
     },
   ],
 
   loadExampleButton: {
     enabled: true,
-    label: 'Load example',
-    tooltip: 'Fill all fields with a sample CNN chest X-ray experiment',
+    label: "Load example",
+    tooltip: "Fill all fields with a sample CNN chest X-ray experiment",
   },
 
   exportOptions: {
     markdown: {
       enabled: true,
-      label: 'Export as Markdown',
-      filename: 'ml-autopsy-report.md',
+      label: "Export as Markdown",
+      filename: "ml-autopsy-report.md",
     },
     pdf: {
       enabled: true,
-      label: 'Export as PDF',
-      filename: 'ml-autopsy-report.pdf',
+      label: "Export as PDF",
+      filename: "ml-autopsy-report.pdf",
       // PDF generation should use the rendered markdown output.
       // Recommended: use a headless print approach (window.print or a lib like jsPDF / Puppeteer).
     },
   },
 
   copyOptions: {
-    copyMarkdown: { enabled: true, label: 'Copy' },
+    copyMarkdown: { enabled: true, label: "Copy" },
     copyPlainText: {
       enabled: true,
-      label: 'Copy as plain text',
+      label: "Copy as plain text",
       // Strip: ##, **, *, `, |, leading dashes, table separators
       stripPatterns: [
-        /^#{1,6}\s/gm,       // headings
-        /\*\*(.*?)\*\*/g,    // bold → inner text
-        /\*(.*?)\*/g,        // italic → inner text
+        /^#{1,6}\s/gm, // headings
+        /\*\*(.*?)\*\*/g, // bold → inner text
+        /\*(.*?)\*/g, // italic → inner text
         /`{1,3}[^`]*`{1,3}/g, // inline + fenced code → inner text
-        /^\|.*\|$/gm,        // table rows
-        /^[-|:\s]+$/gm,      // table separators
-        /^-\s/gm,            // bullet dashes
+        /^\|.*\|$/gm, // table rows
+        /^[-|:\s]+$/gm, // table separators
+        /^-\s/gm, // bullet dashes
       ],
     },
   },
@@ -274,7 +280,7 @@ EDGE CASES:
 - If a code snippet has a clear bug: flag it explicitly under ## Detected Issues as
   "Code Bug [CRITICAL]: <description>"`,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default mlExperimentAutopsy;

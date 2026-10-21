@@ -12,8 +12,7 @@ export default {
   exampleInputs: {
     service_architecture:
       "Microservices architecture: Node.js (NestJS) API Gateway -> Go OrderService -> Python Fraud-Detection ML Service -> PostgreSQL & Redis. Microservices communicate via gRPC for synchronous calls and Kafka for async workflows.",
-    telemetry_signals:
-      "Traces, Metrics & Structured Logs (Full 3-Pillar OTel)",
+    telemetry_signals: "Traces, Metrics & Structured Logs (Full 3-Pillar OTel)",
     collector_topology:
       "Sidecar + Gateway (DaemonSet on K8s + Centralized Collector)",
     observability_backend:

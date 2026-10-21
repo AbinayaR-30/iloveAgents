@@ -61,8 +61,7 @@ export default {
       id: "goals",
       label: "Your goals",
       type: "textarea",
-      placeholder:
-        "What do you say you want to achieve in the future?",
+      placeholder: "What do you say you want to achieve in the future?",
       required: true,
     },
     {
@@ -85,8 +84,7 @@ export default {
       id: "currentRoutine",
       label: "Your daily routine",
       type: "textarea",
-      placeholder:
-        "A rough breakdown of a normal day from wake-up to sleep...",
+      placeholder: "A rough breakdown of a normal day from wake-up to sleep...",
       required: false,
     },
   ],

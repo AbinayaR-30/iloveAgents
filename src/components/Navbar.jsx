@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { useState, useEffect } from "react";
+import { Link, NavLink } from "react-router-dom";
 import {
   Sun,
   Moon,
@@ -17,63 +17,64 @@ import {
   Info,
   Compass,
   Clock,
-} from 'lucide-react'
+} from "lucide-react";
 
-import Logo from './Logo'
-import KeyboardShortcutsModal from './KeyboardShortcutsModal'
-import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts'
-import { useSessionSpend } from '../lib/useSessionSpend'
+import Logo from "./Logo";
+import KeyboardShortcutsModal from "./KeyboardShortcutsModal";
+import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
+import { useSessionSpend } from "../lib/useSessionSpend";
 
 export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
-  const [darkMode, setDarkMode] = useState(true)
-  const [showShortcuts, setShowShortcuts] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [showSpendPopup, setShowSpendPopup] = useState(false)
-  const { totalSpend, runs, clearSession } = useSessionSpend()
+  const [darkMode, setDarkMode] = useState(true);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showSpendPopup, setShowSpendPopup] = useState(false);
+  const { totalSpend, runs, clearSession } = useSessionSpend();
 
   useKeyboardShortcuts({
-    '?': () => setShowShortcuts(true),
-  })
+    "?": () => setShowShortcuts(true),
+  });
 
   useEffect(() => {
-    const saved = localStorage.getItem('ila_theme')
+    const saved = localStorage.getItem("ila_theme");
 
-    if (saved === 'light') {
-      setDarkMode(false)
-      document.documentElement.classList.remove('dark')
+    if (saved === "light") {
+      setDarkMode(false);
+      document.documentElement.classList.remove("dark");
     } else {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add("dark");
     }
-  }, [])
+  }, []);
 
   const toggleTheme = () => {
-    const next = !darkMode
-    setDarkMode(next)
+    const next = !darkMode;
+    setDarkMode(next);
 
     if (next) {
-      document.documentElement.classList.add('dark')
-      localStorage.setItem('ila_theme', 'dark')
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("ila_theme", "dark");
     } else {
-      document.documentElement.classList.remove('dark')
-      localStorage.setItem('ila_theme', 'light')
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("ila_theme", "light");
     }
-  }
+  };
 
   const navItems = [
-    { label: 'Agents', to: '/', icon: Sparkles, end: true },
-    { label: 'Automations', to: '/automations', icon: Clock },
-    { label: 'Suites', to: '/suites', icon: LibraryBig },
-    { label: 'Workflows', to: '/workflows', icon: Workflow },
-    { label: 'Battle', to: '/battle', icon: PanelsTopLeft },
-    { label: 'About', to: '/about', icon: Info },
-  ]
+    { label: "Agents", to: "/", icon: Sparkles, end: true },
+    { label: "Automations", to: "/automations", icon: Clock },
+    { label: "Suites", to: "/suites", icon: LibraryBig },
+    { label: "Workflows", to: "/workflows", icon: Workflow },
+    { label: "Battle", to: "/battle", icon: PanelsTopLeft },
+    { label: "About", to: "/about", icon: Info },
+  ];
 
   const navLinkClass = ({ isActive }) =>
     `group relative inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-semibold tracking-wide transition-all duration-300
-    ${isActive
-      ? 'text-gray-950 dark:text-white bg-white/80 dark:bg-white/10 shadow-sm shadow-indigo-500/10'
-      : 'text-gray-600 hover:text-gray-950 dark:text-text-secondary dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/5'
-    }`
+    ${
+      isActive
+        ? "text-gray-950 dark:text-white bg-white/80 dark:bg-white/10 shadow-sm shadow-indigo-500/10"
+        : "text-gray-600 hover:text-gray-950 dark:text-text-secondary dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/5"
+    }`;
 
   return (
     <>
@@ -94,10 +95,10 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
         "
       >
         <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 min-w-0">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="
+          <div className="flex items-center gap-2 min-w-0">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="
               lg:hidden
               p-2.5
               rounded-full
@@ -107,57 +108,64 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
               hover:bg-white/70
               transition-all duration-200 hover:scale-105
             "
-            aria-label="Toggle sidebar"
-          >
-            {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
+              aria-label="Toggle sidebar"
+            >
+              {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
 
-          <Link
-            to="/"
-            aria-label="iloveAgents - Go to homepage"
-            onClick={() => {
-              setMobileMenuOpen(false)
-              window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              })
-            }}
-            className="
+            <Link
+              to="/"
+              aria-label="iloveAgents - Go to homepage"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+              }}
+              className="
               flex items-center rounded-full px-1.5 py-1
               min-w-0
               overflow-hidden
               transition-all duration-300 hover:scale-[1.02]
               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500
             "
-          >
-            <Logo
-              height={24}
-              className="dark:text-white text-gray-900 max-w-full"
-            />
-          </Link>
-        </div>
+            >
+              <Logo
+                height={24}
+                className="dark:text-white text-gray-900 max-w-full"
+              />
+            </Link>
+          </div>
 
-        <div className="hidden md:flex items-center justify-center rounded-full border border-white/50 bg-white/45 p-1 shadow-inner shadow-white/50 dark:border-white/10 dark:bg-black/20 dark:shadow-black/20">
-          {navItems.map(({ label, to, icon: Icon, end, id }) => (
-            <NavLink key={to} to={to} end={end} className={navLinkClass} aria-label={label} id={id}>
-              {({ isActive }) => (
-                <>
-                  <Icon size={14} />
-                <span>{label}</span>
-                <span className="absolute inset-x-4 -bottom-1 h-px scale-x-0 rounded-full bg-gradient-to-r from-transparent via-indigo-400 to-transparent opacity-0 transition-all duration-300 group-hover:scale-x-100 group-hover:opacity-100" />
-                </>
-              )}
-            </NavLink>
-          ))}
-        </div>
+          <div className="hidden md:flex items-center justify-center rounded-full border border-white/50 bg-white/45 p-1 shadow-inner shadow-white/50 dark:border-white/10 dark:bg-black/20 dark:shadow-black/20">
+            {navItems.map(({ label, to, icon: Icon, end, id }) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={end}
+                className={navLinkClass}
+                aria-label={label}
+                id={id}
+              >
+                {({ isActive }) => (
+                  <>
+                    <Icon size={14} />
+                    <span>{label}</span>
+                    <span className="absolute inset-x-4 -bottom-1 h-px scale-x-0 rounded-full bg-gradient-to-r from-transparent via-indigo-400 to-transparent opacity-0 transition-all duration-300 group-hover:scale-x-100 group-hover:opacity-100" />
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </div>
 
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-          <a
-            href="https://github.com/AditthyaSS/iloveAgents"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Star iloveAgents on GitHub (opens in new tab)"
-            className="
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            <a
+              href="https://github.com/AditthyaSS/iloveAgents"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Star iloveAgents on GitHub (opens in new tab)"
+              className="
               hidden md:flex items-center justify-center gap-1.5
               px-3.5 py-2
               rounded-full
@@ -167,15 +175,15 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
               shadow-lg shadow-indigo-500/25
               transition-all duration-300 hover:-translate-y-0.5 hover:shadow-violet-500/35
             "
-          >
-            <Github size={15} aria-hidden="true" />
-            <span>Star</span>
-          </a>
+            >
+              <Github size={15} aria-hidden="true" />
+              <span>Star</span>
+            </a>
 
-          {onStartTour && (
-            <button
-              onClick={onStartTour}
-              className="
+            {onStartTour && (
+              <button
+                onClick={onStartTour}
+                className="
                 hidden md:inline-flex items-center justify-center p-2.5
                 rounded-full
                 transition-all duration-200 hover:scale-105
@@ -185,16 +193,16 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
                 text-gray-500
                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500
               "
-              aria-label="Take a tour"
-              title="Take a tour"
-            >
-              <Compass size={16} />
-            </button>
-          )}
+                aria-label="Take a tour"
+                title="Take a tour"
+              >
+                <Compass size={16} />
+              </button>
+            )}
 
-          <button
-            onClick={() => setShowShortcuts(true)}
-            className="
+            <button
+              onClick={() => setShowShortcuts(true)}
+              className="
               hidden md:inline-flex items-center justify-center p-2.5
               rounded-full
               transition-all duration-200 hover:scale-105
@@ -204,66 +212,78 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
               text-gray-500
               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500
             "
-            aria-label="Keyboard Shortcuts"
-          >
-            <HelpCircle size={16} />
-          </button>
+              aria-label="Keyboard Shortcuts"
+            >
+              <HelpCircle size={16} />
+            </button>
 
-          {totalSpend > 0 && (
-            <div className="relative hidden md:block">
-              <button
-                onClick={() => setShowSpendPopup((p) => !p)}
-                className="flex items-center gap-1.5 px-2.5 py-2 rounded-full
+            {totalSpend > 0 && (
+              <div className="relative hidden md:block">
+                <button
+                  onClick={() => setShowSpendPopup((p) => !p)}
+                  className="flex items-center gap-1.5 px-2.5 py-2 rounded-full
                   text-xs font-semibold
                   dark:text-emerald-400 text-emerald-600
                   dark:bg-emerald-500/10 bg-emerald-50
                   border dark:border-emerald-500/20 border-emerald-300/30
                   hover:dark:bg-emerald-500/20 hover:bg-emerald-100
                   transition-all duration-200"
-                aria-label="Session spend"
-              >
-                <DollarSign size={12} />
-                <span className="tabular-nums">${totalSpend.toFixed(2)}</span>
-              </button>
-              {showSpendPopup && (
-                <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border
+                  aria-label="Session spend"
+                >
+                  <DollarSign size={12} />
+                  <span className="tabular-nums">${totalSpend.toFixed(2)}</span>
+                </button>
+                {showSpendPopup && (
+                  <div
+                    className="absolute right-0 top-full mt-2 w-64 rounded-xl border
                   dark:bg-surface-card dark:border-border bg-white border-gray-200
-                  shadow-xl z-50 p-3 animate-fade-in">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-semibold dark:text-text-primary text-gray-900">
-                      Session Spend
-                    </span>
-                    <span className="text-[10px] dark:text-text-muted text-gray-400">
-                      {runs.length} run{runs.length !== 1 ? 's' : ''}
-                    </span>
-                  </div>
-                  <div className="text-lg font-bold dark:text-text-primary text-gray-900 tabular-nums mb-2">
-                    ${totalSpend.toFixed(4)}
-                  </div>
-                  <div className="max-h-32 overflow-y-auto space-y-1 mb-2">
-                    {runs.slice(0, 10).map((run, i) => (
-                      <div key={i} className="flex justify-between text-[10px] dark:text-text-muted text-gray-400">
-                        <span className="truncate max-w-[140px]">{run.model || 'Unknown'}</span>
-                        <span className="tabular-nums font-medium">${run.totalCost.toFixed(4)}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => { clearSession(); setShowSpendPopup(false); }}
-                    className="flex items-center gap-1 text-[10px] font-medium dark:text-text-muted text-gray-400 hover:text-error transition-colors"
+                  shadow-xl z-50 p-3 animate-fade-in"
                   >
-                    <RotateCcw size={10} />
-                    Reset session
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-semibold dark:text-text-primary text-gray-900">
+                        Session Spend
+                      </span>
+                      <span className="text-[10px] dark:text-text-muted text-gray-400">
+                        {runs.length} run{runs.length !== 1 ? "s" : ""}
+                      </span>
+                    </div>
+                    <div className="text-lg font-bold dark:text-text-primary text-gray-900 tabular-nums mb-2">
+                      ${totalSpend.toFixed(4)}
+                    </div>
+                    <div className="max-h-32 overflow-y-auto space-y-1 mb-2">
+                      {runs.slice(0, 10).map((run, i) => (
+                        <div
+                          key={i}
+                          className="flex justify-between text-[10px] dark:text-text-muted text-gray-400"
+                        >
+                          <span className="truncate max-w-[140px]">
+                            {run.model || "Unknown"}
+                          </span>
+                          <span className="tabular-nums font-medium">
+                            ${run.totalCost.toFixed(4)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => {
+                        clearSession();
+                        setShowSpendPopup(false);
+                      }}
+                      className="flex items-center gap-1 text-[10px] font-medium dark:text-text-muted text-gray-400 hover:text-error transition-colors"
+                    >
+                      <RotateCcw size={10} />
+                      Reset session
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
-          <button
-            id="nav-theme-toggle"
-            onClick={toggleTheme}
-            className="
+            <button
+              id="nav-theme-toggle"
+              onClick={toggleTheme}
+              className="
               hidden md:inline-flex items-center justify-center p-2.5
               rounded-full
               transition-all duration-200 hover:scale-105
@@ -273,16 +293,16 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
               text-gray-500
               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500
             "
-            aria-label="Toggle theme"
-          >
-            {darkMode ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
+              aria-label="Toggle theme"
+            >
+              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
 
-          {/* Settings icon link */}
-          <Link
-            id="nav-settings-link"
-            to="/settings"
-            className="
+            {/* Settings icon link */}
+            <Link
+              id="nav-settings-link"
+              to="/settings"
+              className="
               hidden md:inline-flex items-center justify-center p-2.5
               rounded-full
               transition-all duration-200 hover:scale-105
@@ -292,33 +312,35 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
               text-gray-500
               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500
             "
-            aria-label="Settings"
-          >
-            <Settings size={16} />
-          </Link>
+              aria-label="Settings"
+            >
+              <Settings size={16} />
+            </Link>
 
-          <button
-            onClick={() => setMobileMenuOpen((open) => !open)}
-            className="
+            <button
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="
               md:hidden p-2.5 rounded-full
               text-gray-600 dark:text-text-secondary
               transition-all duration-200 hover:scale-105
               hover:bg-white/70 dark:hover:bg-white/10
               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500
             "
-            aria-label="Toggle navigation menu"
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
-        </div>
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
         </div>
 
         <div
           role="menu"
-          aria-hidden={ !mobileMenuOpen }
+          aria-hidden={!mobileMenuOpen}
           className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${
-            mobileMenuOpen ? 'max-h-80 opacity-100 pt-3' : 'max-h-0 opacity-0 pt-0'
+            mobileMenuOpen
+              ? "max-h-80 opacity-100 pt-3"
+              : "max-h-0 opacity-0 pt-0"
           }`}
         >
           <div className="rounded-[1.5rem] border border-white/50 bg-white/70 p-2 shadow-inner shadow-white/50 dark:border-white/10 dark:bg-black/25 dark:shadow-black/20">
@@ -332,8 +354,8 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
                   className={({ isActive }) =>
                     `flex items-center justify-between rounded-2xl px-3.5 py-3 text-sm font-semibold transition-all duration-200 ${
                       isActive
-                        ? 'bg-white text-gray-950 shadow-sm dark:bg-white/10 dark:text-white'
-                        : 'text-gray-600 hover:bg-white/70 hover:text-gray-950 dark:text-text-secondary dark:hover:bg-white/10 dark:hover:text-white'
+                        ? "bg-white text-gray-950 shadow-sm dark:bg-white/10 dark:text-white"
+                        : "text-gray-600 hover:bg-white/70 hover:text-gray-950 dark:text-text-secondary dark:hover:bg-white/10 dark:hover:text-white"
                     }`
                   }
                 >
@@ -356,8 +378,8 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
                   onClick={() => {
-                    setShowShortcuts(true)
-                    setMobileMenuOpen(false)
+                    setShowShortcuts(true);
+                    setMobileMenuOpen(false);
                   }}
                   className="flex items-center justify-center gap-2 rounded-2xl border border-white/50 bg-white/70 px-3 py-2.5 text-xs font-semibold text-gray-600 transition-colors hover:text-gray-950 dark:border-white/10 dark:bg-white/5 dark:text-text-secondary dark:hover:text-white"
                 >
@@ -382,5 +404,5 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, onStartTour }) {
         onClose={() => setShowShortcuts(false)}
       />
     </>
-  )
+  );
 }

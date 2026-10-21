@@ -1,16 +1,16 @@
 const terraformPlanDiffExplainer = {
-  id: 'terraform-plan-diff-explainer',
-  createdAt: '2026-09-28',
-  name: 'Terraform Plan Diff Explainer',
-  description: 'Paste raw `terraform plan` output and get a plain-English breakdown of every create, update, destroy, and replace action — with downtime and data-loss risks called out clearly before you apply.',
-  category: 'DevOps',
-  icon: 'GitCompare',
-  provider: 'any',
-  defaultProvider: 'anthropic',
-  model: 'claude-sonnet-4-6',
+  id: "terraform-plan-diff-explainer",
+  createdAt: "2026-09-28",
+  name: "Terraform Plan Diff Explainer",
+  description:
+    "Paste raw `terraform plan` output and get a plain-English breakdown of every create, update, destroy, and replace action — with downtime and data-loss risks called out clearly before you apply.",
+  category: "DevOps",
+  icon: "GitCompare",
+  provider: "any",
+  defaultProvider: "anthropic",
+  model: "claude-sonnet-4-6",
   exampleInputs: {
-    plan_output:
-      `Terraform will perform the following actions:
+    plan_output: `Terraform will perform the following actions:
 
   # aws_db_instance.main will be updated in-place
   ~ resource "aws_db_instance" "main" {
@@ -40,22 +40,23 @@ const terraformPlanDiffExplainer = {
     }
 
 Plan: 2 to add, 1 to change, 2 to destroy.`,
-    environment_context: 'Production',
+    environment_context: "Production",
   },
   inputs: [
     {
-      id: 'plan_output',
-      label: 'Terraform Plan Output',
-      type: 'code',
-      placeholder: 'Paste the full output of `terraform plan` (or `terraform show -json` piped through a formatter) here...',
+      id: "plan_output",
+      label: "Terraform Plan Output",
+      type: "code",
+      placeholder:
+        "Paste the full output of `terraform plan` (or `terraform show -json` piped through a formatter) here...",
       required: true,
     },
     {
-      id: 'environment_context',
-      label: 'Environment (optional)',
-      type: 'select',
-      options: ['Not specified', 'Development', 'Staging', 'Production'],
-      defaultValue: 'Not specified',
+      id: "environment_context",
+      label: "Environment (optional)",
+      type: "select",
+      options: ["Not specified", "Development", "Staging", "Production"],
+      defaultValue: "Not specified",
       required: false,
     },
   ],
@@ -157,11 +158,12 @@ Rules:
 6. Keep language plain and jargon-free enough for a non-Terraform-expert reviewer (e.g. a manager
    approving the change) while remaining precise enough for the engineer running \`apply\`.
 7. If the pasted input is not actually Terraform plan output, say so clearly instead of guessing.`,
-  outputType: 'markdown',
+  outputType: "markdown",
   loadExampleButton: {
     enabled: true,
-    label: 'Load example',
-    tooltip: 'Fill the form with a sample plan showing a create, an update, a destroy, and a forced replacement',
+    label: "Load example",
+    tooltip:
+      "Fill the form with a sample plan showing a create, an update, a destroy, and a forced replacement",
   },
 };
 

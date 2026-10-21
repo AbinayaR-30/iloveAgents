@@ -8,18 +8,19 @@
  * throwing.
  */
 
-const LISTINGS_KEY = 'ila_marketplace_listings'
-const DRAFTS_KEY = 'ila_marketplace_drafts'
-const VOTES_KEY = 'ila_marketplace_votes'
+const LISTINGS_KEY = "ila_marketplace_listings";
+const DRAFTS_KEY = "ila_marketplace_drafts";
+const VOTES_KEY = "ila_marketplace_votes";
 
 export const MARKETPLACE_CATEGORIES = [
-  'Data Processing',
-  'Content Generation',
-  'Research',
-]
+  "Data Processing",
+  "Content Generation",
+  "Research",
+];
 
 // Config keys that must never be published as-is
-const CREDENTIAL_KEY_PATTERN = /(api[_-]?key|token|secret|password|credential|auth)/i
+const CREDENTIAL_KEY_PATTERN =
+  /(api[_-]?key|token|secret|password|credential|auth)/i;
 
 /**
  * Deep-copy an agent config, replacing the value of any credential-like field
@@ -29,27 +30,33 @@ const CREDENTIAL_KEY_PATTERN = /(api[_-]?key|token|secret|password|credential|au
  * @returns {{ config: object, sanitizedFields: string[] }}
  */
 export function sanitizeAgentConfig(config) {
-  const sanitizedFields = []
+  const sanitizedFields = [];
 
   const walk = (value, path) => {
-    if (Array.isArray(value)) return value.map((v, i) => walk(v, `${path}[${i}]`))
-    if (value && typeof value === 'object') {
-      const out = {}
+    if (Array.isArray(value))
+      return value.map((v, i) => walk(v, `${path}[${i}]`));
+    if (value && typeof value === "object") {
+      const out = {};
       for (const [key, v] of Object.entries(value)) {
-        const childPath = path ? `${path}.${key}` : key
-        if (CREDENTIAL_KEY_PATTERN.test(key) && typeof v === 'string' && v !== '') {
-          out[key] = `YOUR_${key.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase()}_HERE`
-          sanitizedFields.push(childPath)
+        const childPath = path ? `${path}.${key}` : key;
+        if (
+          CREDENTIAL_KEY_PATTERN.test(key) &&
+          typeof v === "string" &&
+          v !== ""
+        ) {
+          out[key] =
+            `YOUR_${key.replace(/[^a-zA-Z0-9]/g, "_").toUpperCase()}_HERE`;
+          sanitizedFields.push(childPath);
         } else {
-          out[key] = walk(v, childPath)
+          out[key] = walk(v, childPath);
         }
       }
-      return out
+      return out;
     }
-    return value
-  }
+    return value;
+  };
 
-  return { config: walk(config ?? {}, ''), sanitizedFields }
+  return { config: walk(config ?? {}, ""), sanitizedFields };
 }
 
 /**
@@ -59,26 +66,31 @@ export function sanitizeAgentConfig(config) {
  * @returns {object} the stored listing
  */
 export function publishAgent(entry) {
-  const { config, sanitizedFields } = sanitizeAgentConfig(entry.config)
+  const { config, sanitizedFields } = sanitizeAgentConfig(entry.config);
   const listing = {
     id: `mkt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-    name: String(entry.name ?? '').trim(),
-    description: String(entry.description ?? '').trim(),
-    tags: (entry.tags ?? []).map((t) => String(t).trim()).filter(Boolean).slice(0, 8),
-    category: MARKETPLACE_CATEGORIES.includes(entry.category) ? entry.category : MARKETPLACE_CATEGORIES[0],
-    readme: entry.readme ? String(entry.readme) : '',
-    author: String(entry.author ?? 'Anonymous').trim() || 'Anonymous',
+    name: String(entry.name ?? "").trim(),
+    description: String(entry.description ?? "").trim(),
+    tags: (entry.tags ?? [])
+      .map((t) => String(t).trim())
+      .filter(Boolean)
+      .slice(0, 8),
+    category: MARKETPLACE_CATEGORIES.includes(entry.category)
+      ? entry.category
+      : MARKETPLACE_CATEGORIES[0],
+    readme: entry.readme ? String(entry.readme) : "",
+    author: String(entry.author ?? "Anonymous").trim() || "Anonymous",
     config,
     sanitizedFields,
     importCount: 0,
     ratingTotal: 0,
     ratingCount: 0,
     publishedAt: new Date().toISOString(),
-  }
-  const listings = loadListings()
-  listings.unshift(listing)
-  saveJson(LISTINGS_KEY, listings)
-  return listing
+  };
+  const listings = loadListings();
+  listings.unshift(listing);
+  saveJson(LISTINGS_KEY, listings);
+  return listing;
 }
 
 /**
@@ -86,20 +98,23 @@ export function publishAgent(entry) {
  * @returns {Array<object>}
  */
 export function loadListings() {
-  const listings = loadJson(LISTINGS_KEY, [])
-  return Array.isArray(listings) ? listings.map(normalizeListing) : []
+  const listings = loadJson(LISTINGS_KEY, []);
+  return Array.isArray(listings) ? listings.map(normalizeListing) : [];
 }
 
 export function normalizeListing(listing) {
-  if (!listing || typeof listing !== 'object') return listing
+  if (!listing || typeof listing !== "object") return listing;
   return {
     ...listing,
     tags: Array.isArray(listing.tags)
-      ? listing.tags.filter((t) => typeof t === 'string')
+      ? listing.tags.filter((t) => typeof t === "string")
       : [],
-    sanitizedFields: Array.isArray(listing.sanitizedFields) ? listing.sanitizedFields : [],
-    importCount: typeof listing.importCount === 'number' ? listing.importCount : 0,
-  }
+    sanitizedFields: Array.isArray(listing.sanitizedFields)
+      ? listing.sanitizedFields
+      : [],
+    importCount:
+      typeof listing.importCount === "number" ? listing.importCount : 0,
+  };
 }
 
 /**
@@ -110,9 +125,9 @@ export function normalizeListing(listing) {
  * @returns {object|null} the created draft, or null when the listing is gone
  */
 export function importAgent(listingId) {
-  const listings = loadListings()
-  const listing = listings.find((l) => l.id === listingId)
-  if (!listing) return null
+  const listings = loadListings();
+  const listing = listings.find((l) => l.id === listingId);
+  if (!listing) return null;
 
   const draft = {
     id: `draft_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
@@ -124,16 +139,16 @@ export function importAgent(listingId) {
     pendingCredentialFields: [...listing.sanitizedFields],
     readyToRun: listing.sanitizedFields.length === 0,
     importedAt: new Date().toISOString(),
-  }
+  };
 
-  const drafts = loadJson(DRAFTS_KEY, [])
-  drafts.unshift(draft)
-  saveJson(DRAFTS_KEY, drafts)
+  const drafts = loadJson(DRAFTS_KEY, []);
+  drafts.unshift(draft);
+  saveJson(DRAFTS_KEY, drafts);
 
-  listing.importCount = (listing.importCount ?? 0) + 1
-  saveJson(LISTINGS_KEY, listings)
+  listing.importCount = (listing.importCount ?? 0) + 1;
+  saveJson(LISTINGS_KEY, listings);
 
-  return draft
+  return draft;
 }
 
 /**
@@ -141,7 +156,7 @@ export function importAgent(listingId) {
  * @returns {Array<object>}
  */
 export function loadDrafts() {
-  return loadJson(DRAFTS_KEY, [])
+  return loadJson(DRAFTS_KEY, []);
 }
 
 /**
@@ -152,25 +167,25 @@ export function loadDrafts() {
  * @returns {{ average: number, count: number }|null}
  */
 export function rateAgent(listingId, stars) {
-  const value = Math.min(5, Math.max(1, Math.round(stars)))
-  const listings = loadListings()
-  const listing = listings.find((l) => l.id === listingId)
-  if (!listing) return null
+  const value = Math.min(5, Math.max(1, Math.round(stars)));
+  const listings = loadListings();
+  const listing = listings.find((l) => l.id === listingId);
+  if (!listing) return null;
 
-  const votes = loadJson(VOTES_KEY, {})
-  const previous = votes[listingId]
+  const votes = loadJson(VOTES_KEY, {});
+  const previous = votes[listingId];
 
   if (previous) {
-    listing.ratingTotal = listing.ratingTotal - previous + value
+    listing.ratingTotal = listing.ratingTotal - previous + value;
   } else {
-    listing.ratingTotal = (listing.ratingTotal ?? 0) + value
-    listing.ratingCount = (listing.ratingCount ?? 0) + 1
+    listing.ratingTotal = (listing.ratingTotal ?? 0) + value;
+    listing.ratingCount = (listing.ratingCount ?? 0) + 1;
   }
-  votes[listingId] = value
+  votes[listingId] = value;
 
-  saveJson(LISTINGS_KEY, listings)
-  saveJson(VOTES_KEY, votes)
-  return { average: getAverageRating(listing), count: listing.ratingCount }
+  saveJson(LISTINGS_KEY, listings);
+  saveJson(VOTES_KEY, votes);
+  return { average: getAverageRating(listing), count: listing.ratingCount };
 }
 
 /**
@@ -179,8 +194,8 @@ export function rateAgent(listingId, stars) {
  * @returns {number|null}
  */
 export function getUserVote(listingId) {
-  const votes = loadJson(VOTES_KEY, {})
-  return votes[listingId] ?? null
+  const votes = loadJson(VOTES_KEY, {});
+  return votes[listingId] ?? null;
 }
 
 /**
@@ -189,8 +204,8 @@ export function getUserVote(listingId) {
  * @returns {number}
  */
 export function getAverageRating(listing) {
-  if (!listing?.ratingCount) return 0
-  return Math.round((listing.ratingTotal / listing.ratingCount) * 10) / 10
+  if (!listing?.ratingCount) return 0;
+  return Math.round((listing.ratingTotal / listing.ratingCount) * 10) / 10;
 }
 
 /**
@@ -199,31 +214,32 @@ export function getAverageRating(listing) {
  * @param {{ search?: string, category?: string }} filters
  * @returns {Array<object>}
  */
-export function filterListings(listings, { search = '', category = '' } = {}) {
-  const q = search.trim().toLowerCase()
+export function filterListings(listings, { search = "", category = "" } = {}) {
+  const q = search.trim().toLowerCase();
   return listings.filter((l) => {
-    if (category && l.category !== category) return false
-    if (!q) return true
-    const tags = Array.isArray(l.tags) ? l.tags : []
+    if (category && l.category !== category) return false;
+    if (!q) return true;
+    const tags = Array.isArray(l.tags) ? l.tags : [];
     return (
-      String(l.name || '').toLowerCase().includes(q) ||
-      tags.some((t) => String(t).toLowerCase().includes(q))
-    )
-  })
+      String(l.name || "")
+        .toLowerCase()
+        .includes(q) || tags.some((t) => String(t).toLowerCase().includes(q))
+    );
+  });
 }
 
 function loadJson(key, fallback) {
   try {
-    const parsed = JSON.parse(localStorage.getItem(key) ?? 'null')
-    return parsed ?? fallback
+    const parsed = JSON.parse(localStorage.getItem(key) ?? "null");
+    return parsed ?? fallback;
   } catch {
-    return fallback
+    return fallback;
   }
 }
 
 function saveJson(key, value) {
   try {
-    localStorage.setItem(key, JSON.stringify(value))
+    localStorage.setItem(key, JSON.stringify(value));
   } catch {
     // Storage unavailable or full; the UI keeps its in-memory state
   }

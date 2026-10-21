@@ -1,17 +1,38 @@
-import { useState, useMemo, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, ArrowRight, SkipForward, Sparkles,
-  Code2, BarChart3, TrendingUp, DollarSign, Palette,
-  PenLine, GraduationCap, Briefcase, HeartPulse, ShieldCheck, Gamepad2,
-} from 'lucide-react'
-import { useAgents } from '../lib/useAgents'
+  ArrowLeft,
+  ArrowRight,
+  SkipForward,
+  Sparkles,
+  Code2,
+  BarChart3,
+  TrendingUp,
+  DollarSign,
+  Palette,
+  PenLine,
+  GraduationCap,
+  Briefcase,
+  HeartPulse,
+  ShieldCheck,
+  Gamepad2,
+} from "lucide-react";
+import { useAgents } from "../lib/useAgents";
 
 // Map icon name string → Lucide component
 const SUITE_ICONS = {
-  Code2, BarChart3, TrendingUp, DollarSign, Palette,
-  PenLine, GraduationCap, Briefcase, HeartPulse, ShieldCheck, Gamepad2,
-}
+  Code2,
+  BarChart3,
+  TrendingUp,
+  DollarSign,
+  Palette,
+  PenLine,
+  GraduationCap,
+  Briefcase,
+  HeartPulse,
+  ShieldCheck,
+  Gamepad2,
+};
 
 /**
  * SuiteWizard
@@ -23,138 +44,148 @@ const SUITE_ICONS = {
  *   onBack — callback to return to the suites browse view
  */
 export default function SuiteWizard({ suite, onBack }) {
-  const navigate = useNavigate()
-  const { agents: allAgents } = useAgents()
+  const navigate = useNavigate();
+  const { agents: allAgents } = useAgents();
 
-  const questions = suite.quiz?.questions ?? []
+  const questions = suite.quiz?.questions ?? [];
 
   // ── State
-  const [step, setStep] = useState(0)           // current question index, -1 = results
- const [answers, setAnswers] = useState(
-  Array(questions.length).fill(null)
-)
- // selected option index for current question
+  const [step, setStep] = useState(0); // current question index, -1 = results
+  const [answers, setAnswers] = useState(Array(questions.length).fill(null));
+  // selected option index for current question
   // tagCounts maps agentId → number of times it appeared in chosen tags
-  const [tagCounts, setTagCounts] = useState({})
-  const [answeredCount, setAnsweredCount] = useState(0)
-  const [showResults, setShowResults] = useState(false)
-  
+  const [tagCounts, setTagCounts] = useState({});
+  const [answeredCount, setAnsweredCount] = useState(0);
+  const [showResults, setShowResults] = useState(false);
+
   useEffect(() => {
-  const handleKeyDown = (event) => {
-    if (event.key !== "Enter" || event.repeat) return
+    const handleKeyDown = (event) => {
+      if (event.key !== "Enter" || event.repeat) return;
 
-    const active = document.activeElement
+      const active = document.activeElement;
 
-    if (active) {
-      const tag = active.tagName
+      if (active) {
+        const tag = active.tagName;
 
-      const isInteractive =
-        ["BUTTON", "INPUT", "TEXTAREA", "SELECT", "A"].includes(tag)
+        const isInteractive = [
+          "BUTTON",
+          "INPUT",
+          "TEXTAREA",
+          "SELECT",
+          "A",
+        ].includes(tag);
 
-      const isSelectedOptionButton =
-  active.dataset.option === "true" &&
-  Number(active.dataset.index) === answers[step]
+        const isSelectedOptionButton =
+          active.dataset.option === "true" &&
+          Number(active.dataset.index) === answers[step];
 
-if (isInteractive && !isSelectedOptionButton) {
-  return
-}
-    }
+        if (isInteractive && !isSelectedOptionButton) {
+          return;
+        }
+      }
 
-    if (answers[step] == null) return
+      if (answers[step] == null) return;
 
-    event.preventDefault()
-    handleNext()
-  }
+      event.preventDefault();
+      handleNext();
+    };
 
-  window.addEventListener("keydown", handleKeyDown)
+    window.addEventListener("keydown", handleKeyDown);
 
-  return () => {
-    window.removeEventListener("keydown", handleKeyDown)
-  }
-}, [answers, step])
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [answers, step]);
 
   // ── Helpers
 
   // Look up a full agent object by id from the loaded agents list
-  const findAgent = (id) => allAgents.find((a) => a.id === id)
+  const findAgent = (id) => allAgents.find((a) => a.id === id);
 
   // Commit the current answer and advance
   const handleNext = () => {
-  const newCounts = {}
-  let newAnsweredCount = 0
+    const newCounts = {};
+    let newAnsweredCount = 0;
 
-  answers.forEach((selected, questionIndex) => {
-    if (selected == null) return
+    answers.forEach((selected, questionIndex) => {
+      if (selected == null) return;
 
-    newAnsweredCount++
+      newAnsweredCount++;
 
-    const option = questions[questionIndex].options[selected]
+      const option = questions[questionIndex].options[selected];
 
-    option.tags.forEach((tag) => {
-      newCounts[tag] = (newCounts[tag] || 0) + 1
-    })
-  })
+      option.tags.forEach((tag) => {
+        newCounts[tag] = (newCounts[tag] || 0) + 1;
+      });
+    });
 
-  setTagCounts(newCounts)
-  setAnsweredCount(newAnsweredCount)
+    setTagCounts(newCounts);
+    setAnsweredCount(newAnsweredCount);
 
-  advance()
-}
+    advance();
+  };
 
   // Skip current question without recording an answer
   const handleSkip = () => {
-    advance()
-  }
+    advance();
+  };
 
-    const handleBack = () => {
-  if (step > 0) {
-    setStep((s) => s - 1)
-  }
-}
+  const handleBack = () => {
+    if (step > 0) {
+      setStep((s) => s - 1);
+    }
+  };
   const advance = () => {
     if (step + 1 >= questions.length) {
-      setShowResults(true)
+      setShowResults(true);
     } else {
-      setStep((s) => s + 1)
+      setStep((s) => s + 1);
     }
-  }
+  };
 
   // Skip quiz entirely — show all suite agents unranked
   const handleViewAll = () => {
-    setTagCounts({})
-    setAnsweredCount(0)
-    setShowResults(true)
-  }
+    setTagCounts({});
+    setAnsweredCount(0);
+    setShowResults(true);
+  };
 
   // ── Build ranked agent list
   const rankedAgents = useMemo(() => {
-    const totalQ = answeredCount || 0
+    const totalQ = answeredCount || 0;
 
     return suite.agents
       .map((id) => {
-        const agent = findAgent(id)
-        const mentions = tagCounts[id] || 0
-        const pct = totalQ > 0 ? Math.round((mentions / totalQ) * 100) : 0
-        return { id, agent, mentions, pct }
+        const agent = findAgent(id);
+        const mentions = tagCounts[id] || 0;
+        const pct = totalQ > 0 ? Math.round((mentions / totalQ) * 100) : 0;
+        return { id, agent, mentions, pct };
       })
-      .sort((a, b) => b.pct - a.pct || (a.agent?.name ?? a.id).localeCompare(b.agent?.name ?? b.id))
-  }, [tagCounts, answeredCount, suite.agents, allAgents])
+      .sort(
+        (a, b) =>
+          b.pct - a.pct ||
+          (a.agent?.name ?? a.id).localeCompare(b.agent?.name ?? b.id),
+      );
+  }, [tagCounts, answeredCount, suite.agents, allAgents]);
 
   // ── Badge colour based on match %
   const badgeClass = (pct, answeredCount) => {
-    if (answeredCount === 0) return 'bg-gray-100 text-gray-500 dark:bg-surface-hover dark:text-text-muted'
-    if (pct >= 80) return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-    if (pct >= 60) return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-    return 'bg-gray-100 text-gray-500 dark:bg-surface-hover dark:text-text-muted'
-  }
+    if (answeredCount === 0)
+      return "bg-gray-100 text-gray-500 dark:bg-surface-hover dark:text-text-muted";
+    if (pct >= 80)
+      return "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400";
+    if (pct >= 60)
+      return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
+    return "bg-gray-100 text-gray-500 dark:bg-surface-hover dark:text-text-muted";
+  };
 
   // ─────────────────────────────────────────────────────
   // RESULTS VIEW
   // ─────────────────────────────────────────────────────
   if (showResults) {
-    const matched = rankedAgents.filter((r) => r.pct > 0)
-    const unmatched = rankedAgents.filter((r) => r.pct === 0)
-    const SuiteIcon = SUITE_ICONS[suite.icon] || Code2
+    const matched = rankedAgents.filter((r) => r.pct > 0);
+    const unmatched = rankedAgents.filter((r) => r.pct === 0);
+    const SuiteIcon = SUITE_ICONS[suite.icon] || Code2;
 
     return (
       <div className="animate-fade-in">
@@ -177,7 +208,7 @@ if (isInteractive && !isSelectedOptionButton) {
               <p className="text-xs dark:text-text-muted text-gray-400">
                 {answeredCount > 0
                   ? `Recommended based on your answers`
-                  : 'All agents in this suite'}
+                  : "All agents in this suite"}
               </p>
             </div>
           </div>
@@ -239,18 +270,16 @@ if (isInteractive && !isSelectedOptionButton) {
           </div>
         )}
       </div>
-    )
+    );
   }
 
   // ─────────────────────────────────────────────────────
   // QUIZ VIEW
   // ─────────────────────────────────────────────────────
-  const question = questions[step]
+  const question = questions[step];
   const progress =
-  questions.length > 0
-    ? ((step + 1) / questions.length) * 100
-    : 0
-  const SuiteIcon = SUITE_ICONS[suite.icon] || Code2
+    questions.length > 0 ? ((step + 1) / questions.length) * 100 : 0;
+  const SuiteIcon = SUITE_ICONS[suite.icon] || Code2;
 
   return (
     <div className="max-w-xl mx-auto animate-fade-in">
@@ -279,12 +308,12 @@ if (isInteractive && !isSelectedOptionButton) {
 
       {/* Progress bar */}
       <div
-  className="w-full h-1.5 rounded-full bg-gray-200 dark:bg-surface-hover mb-2 overflow-hidden"
-  role="progressbar"
-  aria-valuemin={0}
-  aria-valuemax={100}
-  aria-valuenow={Math.round(progress)}
->
+        className="w-full h-1.5 rounded-full bg-gray-200 dark:bg-surface-hover mb-2 overflow-hidden"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(progress)}
+      >
         <div
           className="h-full rounded-full bg-accent transition-all duration-300"
           style={{ width: `${progress}%` }}
@@ -292,8 +321,8 @@ if (isInteractive && !isSelectedOptionButton) {
       </div>
 
       <p className="text-xs text-gray-500 dark:text-text-muted mb-8">
-  {Math.round(progress)}% complete
-</p>
+        {Math.round(progress)}% complete
+      </p>
 
       {/* Question */}
       <h3 className="text-xl font-bold dark:text-text-primary text-gray-900 mb-6 leading-snug">
@@ -305,17 +334,18 @@ if (isInteractive && !isSelectedOptionButton) {
         {question.options.map((opt, idx) => (
           <button
             key={idx}
-data-option="true"
-data-index={idx}
-onClick={() => {
-  const updated = [...answers]
-  updated[step] = idx
-  setAnswers(updated)
-}}
+            data-option="true"
+            data-index={idx}
+            onClick={() => {
+              const updated = [...answers];
+              updated[step] = idx;
+              setAnswers(updated);
+            }}
             className={`text-left px-4 py-3.5 rounded-xl border text-sm font-medium transition-all duration-150
-              ${answers[step] === idx
-                ? 'border-accent bg-accent/10 dark:bg-accent/10 dark:border-accent text-accent'
-                : 'dark:bg-surface-card dark:border-border dark:text-text-primary dark:hover:border-accent/40 bg-white border-gray-200 text-gray-700 hover:border-indigo-300'
+              ${
+                answers[step] === idx
+                  ? "border-accent bg-accent/10 dark:bg-accent/10 dark:border-accent text-accent"
+                  : "dark:bg-surface-card dark:border-border dark:text-text-primary dark:hover:border-accent/40 bg-white border-gray-200 text-gray-700 hover:border-indigo-300"
               }`}
           >
             {opt.label}
@@ -334,14 +364,14 @@ onClick={() => {
         </button>
 
         <div className="flex items-center gap-2">
-     <button
-        onClick={handleBack}
-        disabled={step === 0}
-        className="px-3 py-2 text-sm rounded-lg border
+          <button
+            onClick={handleBack}
+            disabled={step === 0}
+            className="px-3 py-2 text-sm rounded-lg border
           disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        Previous
-      </button>
+          >
+            Previous
+          </button>
           <button
             onClick={handleViewAll}
             className="text-xs dark:text-text-muted text-gray-400 hover:text-accent transition-colors px-2 py-1.5"
@@ -361,11 +391,18 @@ onClick={() => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 // ── Small result card component
-function AgentResultCard({ id, agent, pct, answeredCount, badgeClass, onClick }) {
+function AgentResultCard({
+  id,
+  agent,
+  pct,
+  answeredCount,
+  badgeClass,
+  onClick,
+}) {
   return (
     <button
       onClick={onClick}
@@ -381,7 +418,9 @@ function AgentResultCard({ id, agent, pct, answeredCount, badgeClass, onClick })
           {agent?.name ?? id}
         </span>
         {answeredCount > 0 && (
-          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0 ${badgeClass(pct, answeredCount)}`}>
+          <span
+            className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0 ${badgeClass(pct, answeredCount)}`}
+          >
             {pct}%
           </span>
         )}
@@ -395,5 +434,5 @@ function AgentResultCard({ id, agent, pct, answeredCount, badgeClass, onClick })
         <p className="text-[11px] text-gray-400 italic">Agent not found</p>
       )}
     </button>
-  )
+  );
 }

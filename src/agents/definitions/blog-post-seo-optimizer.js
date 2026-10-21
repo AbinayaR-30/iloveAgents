@@ -12,7 +12,8 @@ export default {
   exampleInputs: {
     blog_draft:
       "# How to Start Investing\n\nInvesting can seem scary at first but it doesn't have to be. In this post I'll walk you through the basics of getting started with investing even if you have no experience.\n\nFirst you need to understand what investing is. Investing means putting your money into assets like stocks, bonds, or real estate with the goal of growing your wealth over time.\n\nThe most important thing is to start early. The power of compound interest means that even small amounts invested today can grow significantly over decades.\n\nHere are some tips for beginners:\n- Start with index funds\n- Don't try to time the market\n- Invest regularly\n- Keep your fees low\n\nIn conclusion, investing is one of the best ways to build wealth over time. Start today and your future self will thank you.",
-    target_keywords: "beginner investing, how to start investing, investing for beginners, index funds for beginners",
+    target_keywords:
+      "beginner investing, how to start investing, investing for beginners, index funds for beginners",
     tone: "Keep original tone",
     focus: "Full optimization",
   },

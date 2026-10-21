@@ -1,11 +1,11 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Bot, Home, Swords, Search, Ghost } from 'lucide-react';
-import { useDocumentTitle } from '../lib/useDocumentTitle';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Bot, Home, Swords, Search, Ghost } from "lucide-react";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function NotFoundPage() {
   const navigate = useNavigate();
-  useDocumentTitle('Page Not Found');
+  useDocumentTitle("Page Not Found");
 
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-4 relative overflow-hidden">
@@ -34,9 +34,9 @@ export default function NotFoundPage() {
           <div className="absolute inset-0 bg-accent/20 blur-3xl rounded-full animate-pulse" />
           <div className="relative animate-robot-wiggle">
             <Bot size={120} className="text-accent stroke-[1.5]" />
-            <Ghost 
-              size={40} 
-              className="absolute -top-4 -right-4 text-accent/40 animate-bounce" 
+            <Ghost
+              size={40}
+              className="absolute -top-4 -right-4 text-accent/40 animate-bounce"
             />
           </div>
         </div>
@@ -44,18 +44,19 @@ export default function NotFoundPage() {
         <h1 className="text-7xl font-black mb-4 bg-gradient-to-b from-text-primary to-text-muted bg-clip-text text-transparent">
           404
         </h1>
-        
+
         <h2 className="text-2xl font-bold dark:text-text-primary text-gray-900 mb-2">
           Looks like this agent went rogue.
         </h2>
         <p className="dark:text-text-secondary text-gray-500 max-w-md mb-10 leading-relaxed">
-          The page you are looking for does not exist or has been relocated to a different sector of the grid.
+          The page you are looking for does not exist or has been relocated to a
+          different sector of the grid.
         </p>
 
         {/* Quick Links */}
         <div className="flex flex-wrap items-center justify-center gap-4">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="group relative flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm
               bg-accent text-white hover:bg-accent-hover transition-all duration-300
               hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] active:scale-95 overflow-hidden"
@@ -66,21 +67,24 @@ export default function NotFoundPage() {
           </button>
 
           <button
-            onClick={() => navigate('/battle')}
+            onClick={() => navigate("/battle")}
             className="group flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm
               dark:bg-surface-card dark:border-border border border-gray-200 bg-white
               dark:text-text-primary text-gray-900 hover:border-yellow-500/50 transition-all duration-300
               hover:shadow-[0_0_20px_rgba(234,179,8,0.15)] active:scale-95"
           >
-            <Swords size={18} className="group-hover:text-yellow-500 transition-colors" />
+            <Swords
+              size={18}
+              className="group-hover:text-yellow-500 transition-colors"
+            />
             <span>Battle Mode</span>
           </button>
 
           <button
             onClick={() => {
-              navigate('/');
+              navigate("/");
               setTimeout(() => {
-                document.getElementById('agent-search')?.focus();
+                document.getElementById("agent-search")?.focus();
               }, 100);
             }}
             className="group flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm
@@ -88,13 +92,18 @@ export default function NotFoundPage() {
               dark:text-text-primary text-gray-900 hover:border-accent/50 transition-all duration-300
               hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] active:scale-95"
           >
-            <Search size={18} className="group-hover:text-accent transition-colors" />
+            <Search
+              size={18}
+              className="group-hover:text-accent transition-colors"
+            />
             <span>Browse Agents</span>
           </button>
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes float {
           0%, 100% { transform: translateY(0) translateX(0); }
           25% { transform: translateY(-20px) translateX(10px); }
@@ -112,7 +121,9 @@ export default function NotFoundPage() {
         .animate-robot-wiggle {
           animation: robot-wiggle 4s ease-in-out infinite;
         }
-      `}} />
+      `,
+        }}
+      />
     </div>
   );
 }

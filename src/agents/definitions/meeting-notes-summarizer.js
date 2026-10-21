@@ -20,8 +20,7 @@ export default {
       id: "notes",
       label: "Raw meeting notes or transcript",
       type: "textarea",
-      placeholder:
-        "Paste your raw notes, transcript, or bullet points here...",
+      placeholder: "Paste your raw notes, transcript, or bullet points here...",
       required: true,
     },
     {

@@ -1,50 +1,50 @@
 const databaseMigrationScriptGenerator = {
-  id: 'database-migration-script-generator',
+  id: "database-migration-script-generator",
 
-  name: 'Database Migration Script Generator',
+  name: "Database Migration Script Generator",
 
   description:
-    'Writing safe database migration scripts is tedious and error-prone. This agent takes a schema change description and generates a production-safe migration script with rollback.',
+    "Writing safe database migration scripts is tedious and error-prone. This agent takes a schema change description and generates a production-safe migration script with rollback.",
 
-  category: 'Engineering',
+  category: "Engineering",
 
-  icon: 'Database',
+  icon: "Database",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'openai',
+  defaultProvider: "openai",
 
-  model: 'gpt-4o-mini',
+  model: "gpt-4o-mini",
 
   inputs: [
     {
-      id: 'current_schema',
-      label: 'Current Schema',
-      type: 'textarea',
+      id: "current_schema",
+      label: "Current Schema",
+      type: "textarea",
       placeholder:
-        'Paste existing CREATE TABLE statement or describe the current structure here.',
+        "Paste existing CREATE TABLE statement or describe the current structure here.",
       required: true,
     },
     {
-      id: 'desired_change',
-      label: 'Desired Change',
-      type: 'textarea',
+      id: "desired_change",
+      label: "Desired Change",
+      type: "textarea",
       placeholder:
         'e.g. "Add a nullable email_verified boolean column to users table"',
       required: true,
     },
     {
-      id: 'database_type',
-      label: 'Database Type',
-      type: 'select',
-      options: ['PostgreSQL', 'MySQL', 'SQLite', 'MSSQL'],
+      id: "database_type",
+      label: "Database Type",
+      type: "select",
+      options: ["PostgreSQL", "MySQL", "SQLite", "MSSQL"],
       required: true,
     },
     {
-      id: 'migration_tool',
-      label: 'Migration Tool',
-      type: 'select',
-      options: ['Raw SQL', 'Flyway', 'Liquibase', 'Alembic', 'Knex', 'Prisma'],
+      id: "migration_tool",
+      label: "Migration Tool",
+      type: "select",
+      options: ["Raw SQL", "Flyway", "Liquibase", "Alembic", "Knex", "Prisma"],
       required: true,
     },
   ],
@@ -85,7 +85,7 @@ The script to revert the changes.
 ## 🚀 Zero-Downtime Production Tips
 - 2-3 specific actionable tips for deploying this migration safely to a live production database without causing application errors or locking out reads/writes.`,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default databaseMigrationScriptGenerator;

@@ -1,30 +1,32 @@
 const dsaProgressAnalyzer = {
-  id: 'dsa-progress-analyzer',
-  name: 'DSA Progress Analyzer',
-  description: 'Analyzes your DSA practice log to find weak topics and suggest what to practice next.',
-  category: 'Education',
-  icon: 'TrendingUp',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "dsa-progress-analyzer",
+  name: "DSA Progress Analyzer",
+  description:
+    "Analyzes your DSA practice log to find weak topics and suggest what to practice next.",
+  category: "Education",
+  icon: "TrendingUp",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'dsa_log',
-      label: 'Your DSA practice log',
-      type: 'textarea',
+      id: "dsa_log",
+      label: "Your DSA practice log",
+      type: "textarea",
       placeholder:
-        'Paste your problem log. One line per problem is fine, e.g.:\n' +
-        'Two Sum | Arrays | Easy | Solved in 8 min | no help\n' +
-        'Merge Intervals | Arrays | Medium | Solved in 35 min | needed a hint\n' +
-        'LRU Cache | Design | Medium | Gave up, watched solution\n' +
-        'Course Schedule | Graphs | Medium | Solved in 40 min | used editorial approach',
+        "Paste your problem log. One line per problem is fine, e.g.:\n" +
+        "Two Sum | Arrays | Easy | Solved in 8 min | no help\n" +
+        "Merge Intervals | Arrays | Medium | Solved in 35 min | needed a hint\n" +
+        "LRU Cache | Design | Medium | Gave up, watched solution\n" +
+        "Course Schedule | Graphs | Medium | Solved in 40 min | used editorial approach",
       required: true,
     },
     {
-      id: 'goal',
-      label: 'Your current goal (optional)',
-      type: 'text',
-      placeholder: 'e.g. Interview in 6 weeks, targeting FAANG-level, or just building fundamentals',
+      id: "goal",
+      label: "Your current goal (optional)",
+      type: "text",
+      placeholder:
+        "e.g. Interview in 6 weeks, targeting FAANG-level, or just building fundamentals",
       required: false,
     },
   ],
@@ -51,7 +53,7 @@ Suggest 3-5 specific problem types or well-known problems to target their weak a
 A single, concrete, actionable focus area — not a vague "practice more" but something specific like "spend 20 extra minutes attempting DP problems before looking at hints."
 
 Be honest and specific, not generically encouraging. If the log is too short to draw real conclusions, say so plainly and ask for more data rather than inventing insights. If the user gave a goal, tailor urgency and recommendations to it.`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default dsaProgressAnalyzer;

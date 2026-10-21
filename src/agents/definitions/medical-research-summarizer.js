@@ -1,34 +1,34 @@
 const medicalResearchSummarizer = {
-  id: 'medical-research-summarizer',
-  name: 'Medical Research Summarizer',
+  id: "medical-research-summarizer",
+  name: "Medical Research Summarizer",
   description:
-    'Summarizes medical research papers and abstracts into plain English with key findings, methodology, limitations, and clinical implications.',
-  category: 'Research',
-  icon: 'HeartPulse',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+    "Summarizes medical research papers and abstracts into plain English with key findings, methodology, limitations, and clinical implications.",
+  category: "Research",
+  icon: "HeartPulse",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
 
   inputs: [
     {
-      id: 'researchText',
-      label: 'Medical Research Paper or Abstract',
-      type: 'textarea',
+      id: "researchText",
+      label: "Medical Research Paper or Abstract",
+      type: "textarea",
       placeholder:
-        'Paste a medical research abstract or full research paper here...',
+        "Paste a medical research abstract or full research paper here...",
       required: true,
     },
     {
-      id: 'targetAudience',
-      label: 'Target Audience',
-      type: 'select',
+      id: "targetAudience",
+      label: "Target Audience",
+      type: "select",
       options: [
-        'General Public',
-        'Patients',
-        'Healthcare Professionals',
-        'Researchers',
+        "General Public",
+        "Patients",
+        "Healthcare Professionals",
+        "Researchers",
       ],
-      defaultValue: 'General Public',
+      defaultValue: "General Public",
       required: true,
     },
   ],
@@ -75,7 +75,7 @@ Guidelines:
 - Format the response in clean Markdown.
 `,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default medicalResearchSummarizer;

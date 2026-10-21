@@ -1,51 +1,51 @@
 const dockerComposeGenerator = {
-  id: 'docker-compose-generator',
-  name: 'Docker Compose Generator',
+  id: "docker-compose-generator",
+  name: "Docker Compose Generator",
   description:
-    'Describe your multi-service application stack and get a production-ready docker-compose.yml with named volumes, networks, environment variables, depends_on ordering, and optional health checks.',
+    "Describe your multi-service application stack and get a production-ready docker-compose.yml with named volumes, networks, environment variables, depends_on ordering, and optional health checks.",
 
-  category: 'Engineering',
-  icon: 'Container',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  category: "Engineering",
+  icon: "Container",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
 
   exampleInputs: {
     serviceDescription:
-      'Node.js REST API on port 3000, PostgreSQL database, Redis cache for sessions, Nginx reverse proxy on port 80',
-    environment: 'Production',
-    includeVolumes: 'Yes',
-    includeHealthChecks: 'Yes',
+      "Node.js REST API on port 3000, PostgreSQL database, Redis cache for sessions, Nginx reverse proxy on port 80",
+    environment: "Production",
+    includeVolumes: "Yes",
+    includeHealthChecks: "Yes",
   },
 
   inputs: [
     {
-      id: 'serviceDescription',
-      label: 'Service Description',
-      type: 'textarea',
+      id: "serviceDescription",
+      label: "Service Description",
+      type: "textarea",
       placeholder:
         'Describe your services in plain English, e.g. "Node.js API on port 3000, PostgreSQL database, Redis cache, Nginx reverse proxy"',
       required: true,
     },
     {
-      id: 'environment',
-      label: 'Environment',
-      type: 'select',
-      options: ['Development', 'Production'],
+      id: "environment",
+      label: "Environment",
+      type: "select",
+      options: ["Development", "Production"],
       required: true,
     },
     {
-      id: 'includeVolumes',
-      label: 'Include Volumes',
-      type: 'select',
-      options: ['Yes', 'No'],
+      id: "includeVolumes",
+      label: "Include Volumes",
+      type: "select",
+      options: ["Yes", "No"],
       required: true,
     },
     {
-      id: 'includeHealthChecks',
-      label: 'Include Health Checks',
-      type: 'select',
-      options: ['Yes', 'No'],
+      id: "includeHealthChecks",
+      label: "Include Health Checks",
+      type: "select",
+      options: ["Yes", "No"],
       required: true,
     },
   ],
@@ -248,7 +248,7 @@ Add a short inline comment (# ...) above each major block (service, volumes sect
 - Use docker compose v3.9 syntax (version: '3.9')
 - All network and volume names must be lowercase with hyphens`,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default dockerComposeGenerator;

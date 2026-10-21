@@ -1,70 +1,70 @@
 export default {
-  id: 'cloud-cost-estimator',
-  name: 'Cloud Cost Estimator',
+  id: "cloud-cost-estimator",
+  name: "Cloud Cost Estimator",
   description:
-    'Describe your cloud infrastructure and get a realistic monthly cost estimate with line-by-line breakdown, hidden cost warnings, tier comparisons, and actionable optimization tips',
+    "Describe your cloud infrastructure and get a realistic monthly cost estimate with line-by-line breakdown, hidden cost warnings, tier comparisons, and actionable optimization tips",
 
-  category: 'DevOps',
-  icon: 'CloudCog',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  category: "DevOps",
+  icon: "CloudCog",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
 
   // example to test the agent , its pretty complex so that we can see if its able to handle complex inputs from the user. :)
 
   exampleInputs: {
     infrastructure:
-      '3 t3.medium EC2 instances (Linux, us-east-1), 1 RDS PostgreSQL db.t3.medium Multi-AZ with 100GB gp3 storage, 500GB S3 standard storage, 2TB outbound data transfer, 1 Application Load Balancer, 1 NAT Gateway, CloudWatch logs at ~50GB/day',
-    cloudProvider: 'AWS',
-    region: 'India (Meerut)',
-    usagePattern: 'Production (24/7)',
-    budgetConstraint: '$1500',
+      "3 t3.medium EC2 instances (Linux, us-east-1), 1 RDS PostgreSQL db.t3.medium Multi-AZ with 100GB gp3 storage, 500GB S3 standard storage, 2TB outbound data transfer, 1 Application Load Balancer, 1 NAT Gateway, CloudWatch logs at ~50GB/day",
+    cloudProvider: "AWS",
+    region: "India (Meerut)",
+    usagePattern: "Production (24/7)",
+    budgetConstraint: "$1500",
   },
 
   inputs: [
     {
-      id: 'infrastructure',
-      label: 'Infrastructure Description',
-      type: 'textarea',
+      id: "infrastructure",
+      label: "Infrastructure Description",
+      type: "textarea",
       placeholder:
-        'Describe your full stack in plain English — include compute instances, databases, storage, networking, containers, serverless functions, caching, queues, monitoring, CI/CD, AI/ML services, etc.\n\n',
+        "Describe your full stack in plain English — include compute instances, databases, storage, networking, containers, serverless functions, caching, queues, monitoring, CI/CD, AI/ML services, etc.\n\n",
       required: true,
     },
 
     {
-      id: 'cloudProvider',
-      label: 'Cloud Provider',
-      type: 'select',
-      options: ['AWS', 'Google Cloud (GCP)', 'Microsoft Azure', 'DigitalOcean'],
+      id: "cloudProvider",
+      label: "Cloud Provider",
+      type: "select",
+      options: ["AWS", "Google Cloud (GCP)", "Microsoft Azure", "DigitalOcean"],
       required: true,
     },
 
     {
-      id: 'region',
-      label: 'Preferred Region',
-      type: 'text',
-      placeholder: 'india (Mumbai) , india (Meerut) ',
+      id: "region",
+      label: "Preferred Region",
+      type: "text",
+      placeholder: "india (Mumbai) , india (Meerut) ",
       required: false,
     },
 
     {
-      id: 'usagePattern',
-      label: 'Usage Pattern',
-      type: 'select',
+      id: "usagePattern",
+      label: "Usage Pattern",
+      type: "select",
       options: [
-        'Production (24/7)',
-        'Staging / QA (business hours only)',
-        'Dev / Experimental (a few hours/day)',
-        'Burst / Event-based',
+        "Production (24/7)",
+        "Staging / QA (business hours only)",
+        "Dev / Experimental (a few hours/day)",
+        "Burst / Event-based",
       ],
       required: true,
     },
 
     {
-      id: 'budgetConstraint',
-      label: 'Monthly Budget Constraint (optional)',
-      type: 'text',
-      placeholder: ' $500, $2000, no limit',
+      id: "budgetConstraint",
+      label: "Monthly Budget Constraint (optional)",
+      type: "text",
+      placeholder: " $500, $2000, no limit",
       required: false,
     },
   ],
@@ -302,5 +302,5 @@ RULES (Must obey these strictly):
 - Keep the tone professional but accessible — a startup founder with basic tech knowledge should understand everything.
 - Always call out the #1 most expensive line item and the #1 easiest savings opportunity.`,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };

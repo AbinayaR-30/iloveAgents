@@ -1,18 +1,44 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Sparkles, ArrowRight, Code2, BarChart3, TrendingUp, DollarSign, Palette, PenLine, GraduationCap, Briefcase, HeartPulse, ShieldCheck, Gamepad2, Wand2, Loader2, GitBranch } from 'lucide-react'
-import { suites } from '../suites/suitesData'
-import SuiteWizard from '../components/SuiteWizard'
-import { useDocumentTitle } from '../lib/useDocumentTitle'
-import { generateCustomSuite } from '../lib/customSuiteGenerator'
-import { useApiKey } from '../lib/useApiKey'
-import ApiKeyBar from '../components/ApiKeyBar'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Sparkles,
+  ArrowRight,
+  Code2,
+  BarChart3,
+  TrendingUp,
+  DollarSign,
+  Palette,
+  PenLine,
+  GraduationCap,
+  Briefcase,
+  HeartPulse,
+  ShieldCheck,
+  Gamepad2,
+  Wand2,
+  Loader2,
+  GitBranch,
+} from "lucide-react";
+import { suites } from "../suites/suitesData";
+import SuiteWizard from "../components/SuiteWizard";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
+import { generateCustomSuite } from "../lib/customSuiteGenerator";
+import { useApiKey } from "../lib/useApiKey";
+import ApiKeyBar from "../components/ApiKeyBar";
 
 // Map icon name string → Lucide component
 const SUITE_ICONS = {
-  Code2, BarChart3, TrendingUp, DollarSign, Palette,
-  PenLine, GraduationCap, Briefcase, HeartPulse, ShieldCheck, Gamepad2,
-}
+  Code2,
+  BarChart3,
+  TrendingUp,
+  DollarSign,
+  Palette,
+  PenLine,
+  GraduationCap,
+  Briefcase,
+  HeartPulse,
+  ShieldCheck,
+  Gamepad2,
+};
 
 /**
  * SuitesPage
@@ -21,8 +47,8 @@ const SUITE_ICONS = {
  * QUIZ state   — shows SuiteWizard for the selected suite
  */
 export default function SuitesPage() {
-  useDocumentTitle('Suites')
-  const navigate = useNavigate()
+  useDocumentTitle("Suites");
+  const navigate = useNavigate();
   const {
     provider,
     setProvider,
@@ -30,51 +56,48 @@ export default function SuitesPage() {
     setApiKey,
     saveForSession,
     setSaveForSession,
-  } = useApiKey()
+  } = useApiKey();
 
-  const [activeSuite, setActiveSuite] = useState(null)
-  const [selectedModel, setSelectedModel] = useState(null)
+  const [activeSuite, setActiveSuite] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
 
   // Custom suite generator state
-  const [goal, setGoal] = useState('')
-  const [customSuite, setCustomSuite] = useState(null)
-  const [generating, setGenerating] = useState(false)
-  const [generatorError, setGeneratorError] = useState(null)
+  const [goal, setGoal] = useState("");
+  const [customSuite, setCustomSuite] = useState(null);
+  const [generating, setGenerating] = useState(false);
+  const [generatorError, setGeneratorError] = useState(null);
 
   const handleGenerateSuite = async () => {
-    if (!goal.trim() || !apiKey) return
-    setGenerating(true)
-    setCustomSuite(null)
-    setGeneratorError(null)
+    if (!goal.trim() || !apiKey) return;
+    setGenerating(true);
+    setCustomSuite(null);
+    setGeneratorError(null);
     try {
-      const result = await generateCustomSuite(goal, apiKey, provider)
-      setCustomSuite(result)
+      const result = await generateCustomSuite(goal, apiKey, provider);
+      setCustomSuite(result);
     } catch (err) {
-      setGeneratorError("Couldn't generate your suite. Please try again.")
+      setGeneratorError("Couldn't generate your suite. Please try again.");
     } finally {
-      setGenerating(false)
+      setGenerating(false);
     }
-  }
+  };
 
   const handleCreateWorkflow = () => {
-    navigate('/workflows/build', {
+    navigate("/workflows/build", {
       state: {
         preselectedAgents: customSuite.agents.map((a) => a.id),
         workflowTitle: customSuite.title,
-      }
-    })
-  }
+      },
+    });
+  };
 
   // ── QUIZ state
   if (activeSuite) {
     return (
       <div className="animate-fade-in">
-        <SuiteWizard
-          suite={activeSuite}
-          onBack={() => setActiveSuite(null)}
-        />
+        <SuiteWizard suite={activeSuite} onBack={() => setActiveSuite(null)} />
       </div>
-    )
+    );
   }
 
   // ── BROWSE state
@@ -89,8 +112,8 @@ export default function SuitesPage() {
           </h1>
         </div>
         <p className="text-sm dark:text-text-secondary text-gray-500 max-w-lg mx-auto leading-relaxed">
-          Answer a few questions and we'll recommend the best agents for your needs —
-          or browse by suite below.
+          Answer a few questions and we'll recommend the best agents for your
+          needs — or browse by suite below.
         </p>
       </div>
 
@@ -106,7 +129,8 @@ export default function SuitesPage() {
           </span>
         </div>
         <p className="text-xs dark:text-text-secondary text-gray-500 mb-4">
-          Don't see a suite for your goal? Describe it and we'll pick the best agents for you.
+          Don't see a suite for your goal? Describe it and we'll pick the best
+          agents for you.
         </p>
 
         {/* API Key Bar */}
@@ -129,7 +153,7 @@ export default function SuitesPage() {
             type="text"
             value={goal}
             onChange={(e) => setGoal(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleGenerateSuite()}
+            onKeyDown={(e) => e.key === "Enter" && handleGenerateSuite()}
             placeholder="e.g. I want to prepare for a Goldman Sachs interview..."
             className="flex-1 min-w-0 h-9 pl-3 pr-3 rounded-md text-sm transition-colors
               dark:bg-surface-input dark:border-border dark:text-text-primary dark:placeholder:text-text-muted
@@ -148,7 +172,7 @@ export default function SuitesPage() {
             ) : (
               <Wand2 size={13} />
             )}
-            {generating ? 'Generating...' : 'Generate'}
+            {generating ? "Generating..." : "Generate"}
           </button>
         </div>
 
@@ -208,7 +232,10 @@ export default function SuitesPage() {
                 Create Workflow from this Suite →
               </button>
               <button
-                onClick={() => { setCustomSuite(null); setGoal('') }}
+                onClick={() => {
+                  setCustomSuite(null);
+                  setGoal("");
+                }}
                 className="text-[11px] text-accent hover:underline"
               >
                 ↺ Try a different goal
@@ -232,19 +259,19 @@ export default function SuitesPage() {
       {/* Footer note */}
       <div className="text-center">
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           className="text-xs dark:text-text-muted text-gray-400 hover:text-accent transition-colors"
         >
           Prefer to browse? View all agents →
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 // ── Suite card
 function SuiteCard({ suite, onSelect }) {
-  const IconComponent = SUITE_ICONS[suite.icon] || Code2
+  const IconComponent = SUITE_ICONS[suite.icon] || Code2;
   return (
     <div
       className="premium-hover-card rounded-xl border p-5 flex flex-col gap-3 transition-all duration-300
@@ -256,7 +283,7 @@ function SuiteCard({ suite, onSelect }) {
       <div className="flex items-center gap-2.5">
         <div
           className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: suite.color + '20' }}
+          style={{ backgroundColor: suite.color + "20" }}
         >
           <IconComponent size={17} style={{ color: suite.color }} />
         </div>
@@ -274,7 +301,7 @@ function SuiteCard({ suite, onSelect }) {
       <div className="flex items-center justify-between pt-1">
         <span
           className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-          style={{ backgroundColor: suite.color + '20', color: suite.color }}
+          style={{ backgroundColor: suite.color + "20", color: suite.color }}
         >
           {suite.agents.length} agents
         </span>
@@ -288,5 +315,5 @@ function SuiteCard({ suite, onSelect }) {
         </button>
       </div>
     </div>
-  )
+  );
 }

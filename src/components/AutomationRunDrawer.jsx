@@ -1,42 +1,55 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
-  X, CheckCircle2, AlertCircle, Clock, Zap, Copy, Check,
-  Mail, Calendar, FileText, ChevronRight, Share2, Download
-} from 'lucide-react'
-import OutputRenderer from './OutputRenderer'
+  X,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+  Zap,
+  Copy,
+  Check,
+  Mail,
+  Calendar,
+  FileText,
+  ChevronRight,
+  Share2,
+  Download,
+} from "lucide-react";
+import OutputRenderer from "./OutputRenderer";
 
 export default function AutomationRunDrawer({ run, isOpen, onClose }) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
-  if (!isOpen || !run) return null
+  if (!isOpen || !run) return null;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(run.output || run.error || '')
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+    navigator.clipboard.writeText(run.output || run.error || "");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleDownload = () => {
-    const element = document.createElement('a')
-    const file = new Blob([run.output || run.error || ''], { type: 'text/markdown' })
-    element.href = URL.createObjectURL(file)
-    element.download = `${run.automationName.replace(/\s+/g, '_')}_${new Date(run.startedAt).toISOString().split('T')[0]}.md`
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
-  }
+    const element = document.createElement("a");
+    const file = new Blob([run.output || run.error || ""], {
+      type: "text/markdown",
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = `${run.automationName.replace(/\s+/g, "_")}_${new Date(run.startedAt).toISOString().split("T")[0]}.md`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
 
   const formatDate = (ts) => {
-    if (!ts) return '—'
+    if (!ts) return "—";
     return new Date(ts).toLocaleString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-  }
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -51,25 +64,37 @@ export default function AutomationRunDrawer({ run, isOpen, onClose }) {
         {/* Header */}
         <div className="p-6 border-b dark:border-border/60 border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-              run.status === 'success' ? 'bg-emerald-500/15 text-emerald-500' :
-              run.status === 'running' ? 'bg-indigo-500/15 text-indigo-500 animate-spin' :
-              'bg-red-500/15 text-red-500'
-            }`}>
-              {run.status === 'success' ? <CheckCircle2 size={18} /> :
-               run.status === 'running' ? <Zap size={18} /> :
-               <AlertCircle size={18} />}
+            <div
+              className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                run.status === "success"
+                  ? "bg-emerald-500/15 text-emerald-500"
+                  : run.status === "running"
+                    ? "bg-indigo-500/15 text-indigo-500 animate-spin"
+                    : "bg-red-500/15 text-red-500"
+              }`}
+            >
+              {run.status === "success" ? (
+                <CheckCircle2 size={18} />
+              ) : run.status === "running" ? (
+                <Zap size={18} />
+              ) : (
+                <AlertCircle size={18} />
+              )}
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold truncate max-w-sm">
                   Run Execution Details
                 </h3>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                  run.status === 'success' ? 'bg-emerald-500/15 text-emerald-500' :
-                  run.status === 'running' ? 'bg-indigo-500/15 text-indigo-500' :
-                  'bg-red-500/15 text-red-500'
-                }`}>
+                <span
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                    run.status === "success"
+                      ? "bg-emerald-500/15 text-emerald-500"
+                      : run.status === "running"
+                        ? "bg-indigo-500/15 text-indigo-500"
+                        : "bg-red-500/15 text-red-500"
+                  }`}
+                >
                   {run.status}
                 </span>
               </div>
@@ -85,7 +110,11 @@ export default function AutomationRunDrawer({ run, isOpen, onClose }) {
               className="p-2 rounded-xl text-gray-500 hover:text-accent hover:bg-gray-100 dark:hover:bg-surface-hover transition-colors"
               title="Copy Output"
             >
-              {copied ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
+              {copied ? (
+                <Check size={16} className="text-emerald-500" />
+              ) : (
+                <Copy size={16} />
+              )}
             </button>
             <button
               onClick={handleDownload}
@@ -108,19 +137,31 @@ export default function AutomationRunDrawer({ run, isOpen, onClose }) {
           {/* Metadata KPI Pills */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-3 rounded-xl dark:bg-surface-card bg-gray-50 border dark:border-border/60 border-gray-200">
-              <span className="text-[10px] font-medium text-gray-500 uppercase">Duration</span>
-              <p className="text-sm font-bold mt-0.5">{(run.duration / 1000).toFixed(2)}s</p>
+              <span className="text-[10px] font-medium text-gray-500 uppercase">
+                Duration
+              </span>
+              <p className="text-sm font-bold mt-0.5">
+                {(run.duration / 1000).toFixed(2)}s
+              </p>
             </div>
             <div className="p-3 rounded-xl dark:bg-surface-card bg-gray-50 border dark:border-border/60 border-gray-200">
-              <span className="text-[10px] font-medium text-gray-500 uppercase">Est. Tokens</span>
-              <p className="text-sm font-bold mt-0.5">{run.tokens || '—'}</p>
+              <span className="text-[10px] font-medium text-gray-500 uppercase">
+                Est. Tokens
+              </span>
+              <p className="text-sm font-bold mt-0.5">{run.tokens || "—"}</p>
             </div>
             <div className="p-3 rounded-xl dark:bg-surface-card bg-gray-50 border dark:border-border/60 border-gray-200">
-              <span className="text-[10px] font-medium text-gray-500 uppercase">Started At</span>
-              <p className="text-xs font-semibold mt-0.5 truncate">{formatDate(run.startedAt)}</p>
+              <span className="text-[10px] font-medium text-gray-500 uppercase">
+                Started At
+              </span>
+              <p className="text-xs font-semibold mt-0.5 truncate">
+                {formatDate(run.startedAt)}
+              </p>
             </div>
             <div className="p-3 rounded-xl dark:bg-surface-card bg-gray-50 border dark:border-border/60 border-gray-200">
-              <span className="text-[10px] font-medium text-gray-500 uppercase">Email Sent</span>
+              <span className="text-[10px] font-medium text-gray-500 uppercase">
+                Email Sent
+              </span>
               <p className="text-xs font-semibold mt-0.5 flex items-center gap-1">
                 {run.emailSent ? (
                   <span className="text-emerald-500 flex items-center gap-1">
@@ -153,7 +194,7 @@ export default function AutomationRunDrawer({ run, isOpen, onClose }) {
                 Generated Agent Output
               </h4>
               <span className="text-[11px] font-mono text-gray-400">
-                {run.output ? `${run.output.length} characters` : 'Empty'}
+                {run.output ? `${run.output.length} characters` : "Empty"}
               </span>
             </div>
 
@@ -175,5 +216,5 @@ export default function AutomationRunDrawer({ run, isOpen, onClose }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

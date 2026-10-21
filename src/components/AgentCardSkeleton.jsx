@@ -29,5 +29,5 @@ export default function AgentCardSkeleton() {
         <div className="h-3 w-10 rounded bg-gray-200 dark:bg-surface-input" />
       </div>
     </div>
-  )
+  );
 }

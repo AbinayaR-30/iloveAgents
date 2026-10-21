@@ -11,13 +11,13 @@
 // Each definition file becomes a separate chunk loaded on demand.
 // ============================================================
 
-const modules = import.meta.glob('./definitions/*.js', { eager: false });
+const modules = import.meta.glob("./definitions/*.js", { eager: false });
 
 const normalizeAgents = (agents) => {
   const seenIds = new Set();
   return agents.filter(Boolean).filter((agent) => {
     if (!agent?.id) {
-      console.warn('Skipping agent without an id:', agent);
+      console.warn("Skipping agent without an id:", agent);
       return false;
     }
     if (seenIds.has(agent.id)) {
@@ -35,16 +35,16 @@ export function loadAllAgents() {
   if (cachedAgentsPromise) return cachedAgentsPromise;
 
   cachedAgentsPromise = Promise.all(
-    Object.values(modules).map((loader) => loader())
-  ).then((entries) => {
-    return normalizeAgents(entries.map((mod) => mod.default));
-  })
-  .catch((error) => {
-    // Allow future calls to retry initialization after a failed load.
-    cachedAgentsPromise = null;
-    throw error;
-  });
+    Object.values(modules).map((loader) => loader()),
+  )
+    .then((entries) => {
+      return normalizeAgents(entries.map((mod) => mod.default));
+    })
+    .catch((error) => {
+      // Allow future calls to retry initialization after a failed load.
+      cachedAgentsPromise = null;
+      throw error;
+    });
 
   return cachedAgentsPromise;
 }
-

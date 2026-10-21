@@ -1,12 +1,12 @@
-const STORAGE_KEY = 'ila_execution_traces'
-const MAX_STORED_TRACES = 20
+const STORAGE_KEY = "ila_execution_traces";
+const MAX_STORED_TRACES = 20;
 
 /**
  * Create a new execution trace for a workflow run.
  * @param {{ workflowId?: string, workflowTitle?: string }} meta
  * @returns {object} trace
  */
-export function createTrace({ workflowId = null, workflowTitle = '' } = {}) {
+export function createTrace({ workflowId = null, workflowTitle = "" } = {}) {
   return {
     runId: `run_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     workflowId,
@@ -15,8 +15,8 @@ export function createTrace({ workflowId = null, workflowTitle = '' } = {}) {
     endedAt: null,
     steps: [],
     finalOutput: null,
-    status: 'running',
-  }
+    status: "running",
+  };
 }
 
 /**
@@ -28,14 +28,14 @@ export function createTrace({ workflowId = null, workflowTitle = '' } = {}) {
 export function recordStep(trace, step) {
   trace.steps.push({
     stepName: step.stepName,
-    stepType: step.stepType || 'agent',
+    stepType: step.stepType || "agent",
     input: truncateForStorage(step.input),
     output: truncateForStorage(step.output),
     durationMs: Math.round(step.durationMs),
     status: step.status,
     error: step.error ?? null,
-  })
-  return trace
+  });
+  return trace;
 }
 
 /**
@@ -45,11 +45,11 @@ export function recordStep(trace, step) {
  * @returns {object} trace
  */
 export function finalizeTrace(trace, { status, finalOutput = null }) {
-  trace.endedAt = new Date().toISOString()
-  trace.status = status
-  trace.finalOutput = truncateForStorage(finalOutput)
-  persistTrace(trace)
-  return trace
+  trace.endedAt = new Date().toISOString();
+  trace.status = status;
+  trace.finalOutput = truncateForStorage(finalOutput);
+  persistTrace(trace);
+  return trace;
 }
 
 /**
@@ -58,10 +58,10 @@ export function finalizeTrace(trace, { status, finalOutput = null }) {
  */
 export function loadTraces() {
   try {
-    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-    return Array.isArray(parsed) ? parsed : []
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return []
+    return [];
   }
 }
 
@@ -70,7 +70,7 @@ export function loadTraces() {
  */
 export function clearTraces() {
   try {
-    localStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem(STORAGE_KEY);
   } catch {
     // storage unavailable; nothing to clear
   }
@@ -82,17 +82,20 @@ export function clearTraces() {
  * @returns {string}
  */
 export function formatDuration(ms) {
-  if (!Number.isFinite(ms) || ms < 0) return '0ms'
-  if (ms < 1000) return `${Math.round(ms)}ms`
-  if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`
-  return `${Math.floor(ms / 60000)}m ${Math.round((ms % 60000) / 1000)}s`
+  if (!Number.isFinite(ms) || ms < 0) return "0ms";
+  if (ms < 1000) return `${Math.round(ms)}ms`;
+  if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
+  return `${Math.floor(ms / 60000)}m ${Math.round((ms % 60000) / 1000)}s`;
 }
 
 function persistTrace(trace) {
   try {
-    const traces = loadTraces()
-    traces.unshift(trace)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(traces.slice(0, MAX_STORED_TRACES)))
+    const traces = loadTraces();
+    traces.unshift(trace);
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(traces.slice(0, MAX_STORED_TRACES)),
+    );
   } catch {
     // Quota exceeded or storage unavailable; the in-memory trace still renders
   }
@@ -100,7 +103,7 @@ function persistTrace(trace) {
 
 // Keep individual payloads bounded so a handful of runs cannot exhaust localStorage
 function truncateForStorage(value, limit = 8000) {
-  if (value == null) return null
-  const str = String(value)
-  return str.length > limit ? `${str.slice(0, limit)}\n... [truncated]` : str
+  if (value == null) return null;
+  const str = String(value);
+  return str.length > limit ? `${str.slice(0, limit)}\n... [truncated]` : str;
 }

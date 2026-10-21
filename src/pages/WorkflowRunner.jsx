@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useParams, useLocation, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Zap,
@@ -13,62 +13,66 @@ import {
   AlertCircle,
   ArrowRight,
   GitBranch,
-} from 'lucide-react'
-import * as Icons from 'lucide-react'
-import { useAgents } from '../lib/useAgents'
-import OutputRenderer from '../components/OutputRenderer'
-import ApiKeyBar from '../components/ApiKeyBar'
-import RunRating from '../components/RunRating'
-import { useApiKey } from '../lib/useApiKey'
-import { recordAnalyticsRun } from '../lib/useAnalytics'
-import { runAgent } from '../lib/llmAdapter'
-import { resolveAgentModel, MODEL_MAP } from '../lib/resolveAgentModel'
-import { fetchWorkflowById, incrementUsage } from '../hooks/useWorkflows'
+} from "lucide-react";
+import * as Icons from "lucide-react";
+import { useAgents } from "../lib/useAgents";
+import OutputRenderer from "../components/OutputRenderer";
+import ApiKeyBar from "../components/ApiKeyBar";
+import RunRating from "../components/RunRating";
+import { useApiKey } from "../lib/useApiKey";
+import { recordAnalyticsRun } from "../lib/useAnalytics";
+import { runAgent } from "../lib/llmAdapter";
+import { resolveAgentModel, MODEL_MAP } from "../lib/resolveAgentModel";
+import { fetchWorkflowById, incrementUsage } from "../hooks/useWorkflows";
 import {
   isConditionalStep,
   evaluateConditionalStep,
   validateConditionalStep,
-} from '../lib/pipelineBranching'
-import { exportWorkflowAsMarkdown } from '../lib/exportMarkdown'
-import { useDocumentTitle } from '../lib/useDocumentTitle'
+} from "../lib/pipelineBranching";
+import { exportWorkflowAsMarkdown } from "../lib/exportMarkdown";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 const STATUS_COLORS = {
-  waiting: 'dark:text-text-muted text-gray-400',
-  running: 'text-accent',
-  done: 'text-emerald-400',
-  failed: 'text-red-400',
-}
+  waiting: "dark:text-text-muted text-gray-400",
+  running: "text-accent",
+  done: "text-emerald-400",
+  failed: "text-red-400",
+};
 
 function StepStatusIcon({ status }) {
-  if (status === 'waiting') return <Clock size={15} className={STATUS_COLORS.waiting} />
-  if (status === 'running') return <Loader2 size={15} className="text-accent animate-spin" />
-  if (status === 'done') return <CheckCircle2 size={15} className={STATUS_COLORS.done} />
-  if (status === 'failed') return <XCircle size={15} className={STATUS_COLORS.failed} />
-  return null
+  if (status === "waiting")
+    return <Clock size={15} className={STATUS_COLORS.waiting} />;
+  if (status === "running")
+    return <Loader2 size={15} className="text-accent animate-spin" />;
+  if (status === "done")
+    return <CheckCircle2 size={15} className={STATUS_COLORS.done} />;
+  if (status === "failed")
+    return <XCircle size={15} className={STATUS_COLORS.failed} />;
+  return null;
 }
 
 function CopyAllButton({ steps }) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     const text = steps
-      .filter((s) => s.status === 'done' && s.output)
+      .filter((s) => s.status === "done" && s.output)
       .map((s) => `=== ${s.agentName} ===\n\n${s.output}`)
-      .join('\n\n---\n\n')
+      .join("\n\n---\n\n");
 
     try {
-      await navigator.clipboard.writeText(text)
+      await navigator.clipboard.writeText(text);
     } catch {
-      const ta = document.createElement('textarea')
-      ta.value = text
-      document.body.appendChild(ta)
-      ta.select()
-      document.execCommand('copy')
-      document.body.removeChild(ta)
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
     }
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <button
@@ -77,49 +81,64 @@ function CopyAllButton({ steps }) {
         dark:bg-surface-card dark:border-border dark:text-text-secondary dark:hover:text-text-primary
         bg-white border border-gray-200 text-gray-600 hover:text-gray-900"
     >
-      {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-      {copied ? 'Copied!' : 'Copy All Outputs'}
+      {copied ? (
+        <Check size={14} className="text-emerald-400" />
+      ) : (
+        <Copy size={14} />
+      )}
+      {copied ? "Copied!" : "Copy All Outputs"}
     </button>
-  )
+  );
 }
 
 export default function WorkflowRunner() {
-  const { id } = useParams()
-  const location = useLocation()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const { provider, setProvider, apiKey, setApiKey, saveForSession, setSaveForSession } = useApiKey()
+  const {
+    provider,
+    setProvider,
+    apiKey,
+    setApiKey,
+    saveForSession,
+    setSaveForSession,
+  } = useApiKey();
 
-  const [workflow, setWorkflow] = useState(location.state?.workflow ?? null)
-  const [loadingWorkflow, setLoadingWorkflow] = useState(!location.state?.workflow)
-  const [fetchError, setFetchError] = useState(null)
+  const [workflow, setWorkflow] = useState(location.state?.workflow ?? null);
+  const [loadingWorkflow, setLoadingWorkflow] = useState(
+    !location.state?.workflow,
+  );
+  const [fetchError, setFetchError] = useState(null);
 
-  const [userInput, setUserInput] = useState(location.state?.initialInput ?? '')
-  const [running, setRunning] = useState(false)
-  const [steps, setSteps] = useState([])
-  const [allDone, setAllDone] = useState(false)
-  const [hasRun, setHasRun] = useState(false)
-  useDocumentTitle(workflow?.title ? `Run ${workflow.title}` : 'Run Workflow')
+  const [userInput, setUserInput] = useState(
+    location.state?.initialInput ?? "",
+  );
+  const [running, setRunning] = useState(false);
+  const [steps, setSteps] = useState([]);
+  const [allDone, setAllDone] = useState(false);
+  const [hasRun, setHasRun] = useState(false);
+  useDocumentTitle(workflow?.title ? `Run ${workflow.title}` : "Run Workflow");
 
   // Fetch workflow if not passed via state
   useEffect(() => {
-    if (workflow) return
-    if (!id || id === 'preview') {
-      setFetchError('Workflow not found.')
-      setLoadingWorkflow(false)
-      return
+    if (workflow) return;
+    if (!id || id === "preview") {
+      setFetchError("Workflow not found.");
+      setLoadingWorkflow(false);
+      return;
     }
     fetchWorkflowById(id).then(({ data, error }) => {
       if (error || !data) {
-        setFetchError('Could not load workflow.')
+        setFetchError("Could not load workflow.");
       } else {
-        setWorkflow(data)
+        setWorkflow(data);
       }
-      setLoadingWorkflow(false)
-    })
-  }, [id])
+      setLoadingWorkflow(false);
+    });
+  }, [id]);
 
-  const { agents } = useAgents()
+  const { agents } = useAgents();
 
   // Build the initial (pre-run) step list. Conditional entries render as a
   // single branch node; their selected branch expands at run time.
@@ -127,125 +146,132 @@ export default function WorkflowRunner() {
     (workflowDef.agents ?? []).map((entry) => {
       if (isConditionalStep(entry)) {
         return {
-          kind: 'conditional',
+          kind: "conditional",
           stepDef: entry,
-          agentId: entry.id ?? 'conditional',
-          agentName: entry.id ? `Branch: ${entry.id}` : 'Conditional Branch',
+          agentId: entry.id ?? "conditional",
+          agentName: entry.id ? `Branch: ${entry.id}` : "Conditional Branch",
           agent: null,
-          status: 'waiting',
+          status: "waiting",
           output: null,
           error: null,
           conditionValue: null,
           branchLabel: null,
-        }
+        };
       }
-      const agent = agentList.find((a) => a.id === entry)
+      const agent = agentList.find((a) => a.id === entry);
       return {
-        kind: 'agent',
+        kind: "agent",
         agentId: entry,
         agentName: agent?.name ?? entry,
         agent,
-        status: 'waiting',
+        status: "waiting",
         output: null,
         error: null,
-      }
-    })
+      };
+    });
 
   // Initialize step states when workflow is ready
   useEffect(() => {
-    if (!workflow) return
-    setSteps(buildInitialSteps(workflow, agents))
-  }, [workflow, agents])
+    if (!workflow) return;
+    setSteps(buildInitialSteps(workflow, agents));
+  }, [workflow, agents]);
 
   const handleRun = async () => {
-    if (!userInput.trim() || !apiKey || running) return
-    setRunning(true)
-    setAllDone(false)
-    setHasRun(true)
+    if (!userInput.trim() || !apiKey || running) return;
+    setRunning(true);
+    setAllDone(false);
+    setHasRun(true);
 
     // Rebuild from the workflow definition so branch steps injected by a
     // previous run are dropped before this run starts.
-    const execSteps = buildInitialSteps(workflow, agents)
-    setSteps(execSteps)
+    const execSteps = buildInitialSteps(workflow, agents);
+    setSteps(execSteps);
 
     // Pipeline context available to condition templates:
     // { input, steps: { <stepId>: { output, branch? } } }
-    const context = { input: userInput.trim(), steps: {} }
-    let currentInput = userInput.trim()
-    let failed = false
-    let i = 0
+    const context = { input: userInput.trim(), steps: {} };
+    let currentInput = userInput.trim();
+    let failed = false;
+    let i = 0;
 
-    const syncSteps = () => setSteps([...execSteps])
+    const syncSteps = () => setSteps([...execSteps]);
 
     while (i < execSteps.length) {
-      const step = execSteps[i]
+      const step = execSteps[i];
 
-      if (step.kind === 'conditional') {
-        const problems = validateConditionalStep(step.stepDef, workflow.agents)
-        const { conditionValue, branchLabel, branchAgents } = evaluateConditionalStep(step.stepDef, context)
+      if (step.kind === "conditional") {
+        const problems = validateConditionalStep(step.stepDef, workflow.agents);
+        const { conditionValue, branchLabel, branchAgents } =
+          evaluateConditionalStep(step.stepDef, context);
 
         if (!branchLabel) {
           execSteps[i] = {
             ...step,
-            status: 'failed',
+            status: "failed",
             conditionValue,
             error:
               problems[0] ??
               `No branch matched "${conditionValue}" and no default branch is defined.`,
-          }
-          syncSteps()
-          failed = true
-          break
+          };
+          syncSteps();
+          failed = true;
+          break;
         }
 
         // Exactly one branch executes: splice its agents in right after this node
         const branchSteps = branchAgents.map((agentId) => {
-          const agent = agents.find((a) => a.id === agentId)
+          const agent = agents.find((a) => a.id === agentId);
           return {
-            kind: 'agent',
+            kind: "agent",
             agentId,
             agentName: agent?.name ?? agentId,
             agent,
-            status: 'waiting',
+            status: "waiting",
             output: null,
             error: null,
             branchLabel,
             parentConditionalId: step.stepDef.id,
-          }
-        })
-        execSteps[i] = { ...step, status: 'done', conditionValue, branchLabel }
-        execSteps.splice(i + 1, 0, ...branchSteps)
-        syncSteps()
-        i += 1
-        continue
+          };
+        });
+        execSteps[i] = { ...step, status: "done", conditionValue, branchLabel };
+        execSteps.splice(i + 1, 0, ...branchSteps);
+        syncSteps();
+        i += 1;
+        continue;
       }
 
       if (!step.agent) {
-        execSteps[i] = { ...step, status: 'failed', error: `Agent "${step.agentId}" not found in registry.` }
-        syncSteps()
-        failed = true
-        break
+        execSteps[i] = {
+          ...step,
+          status: "failed",
+          error: `Agent "${step.agentId}" not found in registry.`,
+        };
+        syncSteps();
+        failed = true;
+        break;
       }
 
-      execSteps[i] = { ...step, status: 'running' }
-      syncSteps()
+      execSteps[i] = { ...step, status: "running" };
+      syncSteps();
 
       const actualProvider =
-        step.agent.provider === 'any'
-          ? provider
-          : step.agent.provider
+        step.agent.provider === "any" ? provider : step.agent.provider;
 
-      const keyToUse = actualProvider === provider
-        ? apiKey
-        : (sessionStorage.getItem(`ila_apikey_${actualProvider}`) || '')
+      const keyToUse =
+        actualProvider === provider
+          ? apiKey
+          : sessionStorage.getItem(`ila_apikey_${actualProvider}`) || "";
 
       if (!keyToUse) {
-        setStepField(i, { status: 'failed', error: `API key for provider "${actualProvider}" is not configured.` })
-        failed = true
-        break
+        setStepField(i, {
+          status: "failed",
+          error: `API key for provider "${actualProvider}" is not configured.`,
+        });
+        failed = true;
+        break;
       }
 
-      const model = resolveAgentModel(step.agent, actualProvider)
+      const model = resolveAgentModel(step.agent, actualProvider);
 
       try {
         const result = await runAgent({
@@ -254,9 +280,13 @@ export default function WorkflowRunner() {
           apiKey: keyToUse,
           systemPrompt: step.agent.systemPrompt,
           userMessage: currentInput,
-        })
-        execSteps[i] = { ...execSteps[i], status: 'done', output: result.content }
-        syncSteps()
+        });
+        execSteps[i] = {
+          ...execSteps[i],
+          status: "done",
+          output: result.content,
+        };
+        syncSteps();
         recordAnalyticsRun({
           agentId: step.agent.id,
           agentName: step.agent.name,
@@ -264,72 +294,80 @@ export default function WorkflowRunner() {
           provider: actualProvider,
           model,
           duration: result.duration,
-        })
-        currentInput = result.content // pass output to next step
+        });
+        currentInput = result.content; // pass output to next step
 
         // Expose this step's output to later condition templates. Branch
         // output also merges under the parent conditional's id.
-        context.steps[step.agentId] = { output: result.content }
+        context.steps[step.agentId] = { output: result.content };
         if (step.parentConditionalId) {
           context.steps[step.parentConditionalId] = {
             output: result.content,
             branch: step.branchLabel,
-          }
+          };
         }
       } catch (err) {
-        execSteps[i] = { ...execSteps[i], status: 'failed', error: err?.message || err?.detail || 'Execution failed' }
-        syncSteps()
-        failed = true
-        break
+        execSteps[i] = {
+          ...execSteps[i],
+          status: "failed",
+          error: err?.message || err?.detail || "Execution failed",
+        };
+        syncSteps();
+        failed = true;
+        break;
       }
 
-      i += 1
+      i += 1;
     }
 
     if (!failed) {
-      setAllDone(true)
+      setAllDone(true);
       // Increment usage count if workflow is persisted
       if (workflow?.id) {
-        await incrementUsage(workflow.id)
+        await incrementUsage(workflow.id);
       }
     }
 
-    setRunning(false)
-  }
+    setRunning(false);
+  };
 
   const handleRunAgain = () => {
-    setAllDone(false)
-    setHasRun(false)
+    setAllDone(false);
+    setHasRun(false);
     // Rebuild from the definition so previously injected branch steps are removed
-    setSteps(buildInitialSteps(workflow, agents))
-  }
+    setSteps(buildInitialSteps(workflow, agents));
+  };
 
   // Loading workflow from Supabase
   if (loadingWorkflow) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3 animate-fade-in">
         <Loader2 size={24} className="animate-spin text-accent" />
-        <p className="text-sm dark:text-text-secondary text-gray-500">Loading workflow...</p>
+        <p className="text-sm dark:text-text-secondary text-gray-500">
+          Loading workflow...
+        </p>
       </div>
-    )
+    );
   }
 
   if (fetchError) {
     return (
       <div className="max-w-xl mx-auto text-center py-20 animate-fade-in">
         <AlertCircle size={28} className="text-red-400 mx-auto mb-3" />
-        <p className="text-sm dark:text-text-secondary text-gray-500 mb-4">{fetchError}</p>
+        <p className="text-sm dark:text-text-secondary text-gray-500 mb-4">
+          {fetchError}
+        </p>
         <button
-          onClick={() => navigate('/workflows')}
+          onClick={() => navigate("/workflows")}
           className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-hover"
         >
           <ArrowLeft size={14} /> Back to Library
         </button>
       </div>
-    )
+    );
   }
 
-  const hasFailed = steps.some((s) => s.status === 'failed')
+  const hasFailed = steps.some((s) => s.status === "failed");
 
   return (
     <div className="max-w-2xl mx-auto animate-fade-in">
@@ -346,14 +384,19 @@ export default function WorkflowRunner() {
         </button>
         <div>
           <h1 className="text-base font-bold dark:text-text-primary text-gray-900">
-            {workflow?.title ?? 'Run Workflow'}
+            {workflow?.title ?? "Run Workflow"}
           </h1>
           <div className="flex items-center gap-1 mt-0.5 flex-wrap">
             {steps.map((step, i) => (
               <span key={step.agentId + i} className="flex items-center gap-1">
-                <span className="text-[11px] dark:text-text-muted text-gray-400">{step.agentName}</span>
+                <span className="text-[11px] dark:text-text-muted text-gray-400">
+                  {step.agentName}
+                </span>
                 {i < steps.length - 1 && (
-                  <ArrowRight size={10} className="dark:text-text-muted text-gray-400" />
+                  <ArrowRight
+                    size={10}
+                    className="dark:text-text-muted text-gray-400"
+                  />
                 )}
               </span>
             ))}
@@ -402,7 +445,9 @@ export default function WorkflowRunner() {
         {!hasRun || allDone || hasFailed ? (
           <button
             id="run-workflow-btn"
-            onClick={hasRun && (allDone || hasFailed) ? handleRunAgain : handleRun}
+            onClick={
+              hasRun && (allDone || hasFailed) ? handleRunAgain : handleRun
+            }
             disabled={!userInput.trim() || !apiKey || running}
             className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white
               bg-accent hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed
@@ -442,10 +487,12 @@ export default function WorkflowRunner() {
         )}
 
         {allDone && (
-           <>
+          <>
             <CopyAllButton steps={steps} />
             <button
-              onClick={() => exportWorkflowAsMarkdown(workflow?.title ?? 'workflow', steps)}
+              onClick={() =>
+                exportWorkflowAsMarkdown(workflow?.title ?? "workflow", steps)
+              }
               className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors
                dark:bg-surface-card dark:border-border dark:text-text-secondary dark:hover:text-text-primary
                 bg-white border border-gray-200 text-gray-600 hover:text-gray-900"
@@ -461,9 +508,9 @@ export default function WorkflowRunner() {
         <div className="space-y-4">
           {steps.map((step, index) => {
             const IconComponent =
-              step.kind === 'conditional'
+              step.kind === "conditional"
                 ? GitBranch
-                : (step.agent && Icons[step.agent.icon]) || Icons.Bot
+                : (step.agent && Icons[step.agent.icon]) || Icons.Bot;
             return (
               <div
                 key={step.agentId + index}
@@ -483,7 +530,7 @@ export default function WorkflowRunner() {
                     <span className="text-sm font-medium dark:text-text-primary text-gray-900">
                       {step.agentName}
                     </span>
-                    {step.branchLabel && step.kind !== 'conditional' && (
+                    {step.branchLabel && step.kind !== "conditional" && (
                       <span className="ml-2 px-1.5 py-0.5 rounded text-[10px] font-medium bg-accent/10 text-accent">
                         {step.branchLabel}
                       </span>
@@ -491,36 +538,49 @@ export default function WorkflowRunner() {
                   </div>
                   <div className="flex items-center gap-1.5">
                     <StepStatusIcon status={step.status} />
-                    <span className={`text-[11px] font-medium capitalize ${STATUS_COLORS[step.status] || ''}`}>
+                    <span
+                      className={`text-[11px] font-medium capitalize ${STATUS_COLORS[step.status] || ""}`}
+                    >
                       {step.status}
                     </span>
                   </div>
                 </div>
 
                 {/* Step Body */}
-                {step.status === 'running' && (
+                {step.status === "running" && (
                   <div className="p-4 text-center">
                     <div className="flex items-center justify-center gap-2">
                       <Loader2 size={14} className="animate-spin text-accent" />
-                      <span className="text-xs dark:text-text-secondary text-gray-500">Processing...</span>
+                      <span className="text-xs dark:text-text-secondary text-gray-500">
+                        Processing...
+                      </span>
                     </div>
                   </div>
                 )}
 
-                {step.kind === 'conditional' && step.status === 'done' && (
+                {step.kind === "conditional" && step.status === "done" && (
                   <div className="p-4">
                     <div className="flex items-start gap-2 p-3 rounded-lg bg-accent/5 border border-accent/20">
-                      <GitBranch size={14} className="text-accent flex-shrink-0 mt-0.5" />
+                      <GitBranch
+                        size={14}
+                        className="text-accent flex-shrink-0 mt-0.5"
+                      />
                       <p className="text-xs dark:text-text-secondary text-gray-600">
-                        Condition resolved to{' '}
-                        <span className="font-semibold text-accent">"{step.conditionValue}"</span>, taking the{' '}
-                        <span className="font-semibold text-accent">{step.branchLabel}</span> branch.
+                        Condition resolved to{" "}
+                        <span className="font-semibold text-accent">
+                          "{step.conditionValue}"
+                        </span>
+                        , taking the{" "}
+                        <span className="font-semibold text-accent">
+                          {step.branchLabel}
+                        </span>{" "}
+                        branch.
                       </p>
                     </div>
                   </div>
                 )}
 
-                {step.kind === 'conditional' && step.branches && (
+                {step.kind === "conditional" && step.branches && (
                   <div className="p-4 border-t dark:border-border border-gray-100">
                     <p className="text-xs font-semibold dark:text-text-secondary text-gray-700 mb-3">
                       Branch Paths (Labeled Edges):
@@ -530,20 +590,22 @@ export default function WorkflowRunner() {
                         <div
                           key={label}
                           className={`p-3 rounded-md text-xs transition-colors flex items-start gap-2 ${
-                            label === step.branchLabel && step.status === 'done'
-                              ? 'bg-accent/15 border border-accent/40 text-accent'
-                              : 'bg-gray-50 dark:bg-surface-secondary border border-gray-200 dark:border-border text-gray-700 dark:text-text-secondary'
+                            label === step.branchLabel && step.status === "done"
+                              ? "bg-accent/15 border border-accent/40 text-accent"
+                              : "bg-gray-50 dark:bg-surface-secondary border border-gray-200 dark:border-border text-gray-700 dark:text-text-secondary"
                           }`}
                         >
                           <div className="flex-shrink-0 mt-0.5">
                             <div className="w-2 h-2 rounded-full bg-current" />
                           </div>
                           <div className="flex-1">
-                            <div className="font-medium">{label === 'default' ? 'Default' : label}</div>
+                            <div className="font-medium">
+                              {label === "default" ? "Default" : label}
+                            </div>
                             <div className="text-[10px] opacity-75 mt-1">
                               {Array.isArray(agents) && agents.length > 0
-                                ? agents.join(' → ')
-                                : 'No agents'}
+                                ? agents.join(" → ")
+                                : "No agents"}
                             </div>
                           </div>
                         </div>
@@ -552,24 +614,28 @@ export default function WorkflowRunner() {
                   </div>
                 )}
 
-                {step.status === 'done' && step.output && (
+                {step.status === "done" && step.output && (
                   <div className="p-4">
                     <OutputRenderer
                       content={step.output}
-                      outputType={step.agent?.outputType ?? 'text'}
+                      outputType={step.agent?.outputType ?? "text"}
                       agentName={step.agentName}
                     />
-                    <RunRating agentId={step.agent?.id} /> 
-
+                    <RunRating agentId={step.agent?.id} />
                   </div>
                 )}
 
-                {step.status === 'failed' && step.error && (
+                {step.status === "failed" && step.error && (
                   <div className="p-4">
                     <div className="flex items-start gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-                      <AlertCircle size={14} className="text-red-400 flex-shrink-0 mt-0.5" />
+                      <AlertCircle
+                        size={14}
+                        className="text-red-400 flex-shrink-0 mt-0.5"
+                      />
                       <div>
-                        <p className="text-xs font-medium text-red-400 mb-1">Step failed</p>
+                        <p className="text-xs font-medium text-red-400 mb-1">
+                          Step failed
+                        </p>
                         <p className="text-xs text-red-400/80">{step.error}</p>
                       </div>
                     </div>
@@ -583,13 +649,15 @@ export default function WorkflowRunner() {
                   </div>
                 )}
 
-                {step.status === 'waiting' && (
+                {step.status === "waiting" && (
                   <div className="px-4 py-3">
-                    <p className="text-[11px] dark:text-text-muted text-gray-400">Waiting for previous step...</p>
+                    <p className="text-[11px] dark:text-text-muted text-gray-400">
+                      Waiting for previous step...
+                    </p>
                   </div>
                 )}
               </div>
-            )
+            );
           })}
         </div>
       )}
@@ -606,5 +674,5 @@ export default function WorkflowRunner() {
         </div>
       )}
     </div>
-  )
+  );
 }

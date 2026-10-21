@@ -1,45 +1,45 @@
-import { useMemo } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, FolderPlus, Trash2, X } from 'lucide-react'
-import AgentCard from '../components/AgentCard'
-import CollectionAgentPicker from '../components/collections/CollectionAgentPicker'
-import { useAgents } from '../lib/useAgents'
+import { useMemo } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, FolderPlus, Trash2, X } from "lucide-react";
+import AgentCard from "../components/AgentCard";
+import CollectionAgentPicker from "../components/collections/CollectionAgentPicker";
+import { useAgents } from "../lib/useAgents";
 import {
   MAX_AGENTS_PER_COLLECTION,
   useCollections,
-} from '../lib/useCollections'
-import { useDocumentTitle } from '../lib/useDocumentTitle'
+} from "../lib/useCollections";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export default function CollectionDetailPage() {
-  const { id } = useParams()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const {
     getCollectionById,
     deleteCollection,
     addAgentToCollection,
     removeAgentFromCollection,
-  } = useCollections()
-  const { agents, loading, error } = useAgents()
+  } = useCollections();
+  const { agents, loading, error } = useAgents();
 
-  const collection = getCollectionById(id)
+  const collection = getCollectionById(id);
 
   useDocumentTitle(
-    collection ? `${collection.name} Collection` : 'Collection not found'
-  )
+    collection ? `${collection.name} Collection` : "Collection not found",
+  );
 
   const agentById = useMemo(
     () => new Map(agents.map((agent) => [agent.id, agent])),
-    [agents]
-  )
+    [agents],
+  );
 
   const collectionAgents = useMemo(() => {
-    if (!collection) return []
+    if (!collection) return [];
 
     return collection.agentIds
       .map((agentId) => agentById.get(agentId))
-      .filter(Boolean)
-  }, [agentById, collection])
+      .filter(Boolean);
+  }, [agentById, collection]);
 
   if (!collection) {
     return (
@@ -57,7 +57,7 @@ export default function CollectionDetailPage() {
           Back to Collections
         </Link>
       </div>
-    )
+    );
   }
 
   if (loading) {
@@ -70,7 +70,7 @@ export default function CollectionDetailPage() {
           Preparing the agent list for this collection.
         </p>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -83,23 +83,23 @@ export default function CollectionDetailPage() {
           Refresh the page and try opening this collection again.
         </p>
       </div>
-    )
+    );
   }
 
-  const staleCount = collection.agentIds.length - collectionAgents.length
+  const staleCount = collection.agentIds.length - collectionAgents.length;
 
   const handleDelete = () => {
-    deleteCollection(collection.id)
-    navigate('/collections')
-  }
+    deleteCollection(collection.id);
+    navigate("/collections");
+  };
 
   const handleAddAgent = (agentId) => {
-    return addAgentToCollection(collection.id, agentId)
-  }
+    return addAgentToCollection(collection.id, agentId);
+  };
 
   const handleRemoveAgent = (agentId) => {
-    return removeAgentFromCollection(collection.id, agentId)
-  }
+    return removeAgentFromCollection(collection.id, agentId);
+  };
 
   return (
     <div className="animate-fade-in space-y-8">
@@ -124,9 +124,7 @@ export default function CollectionDetailPage() {
           <p className="mt-2 text-sm text-gray-500 dark:text-text-secondary">
             {collectionAgents.length} / {MAX_AGENTS_PER_COLLECTION} runnable
             agents
-            {staleCount > 0
-              ? ` · ${staleCount} unavailable agents hidden`
-              : ''}
+            {staleCount > 0 ? ` · ${staleCount} unavailable agents hidden` : ""}
           </p>
         </div>
 
@@ -197,5 +195,5 @@ export default function CollectionDetailPage() {
         maxAgents={MAX_AGENTS_PER_COLLECTION}
       />
     </div>
-  )
+  );
 }

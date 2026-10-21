@@ -11,8 +11,9 @@ export default {
   model: "gpt-4o",
   exampleInputs: {
     collectionName: "User Management API",
-    apiRawText: "POST /api/v1/users - creates a new user, body: {name, email}\nGET /api/v1/users/{id} - returns details of a single user",
-    authType: "Bearer Token"
+    apiRawText:
+      "POST /api/v1/users - creates a new user, body: {name, email}\nGET /api/v1/users/{id} - returns details of a single user",
+    authType: "Bearer Token",
   },
   inputs: [
     {
@@ -20,14 +21,15 @@ export default {
       label: "Collection Name",
       type: "text",
       placeholder: "e.g., User Management API",
-      required: true
+      required: true,
     },
     {
       id: "apiRawText",
       label: "Raw API Endpoints/Details",
       type: "textarea",
-      placeholder: "e.g., POST /api/v1/users - creates a new user, body: {name, email}",
-      required: true
+      placeholder:
+        "e.g., POST /api/v1/users - creates a new user, body: {name, email}",
+      required: true,
     },
     {
       id: "authType",
@@ -35,8 +37,8 @@ export default {
       type: "select",
       options: ["None", "Bearer Token", "Basic Auth", "API Key"],
       defaultValue: "None",
-      required: true
-    }
+      required: true,
+    },
   ],
   systemPrompt: `You are an API integration expert. Given a Collection Name, raw API endpoint descriptions/details, and an Authentication Type:
 1. Generate a standard, fully compliant, valid Postman Collection JSON (v2.1.0 specification) representing the endpoints and body templates.
@@ -81,5 +83,5 @@ Rules:
   - If "API Key", add the apiKey header details (e.g. X-API-Key).
 - Ensure code snippets are clean, syntactically correct, and cover query parameter/request body transmission correctly.`,
   outputType: "markdown",
-  suggestedChainFrom: ["api-doc-generator", "openapi-spec-generator"]
+  suggestedChainFrom: ["api-doc-generator", "openapi-spec-generator"],
 };

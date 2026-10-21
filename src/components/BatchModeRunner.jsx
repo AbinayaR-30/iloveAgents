@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo } from "react";
 import {
   Loader2,
   CheckCircle2,
@@ -9,147 +9,167 @@ import {
   StopCircle,
   Zap,
   FileText,
-} from 'lucide-react'
-import CustomSelect from './CustomSelect'
-import { runBatch, parsePastedLines, parseCSV } from '../lib/batchRunner'
-import { exportBatchAsCSV, exportBatchAsMarkdown } from '../lib/exportBatch'
+} from "lucide-react";
+import CustomSelect from "./CustomSelect";
+import { runBatch, parsePastedLines, parseCSV } from "../lib/batchRunner";
+import { exportBatchAsCSV, exportBatchAsMarkdown } from "../lib/exportBatch";
 
-const MAX_BATCH_SIZE = 25
+const MAX_BATCH_SIZE = 25;
 
 const STATUS_COLORS = {
-  waiting: 'dark:text-text-muted text-gray-400',
-  running: 'text-accent',
-  done: 'text-emerald-400',
-  failed: 'text-red-400',
-}
+  waiting: "dark:text-text-muted text-gray-400",
+  running: "text-accent",
+  done: "text-emerald-400",
+  failed: "text-red-400",
+};
 
 function StatusIcon({ status }) {
-  if (status === 'waiting') return <Clock size={13} className={STATUS_COLORS.waiting} />
-  if (status === 'running') return <Loader2 size={13} className="text-accent animate-spin" />
-  if (status === 'done') return <CheckCircle2 size={13} className={STATUS_COLORS.done} />
-  if (status === 'failed') return <XCircle size={13} className={STATUS_COLORS.failed} />
-  return null
+  if (status === "waiting")
+    return <Clock size={13} className={STATUS_COLORS.waiting} />;
+  if (status === "running")
+    return <Loader2 size={13} className="text-accent animate-spin" />;
+  if (status === "done")
+    return <CheckCircle2 size={13} className={STATUS_COLORS.done} />;
+  if (status === "failed")
+    return <XCircle size={13} className={STATUS_COLORS.failed} />;
+  return null;
 }
 
 // Field types that can sensibly hold one "row" of batch data
-const BATCHABLE_TYPES = ['text', 'textarea', 'code']
+const BATCHABLE_TYPES = ["text", "textarea", "code"];
 
-export default function BatchModeRunner({ agent, provider, apiKey, selectedModel, systemPrompt }) {
+export default function BatchModeRunner({
+  agent,
+  provider,
+  apiKey,
+  selectedModel,
+  systemPrompt,
+}) {
   const batchableFields = useMemo(
     () => agent.inputs.filter((i) => BATCHABLE_TYPES.includes(i.type)),
-    [agent]
-  )
+    [agent],
+  );
 
-  const [batchFieldId, setBatchFieldId] = useState(batchableFields[0]?.id || '')
-  const [fixedInputs, setFixedInputs] = useState({})
-  const [rawPaste, setRawPaste] = useState('')
-  const [items, setItems] = useState([]) // string[]
-  const [csvRawRows, setCsvRawRows] = useState(null) // string[][] from parseCSV, before header decision
-  const [csvHasHeader, setCsvHasHeader] = useState(false)
-  const [csvColumnIndex, setCsvColumnIndex] = useState(0)
-  const [results, setResults] = useState([]) // [{input, status, output, error}]
-  const [running, setRunning] = useState(false)
-  const [hasRun, setHasRun] = useState(false)
-  const fileInputRef = useRef(null)
-  const abortControllerRef = useRef(null)
+  const [batchFieldId, setBatchFieldId] = useState(
+    batchableFields[0]?.id || "",
+  );
+  const [fixedInputs, setFixedInputs] = useState({});
+  const [rawPaste, setRawPaste] = useState("");
+  const [items, setItems] = useState([]); // string[]
+  const [csvRawRows, setCsvRawRows] = useState(null); // string[][] from parseCSV, before header decision
+  const [csvHasHeader, setCsvHasHeader] = useState(false);
+  const [csvColumnIndex, setCsvColumnIndex] = useState(0);
+  const [results, setResults] = useState([]); // [{input, status, output, error}]
+  const [running, setRunning] = useState(false);
+  const [hasRun, setHasRun] = useState(false);
+  const fileInputRef = useRef(null);
+  const abortControllerRef = useRef(null);
 
-  const otherFields = agent.inputs.filter((i) => i.id !== batchFieldId)
+  const otherFields = agent.inputs.filter((i) => i.id !== batchFieldId);
 
   const updateFixedInput = (id, value) => {
-    setFixedInputs((prev) => ({ ...prev, [id]: value }))
-  }
+    setFixedInputs((prev) => ({ ...prev, [id]: value }));
+  };
 
   // Resolve a fixed field's effective value: explicit user input, else the
   // field's defaultValue, else a sensible empty value. This matters because
   // shared fields show their defaultValue in the UI even before the user
   // touches them — canRun() and the run payload must agree with what's shown.
   const resolveFixedValue = (input) => {
-    const current = fixedInputs[input.id]
-    if (current !== undefined) return current
-    if (input.defaultValue !== undefined) return input.defaultValue
-    return input.type === 'multiselect' ? [] : ''
-  }
+    const current = fixedInputs[input.id];
+    if (current !== undefined) return current;
+    if (input.defaultValue !== undefined) return input.defaultValue;
+    return input.type === "multiselect" ? [] : "";
+  };
 
   // Derived view of the CSV: which row is the header (if any), and the data rows
-  const csvHeaders = csvHasHeader ? csvRawRows?.[0] : null
-  const csvDataRows = csvHasHeader ? csvRawRows?.slice(1) : csvRawRows
+  const csvHeaders = csvHasHeader ? csvRawRows?.[0] : null;
+  const csvDataRows = csvHasHeader ? csvRawRows?.slice(1) : csvRawRows;
 
   const recomputeItemsFromCsv = (rawRows, hasHeader, columnIndex) => {
-    const dataRows = hasHeader ? rawRows.slice(1) : rawRows
-    setItems(dataRows.map((r) => r[columnIndex]).filter(Boolean))
-  }
+    const dataRows = hasHeader ? rawRows.slice(1) : rawRows;
+    setItems(dataRows.map((r) => r[columnIndex]).filter(Boolean));
+  };
 
   const handleFileUpload = (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (evt) => {
-      const text = evt.target.result
-      if (file.name.toLowerCase().endsWith('.csv')) {
-        const parsed = parseCSV(text)
-        setCsvRawRows(parsed.rows)
-        setCsvHasHeader(false) // safe default: never assume a header, never drop the first row
-        setCsvColumnIndex(0)
-        setItems(parsed.rows.map((r) => r[0]).filter(Boolean))
+      const text = evt.target.result;
+      if (file.name.toLowerCase().endsWith(".csv")) {
+        const parsed = parseCSV(text);
+        setCsvRawRows(parsed.rows);
+        setCsvHasHeader(false); // safe default: never assume a header, never drop the first row
+        setCsvColumnIndex(0);
+        setItems(parsed.rows.map((r) => r[0]).filter(Boolean));
       } else {
-        setCsvRawRows(null)
-        setItems(parsePastedLines(text))
+        setCsvRawRows(null);
+        setItems(parsePastedLines(text));
       }
-    }
-    reader.readAsText(file)
-  }
+    };
+    reader.readAsText(file);
+  };
 
   const handlePasteChange = (val) => {
-    setRawPaste(val)
-    setCsvRawRows(null)
-    setItems(parsePastedLines(val))
-  }
+    setRawPaste(val);
+    setCsvRawRows(null);
+    setItems(parsePastedLines(val));
+  };
 
   const handleCsvColumnChange = (indexStr) => {
-    const index = Number(indexStr)
-    setCsvColumnIndex(index)
+    const index = Number(indexStr);
+    setCsvColumnIndex(index);
     if (csvRawRows) {
-      recomputeItemsFromCsv(csvRawRows, csvHasHeader, index)
+      recomputeItemsFromCsv(csvRawRows, csvHasHeader, index);
     }
-  }
+  };
 
   const handleToggleCsvHeader = () => {
-    const next = !csvHasHeader
-    setCsvHasHeader(next)
+    const next = !csvHasHeader;
+    setCsvHasHeader(next);
     if (csvRawRows) {
-      recomputeItemsFromCsv(csvRawRows, next, csvColumnIndex)
+      recomputeItemsFromCsv(csvRawRows, next, csvColumnIndex);
     }
-  }
+  };
 
   const canRun = () => {
-    if (!apiKey || items.length === 0 || items.length > MAX_BATCH_SIZE || !batchFieldId) return false
+    if (
+      !apiKey ||
+      items.length === 0 ||
+      items.length > MAX_BATCH_SIZE ||
+      !batchFieldId
+    )
+      return false;
     return agent.inputs
       .filter((i) => i.required && i.id !== batchFieldId)
       .every((i) => {
-        const v = resolveFixedValue(i)
-        if (Array.isArray(v)) return v.length > 0
-        return v && String(v).trim() !== ''
-      })
-  }
+        const v = resolveFixedValue(i);
+        if (Array.isArray(v)) return v.length > 0;
+        return v && String(v).trim() !== "";
+      });
+  };
 
   const handleRun = async () => {
-    setRunning(true)
-    setHasRun(true)
-    setResults(items.map((item) => ({ input: item, status: 'waiting' })))
+    setRunning(true);
+    setHasRun(true);
+    setResults(items.map((item) => ({ input: item, status: "waiting" })));
 
-    const controller = new AbortController()
-    abortControllerRef.current = controller
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     const onItemUpdate = (index, patch) => {
-      setResults((prev) => prev.map((r, i) => (i === index ? { ...r, ...patch } : r)))
-    }
+      setResults((prev) =>
+        prev.map((r, i) => (i === index ? { ...r, ...patch } : r)),
+      );
+    };
 
     // Include resolved defaults for any fixed field the user never touched,
     // so the run payload matches what's actually shown in the UI.
     const mergedFixedInputs = Object.fromEntries(
-      otherFields.map((input) => [input.id, resolveFixedValue(input)])
-    )
+      otherFields.map((input) => [input.id, resolveFixedValue(input)]),
+    );
 
     try {
       await runBatch({
@@ -164,23 +184,29 @@ export default function BatchModeRunner({ agent, provider, apiKey, selectedModel
         concurrency: 3,
         onItemUpdate,
         signal: controller.signal,
-      })
+      });
     } finally {
-      setRunning(false)
-      abortControllerRef.current = null
+      setRunning(false);
+      abortControllerRef.current = null;
     }
-  }
+  };
 
   const handleStop = () => {
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort()
-      abortControllerRef.current = null
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
     }
-    setRunning(false)
-  }
+    setRunning(false);
+  };
 
-  const completedCount = results.filter((r) => r.status === 'done' || r.status === 'failed').length
-  const allDone = hasRun && !running && completedCount === results.length && results.length > 0
+  const completedCount = results.filter(
+    (r) => r.status === "done" || r.status === "failed",
+  ).length;
+  const allDone =
+    hasRun &&
+    !running &&
+    completedCount === results.length &&
+    results.length > 0;
 
   return (
     <div className="space-y-4">
@@ -193,7 +219,10 @@ export default function BatchModeRunner({ agent, provider, apiKey, selectedModel
           <CustomSelect
             value={batchFieldId}
             onChange={setBatchFieldId}
-            options={batchableFields.map((f) => ({ value: f.id, label: f.label }))}
+            options={batchableFields.map((f) => ({
+              value: f.id,
+              label: f.label,
+            }))}
             className="w-full sm:w-64"
             triggerClassName="h-9"
           />
@@ -212,61 +241,66 @@ export default function BatchModeRunner({ agent, provider, apiKey, selectedModel
                 {input.label}
                 {input.required && <span className="text-error ml-0.5">*</span>}
               </label>
-              {input.type === 'select' ? (
+              {input.type === "select" ? (
                 <CustomSelect
-                  value={fixedInputs[input.id] || input.defaultValue || ''}
+                  value={fixedInputs[input.id] || input.defaultValue || ""}
                   onChange={(val) => updateFixedInput(input.id, val)}
                   options={input.options || []}
                   className="w-full sm:w-64"
                   triggerClassName="h-9"
                 />
-              ) : input.type === 'multiselect' ? (
+              ) : input.type === "multiselect" ? (
                 <div className="flex flex-wrap gap-2">
                   {input.options?.map((opt) => {
-                    const selected = (fixedInputs[input.id] || input.defaultValue || []).includes(opt)
+                    const selected = (
+                      fixedInputs[input.id] ||
+                      input.defaultValue ||
+                      []
+                    ).includes(opt);
                     return (
                       <button
                         key={opt}
                         type="button"
                         onClick={() => {
-                          const current = fixedInputs[input.id] || input.defaultValue || []
+                          const current =
+                            fixedInputs[input.id] || input.defaultValue || [];
                           updateFixedInput(
                             input.id,
                             current.includes(opt)
                               ? current.filter((o) => o !== opt)
-                              : [...current, opt]
-                          )
+                              : [...current, opt],
+                          );
                         }}
                         className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all border
                           ${
                             selected
-                              ? 'bg-accent/15 text-accent border-accent/30'
-                              : 'dark:bg-surface-input dark:text-text-secondary dark:border-border bg-white text-gray-500 border-gray-200'
+                              ? "bg-accent/15 text-accent border-accent/30"
+                              : "dark:bg-surface-input dark:text-text-secondary dark:border-border bg-white text-gray-500 border-gray-200"
                           }`}
                       >
-                        {selected && '✓ '}
+                        {selected && "✓ "}
                         {opt}
                       </button>
-                    )
+                    );
                   })}
                 </div>
-              ) : input.type === 'textarea' || input.type === 'code' ? (
+              ) : input.type === "textarea" || input.type === "code" ? (
                 <textarea
-                  value={fixedInputs[input.id] ?? input.defaultValue ?? ''}
+                  value={fixedInputs[input.id] ?? input.defaultValue ?? ""}
                   onChange={(e) => updateFixedInput(input.id, e.target.value)}
                   placeholder={input.placeholder}
-                  rows={input.type === 'code' ? 8 : 4}
-                  spellCheck={input.type !== 'code'}
+                  rows={input.type === "code" ? 8 : 4}
+                  spellCheck={input.type !== "code"}
                   className={`w-full px-3 py-2 rounded-md text-sm transition-colors resize-y
                     dark:bg-surface-input dark:border-border dark:text-text-primary
                     dark:bg-gray-900/60 bg-white/80 backdrop-blur-md border border-gray-200 text-gray-900
                     focus:ring-1 focus:ring-accent focus:border-accent outline-none
-                    ${input.type === 'code' ? 'font-mono' : ''}`}
+                    ${input.type === "code" ? "font-mono" : ""}`}
                 />
               ) : (
                 <input
                   type="text"
-                  value={fixedInputs[input.id] ?? input.defaultValue ?? ''}
+                  value={fixedInputs[input.id] ?? input.defaultValue ?? ""}
                   onChange={(e) => updateFixedInput(input.id, e.target.value)}
                   placeholder={input.placeholder}
                   className="w-full h-9 px-3 rounded-md text-sm transition-colors
@@ -288,7 +322,7 @@ export default function BatchModeRunner({ agent, provider, apiKey, selectedModel
         <textarea
           value={rawPaste}
           onChange={(e) => handlePasteChange(e.target.value)}
-          placeholder={'Item 1\nItem 2\nItem 3...'}
+          placeholder={"Item 1\nItem 2\nItem 3..."}
           rows={6}
           disabled={running}
           className="w-full px-3 py-2.5 rounded-lg text-sm transition-colors resize-y
@@ -318,7 +352,7 @@ export default function BatchModeRunner({ agent, provider, apiKey, selectedModel
           />
           {items.length > 0 && (
             <span className="text-[11px] dark:text-text-muted text-gray-400">
-              {items.length} item{items.length !== 1 ? 's' : ''} detected
+              {items.length} item{items.length !== 1 ? "s" : ""} detected
             </span>
           )}
         </div>
@@ -337,21 +371,31 @@ export default function BatchModeRunner({ agent, provider, apiKey, selectedModel
             </label>
             {csvRawRows[0]?.length > 1 && (
               <div className="flex items-center gap-2">
-                <span className="text-[11px] dark:text-text-muted text-gray-400">Use column:</span>
+                <span className="text-[11px] dark:text-text-muted text-gray-400">
+                  Use column:
+                </span>
                 <CustomSelect
                   value={String(csvColumnIndex)}
                   onChange={handleCsvColumnChange}
                   options={
                     csvHasHeader
-                      ? csvHeaders.map((h, i) => ({ value: String(i), label: h || `Column ${i + 1}` }))
-                      : csvRawRows[0].map((_, i) => ({ value: String(i), label: `Column ${i + 1}` }))
+                      ? csvHeaders.map((h, i) => ({
+                          value: String(i),
+                          label: h || `Column ${i + 1}`,
+                        }))
+                      : csvRawRows[0].map((_, i) => ({
+                          value: String(i),
+                          label: `Column ${i + 1}`,
+                        }))
                   }
                   triggerClassName="h-7 text-xs"
                 />
               </div>
             )}
             <p className="text-[10px] dark:text-text-muted text-gray-400">
-              {csvDataRows?.length || 0} row{csvDataRows?.length !== 1 ? 's' : ''} will be used as batch items.
+              {csvDataRows?.length || 0} row
+              {csvDataRows?.length !== 1 ? "s" : ""} will be used as batch
+              items.
             </p>
           </div>
         )}
@@ -427,16 +471,18 @@ export default function BatchModeRunner({ agent, provider, apiKey, selectedModel
                   {r.input}
                 </span>
                 <StatusIcon status={r.status} />
-                <span className={`text-[11px] font-medium capitalize ${STATUS_COLORS[r.status] || ''}`}>
+                <span
+                  className={`text-[11px] font-medium capitalize ${STATUS_COLORS[r.status] || ""}`}
+                >
                   {r.status}
                 </span>
               </div>
-              {r.status === 'done' && r.output && (
+              {r.status === "done" && r.output && (
                 <div className="px-3 py-2 text-xs dark:text-text-secondary text-gray-600 whitespace-pre-wrap max-h-32 overflow-y-auto">
                   {r.output}
                 </div>
               )}
-              {r.status === 'failed' && r.error && (
+              {r.status === "failed" && r.error && (
                 <div className="px-3 py-2 text-xs text-red-400">{r.error}</div>
               )}
             </div>
@@ -444,5 +490,5 @@ export default function BatchModeRunner({ agent, provider, apiKey, selectedModel
         </div>
       )}
     </div>
-  )
+  );
 }

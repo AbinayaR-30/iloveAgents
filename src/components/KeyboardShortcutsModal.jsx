@@ -1,14 +1,37 @@
-import { X, Command, CornerDownLeft, Search, Type, HelpCircle } from 'lucide-react';
+import {
+  X,
+  Command,
+  CornerDownLeft,
+  Search,
+  Type,
+  HelpCircle,
+} from "lucide-react";
 
 export default function KeyboardShortcutsModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   const shortcuts = [
-    { key: 'Ctrl + Enter', description: 'Run Agent or Workflow', icon: <CornerDownLeft size={14} /> },
-    { key: '/', description: 'Focus Search Bar', icon: <Search size={14} /> },
-    { key: 'Esc', description: 'Clear Inputs / Collapse Playground', icon: <X size={14} /> },
-    { key: 'Alt + 1 / 2 / 3', description: 'Toggle Provider (OpenAI, Anthropic, Gemini)', icon: <Type size={14} /> },
-    { key: '?', description: 'Open this help menu', icon: <HelpCircle size={14} /> },
+    {
+      key: "Ctrl + Enter",
+      description: "Run Agent or Workflow",
+      icon: <CornerDownLeft size={14} />,
+    },
+    { key: "/", description: "Focus Search Bar", icon: <Search size={14} /> },
+    {
+      key: "Esc",
+      description: "Clear Inputs / Collapse Playground",
+      icon: <X size={14} />,
+    },
+    {
+      key: "Alt + 1 / 2 / 3",
+      description: "Toggle Provider (OpenAI, Anthropic, Gemini)",
+      icon: <Type size={14} />,
+    },
+    {
+      key: "?",
+      description: "Open this help menu",
+      icon: <HelpCircle size={14} />,
+    },
   ];
 
   return (
@@ -26,7 +49,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }) {
             <X size={20} />
           </button>
         </div>
-        
+
         <div className="px-6 py-4 space-y-4">
           {shortcuts.map((s, idx) => (
             <div key={idx} className="flex items-center justify-between">

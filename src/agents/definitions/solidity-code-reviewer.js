@@ -2,7 +2,8 @@ export default {
   id: "solidity-code-reviewer",
   createdAt: "2026-05-24",
   name: "Solidity Code Reviewer",
-  description: "Review Solidity smart contract code for security, gas efficiency, and best practices.",
+  description:
+    "Review Solidity smart contract code for security, gas efficiency, and best practices.",
   category: "Web3",
   icon: "ShieldCheck", // optional, follow existing icon naming
   provider: "any",
@@ -44,7 +45,7 @@ contract Example {
         "Gas Optimization",
         "Best Practices",
         "Readability",
-        "Common Vulnerabilities"
+        "Common Vulnerabilities",
       ],
       defaultValue: ["Security", "Gas Optimization", "Common Vulnerabilities"],
       required: true,

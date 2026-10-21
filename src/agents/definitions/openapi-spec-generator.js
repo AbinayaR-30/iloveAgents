@@ -11,8 +11,10 @@ export default {
   model: "gpt-4o",
   exampleInputs: {
     apiName: "User Management API",
-    apiDescription: "A simple REST API for managing users in a SaaS application.",
-    endpoints: "GET /users — list all users\nPOST /users — create a new user\nGET /users/{id} — get a single user\nPUT /users/{id} — update a user\nDELETE /users/{id} — delete a user",
+    apiDescription:
+      "A simple REST API for managing users in a SaaS application.",
+    endpoints:
+      "GET /users — list all users\nPOST /users — create a new user\nGET /users/{id} — get a single user\nPUT /users/{id} — update a user\nDELETE /users/{id} — delete a user",
     authType: "Bearer JWT",
     includeExamples: "yes",
   },
@@ -28,14 +30,16 @@ export default {
       id: "apiDescription",
       label: "API description",
       type: "textarea",
-      placeholder: "Explain what your API does, who it is for, and any relevant context...",
+      placeholder:
+        "Explain what your API does, who it is for, and any relevant context...",
       required: true,
     },
     {
       id: "endpoints",
       label: "Endpoints to include",
       type: "textarea",
-      placeholder: "GET /users — list all users\nPOST /users — create a new user\nGET /users/{id} — get a single user\nPUT /users/{id} — update a user\nDELETE /users/{id} — delete a user",
+      placeholder:
+        "GET /users — list all users\nPOST /users — create a new user\nGET /users/{id} — get a single user\nPUT /users/{id} — update a user\nDELETE /users/{id} — delete a user",
       required: true,
     },
     {

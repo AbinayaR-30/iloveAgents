@@ -1,57 +1,59 @@
-import { useState, useEffect, useMemo } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
-import * as Icons from 'lucide-react'
-import { DEFAULT_COLLECTION_ID, useCollections } from '../lib/useCollections'
-import { useAgents } from '../lib/useAgents'
+import { useState, useEffect, useMemo } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import * as Icons from "lucide-react";
+import { DEFAULT_COLLECTION_ID, useCollections } from "../lib/useCollections";
+import { useAgents } from "../lib/useAgents";
 
-const SIDEBAR_CATEGORY_STORAGE_KEY = 'sidebar-category-collapsed-state'
+const SIDEBAR_CATEGORY_STORAGE_KEY = "sidebar-category-collapsed-state";
 
 export default function Sidebar({ open, onClose }) {
-  const [sidebarSearchQuery, setSidebarSearchQuery] = useState('')
+  const [sidebarSearchQuery, setSidebarSearchQuery] = useState("");
   // Stores COLLAPSED state per category (absent/false = expanded).
   // Categories are expanded by default on first visit, since we only
   // record an entry here when the user explicitly collapses one.
   const [collapsedCategories, setCollapsedCategories] = useState(() => {
     try {
-      const stored = localStorage.getItem(SIDEBAR_CATEGORY_STORAGE_KEY)
-      return stored ? JSON.parse(stored) : {}
+      const stored = localStorage.getItem(SIDEBAR_CATEGORY_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : {};
     } catch {
-      return {}
+      return {};
     }
-  })
-  const [searchExpandedCategories, setSearchExpandedCategories] = useState({})
-  const [feedback, setFeedback] = useState('')
-  const { collections, moveAgentToCollection } = useCollections()
-  const { agents } = useAgents()
-  const location = useLocation()
+  });
+  const [searchExpandedCategories, setSearchExpandedCategories] = useState({});
+  const [feedback, setFeedback] = useState("");
+  const { collections, moveAgentToCollection } = useCollections();
+  const { agents } = useAgents();
+  const location = useLocation();
 
   useEffect(() => {
     try {
       localStorage.setItem(
         SIDEBAR_CATEGORY_STORAGE_KEY,
-        JSON.stringify(collapsedCategories)
-      )
+        JSON.stringify(collapsedCategories),
+      );
     } catch {
       // localStorage unavailable (e.g. private browsing) — fail silently
     }
-  }, [collapsedCategories])
+  }, [collapsedCategories]);
 
-  const currentAgentId = location.pathname.startsWith('/agent/')
-    ? location.pathname.split('/agent/')[1]
-    : null
+  const currentAgentId = location.pathname.startsWith("/agent/")
+    ? location.pathname.split("/agent/")[1]
+    : null;
 
-  const activeCollectionId = new URLSearchParams(location.search).get('collection')
-  const activeAgent = agents.find((a) => a.id === currentAgentId)
-  const activeCategory = activeAgent ? activeAgent.category : null
+  const activeCollectionId = new URLSearchParams(location.search).get(
+    "collection",
+  );
+  const activeAgent = agents.find((a) => a.id === currentAgentId);
+  const activeCategory = activeAgent ? activeAgent.category : null;
 
-  const normalizedQuery = sidebarSearchQuery.trim().toLowerCase()
-  const isSearching = normalizedQuery !== ''
+  const normalizedQuery = sidebarSearchQuery.trim().toLowerCase();
+  const isSearching = normalizedQuery !== "";
 
   useEffect(() => {
     if (!isSearching) {
-      setSearchExpandedCategories({})
+      setSearchExpandedCategories({});
     }
-  }, [isSearching])
+  }, [isSearching]);
 
   const { filteredAgents, categories, categoryOrder } = useMemo(() => {
     const filtered = !normalizedQuery
@@ -59,57 +61,57 @@ export default function Sidebar({ open, onClose }) {
       : agents.filter(
           (agent) =>
             agent.name.toLowerCase().includes(normalizedQuery) ||
-            agent.category.toLowerCase().includes(normalizedQuery)
-        )
+            agent.category.toLowerCase().includes(normalizedQuery),
+        );
 
     const cats = filtered.reduce((acc, agent) => {
-      if (!acc[agent.category]) acc[agent.category] = []
-      acc[agent.category].push(agent)
-      return acc
-    }, {})
+      if (!acc[agent.category]) acc[agent.category] = [];
+      acc[agent.category].push(agent);
+      return acc;
+    }, {});
 
     return {
       filteredAgents: filtered,
       categories: cats,
-      categoryOrder: Object.keys(cats)
-    }
-  }, [agents, normalizedQuery])
+      categoryOrder: Object.keys(cats),
+    };
+  }, [agents, normalizedQuery]);
 
   const toggleCategory = (category) => {
     if (isSearching) {
       setSearchExpandedCategories((prev) => ({
         ...prev,
         [category]: !(prev[category] ?? true),
-      }))
+      }));
     } else {
       setCollapsedCategories((prev) => ({
         ...prev,
         [category]: !prev[category],
-      }))
+      }));
     }
-  }
+  };
 
   const handleCollectionDrop = (event, collectionId) => {
-    event.preventDefault()
-    const agentId = event.dataTransfer.getData('text/plain')
-    if (!agentId) return
+    event.preventDefault();
+    const agentId = event.dataTransfer.getData("text/plain");
+    if (!agentId) return;
 
-    const collection = collections.find((item) => item.id === collectionId)
-    const result = moveAgentToCollection(agentId, collectionId)
+    const collection = collections.find((item) => item.id === collectionId);
+    const result = moveAgentToCollection(agentId, collectionId);
 
     setFeedback(
       result.ok
-        ? `Moved to ${collection?.name || 'the selected collection'}.`
-        : result.error
-    )
+        ? `Moved to ${collection?.name || "the selected collection"}.`
+        : result.error,
+    );
 
-    window.setTimeout(() => setFeedback(''), 2200)
-  }
+    window.setTimeout(() => setFeedback(""), 2200);
+  };
 
   const customCollections = collections.filter(
-    (collection) => collection.id !== DEFAULT_COLLECTION_ID
-  )
-  const allAgentsCount = agents.length
+    (collection) => collection.id !== DEFAULT_COLLECTION_ID,
+  );
+  const allAgentsCount = agents.length;
 
   return (
     <>
@@ -123,12 +125,15 @@ export default function Sidebar({ open, onClose }) {
       <aside
         className={`fixed top-14 left-0 bottom-0 z-40 w-60 flex flex-col border-r transition-all duration-200
           dark:border-border border-gray-200
-          ${open ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
+          ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
         <div className="absolute inset-0 -z-10 bg-white/75 dark:bg-[#101014]/75 backdrop-blur-2xl" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-cyan-400/20 via-indigo-400/20 to-rose-400/20 dark:from-cyan-500/10 dark:via-indigo-500/10 dark:to-rose-500/10 opacity-90" />
 
-        <div className="px-4 py-3 flex items-center justify-between" data-tour="sidebar-agents">
+        <div
+          className="px-4 py-3 flex items-center justify-between"
+          data-tour="sidebar-agents"
+        >
           <span className="text-xs font-bold uppercase tracking-wider dark:text-text-primary text-gray-800">
             Agents
           </span>
@@ -159,7 +164,7 @@ export default function Sidebar({ open, onClose }) {
             {sidebarSearchQuery && (
               <button
                 type="button"
-                onClick={() => setSidebarSearchQuery('')}
+                onClick={() => setSidebarSearchQuery("")}
                 aria-label="Clear search"
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-text-muted dark:hover:text-text-primary transition-colors"
               >
@@ -177,8 +182,8 @@ export default function Sidebar({ open, onClose }) {
               `relative flex items-center gap-2.5 pl-3.5 pr-2.5 py-2 rounded-md text-[13px] font-medium transition-all duration-200 mb-2 group
               ${
                 isActive
-                  ? 'bg-accent/15 text-accent dark:text-accent font-semibold shadow-sm'
-                  : 'dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-white/10 text-gray-700 hover:text-gray-950 hover:bg-gray-150/50'
+                  ? "bg-accent/15 text-accent dark:text-accent font-semibold shadow-sm"
+                  : "dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-white/10 text-gray-700 hover:text-gray-950 hover:bg-gray-150/50"
               }`
             }
           >
@@ -217,9 +222,9 @@ export default function Sidebar({ open, onClose }) {
               className={({ isActive }) =>
                 `relative mb-0.5 flex items-center gap-2.5 rounded-md py-1.5 pl-2 pr-2 text-[12px] font-medium transition-all duration-200 group
                 ${
-                  isActive && location.pathname === '/collections'
-                    ? 'bg-accent/15 text-accent font-semibold shadow-sm'
-                    : 'text-gray-700 hover:bg-gray-150/50 hover:text-gray-950 dark:text-text-secondary dark:hover:bg-white/10 dark:hover:text-text-primary'
+                  isActive && location.pathname === "/collections"
+                    ? "bg-accent/15 text-accent font-semibold shadow-sm"
+                    : "text-gray-700 hover:bg-gray-150/50 hover:text-gray-950 dark:text-text-secondary dark:hover:bg-white/10 dark:hover:text-text-primary"
                 }`
               }
             >
@@ -231,12 +236,14 @@ export default function Sidebar({ open, onClose }) {
               to="/"
               onClick={onClose}
               onDragOver={(event) => event.preventDefault()}
-              onDrop={(event) => handleCollectionDrop(event, DEFAULT_COLLECTION_ID)}
+              onDrop={(event) =>
+                handleCollectionDrop(event, DEFAULT_COLLECTION_ID)
+              }
               className={`relative mb-0.5 flex items-center gap-2.5 rounded-md py-1.5 pl-2 pr-2 text-[12px] font-medium transition-all duration-200 group
                 ${
-                  location.pathname === '/' && !activeCollectionId
-                    ? 'bg-accent/15 text-accent font-semibold shadow-sm'
-                    : 'text-gray-700 hover:bg-gray-150/50 hover:text-gray-950 dark:text-text-secondary dark:hover:bg-white/10 dark:hover:text-text-primary'
+                  location.pathname === "/" && !activeCollectionId
+                    ? "bg-accent/15 text-accent font-semibold shadow-sm"
+                    : "text-gray-700 hover:bg-gray-150/50 hover:text-gray-950 dark:text-text-secondary dark:hover:bg-white/10 dark:hover:text-text-primary"
                 }`}
             >
               <Icons.FolderInput size={14} className="flex-shrink-0" />
@@ -249,19 +256,26 @@ export default function Sidebar({ open, onClose }) {
             {customCollections.map((collection) => (
               <Link
                 key={collection.id}
-                to={collection.id === DEFAULT_COLLECTION_ID ? '/' : `/?collection=${collection.id}`}
+                to={
+                  collection.id === DEFAULT_COLLECTION_ID
+                    ? "/"
+                    : `/?collection=${collection.id}`
+                }
                 onClick={onClose}
                 onDragOver={(event) => event.preventDefault()}
                 onDrop={(event) => handleCollectionDrop(event, collection.id)}
                 className={`relative flex items-center gap-2.5 rounded-md py-1.5 pl-2 pr-2 text-[12px] font-medium transition-all duration-200 group
                   ${
-                    location.pathname === '/' && activeCollectionId === collection.id
-                      ? 'bg-accent/15 text-accent font-semibold shadow-sm'
-                      : 'text-gray-700 hover:bg-gray-150/50 hover:text-gray-950 dark:text-text-secondary dark:hover:bg-white/10 dark:hover:text-text-primary'
+                    location.pathname === "/" &&
+                    activeCollectionId === collection.id
+                      ? "bg-accent/15 text-accent font-semibold shadow-sm"
+                      : "text-gray-700 hover:bg-gray-150/50 hover:text-gray-950 dark:text-text-secondary dark:hover:bg-white/10 dark:hover:text-text-primary"
                   }`}
               >
                 <Icons.Folder size={14} className="flex-shrink-0" />
-                <span className="min-w-0 flex-1 truncate">{collection.name}</span>
+                <span className="min-w-0 flex-1 truncate">
+                  {collection.name}
+                </span>
                 <span className="rounded-full bg-accent/15 px-1.5 py-0.5 text-[9px] font-bold text-accent">
                   {collection.agentIds.length}
                 </span>
@@ -275,9 +289,9 @@ export default function Sidebar({ open, onClose }) {
             className={({ isActive }) =>
               `flex items-center gap-2.5 px-2.5 py-2 rounded-md text-[13px] font-medium transition-colors mb-0.5
               ${
-                isActive || location.pathname.startsWith('/automations')
-                  ? 'bg-accent/10 text-accent dark:text-accent font-semibold'
-                  : 'dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-surface-hover text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                isActive || location.pathname.startsWith("/automations")
+                  ? "bg-accent/10 text-accent dark:text-accent font-semibold"
+                  : "dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-surface-hover text-gray-600 hover:text-gray-900 hover:bg-gray-50"
               }`
             }
           >
@@ -292,8 +306,8 @@ export default function Sidebar({ open, onClose }) {
               `flex items-center gap-2.5 px-2.5 py-2 rounded-md text-[13px] font-medium transition-colors mb-0.5
               ${
                 isActive
-                  ? 'bg-accent/10 text-accent dark:text-accent'
-                  : 'dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-surface-hover text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  ? "bg-accent/10 text-accent dark:text-accent"
+                  : "dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-surface-hover text-gray-600 hover:text-gray-900 hover:bg-gray-50"
               }`
             }
           >
@@ -308,8 +322,8 @@ export default function Sidebar({ open, onClose }) {
               `flex items-center gap-2.5 px-2.5 py-2 rounded-md text-[13px] font-medium transition-colors mb-0.5
               ${
                 isActive
-                  ? 'bg-accent/10 text-accent dark:text-accent'
-                  : 'dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-surface-hover text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  ? "bg-accent/10 text-accent dark:text-accent"
+                  : "dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-surface-hover text-gray-600 hover:text-gray-900 hover:bg-gray-50"
               }`
             }
           >
@@ -324,8 +338,8 @@ export default function Sidebar({ open, onClose }) {
               `flex items-center gap-2.5 px-2.5 py-2 rounded-md text-[13px] font-medium transition-colors mb-0.5
               ${
                 isActive
-                  ? 'bg-accent/10 text-accent dark:text-accent'
-                  : 'dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-surface-hover text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  ? "bg-accent/10 text-accent dark:text-accent"
+                  : "dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-surface-hover text-gray-600 hover:text-gray-900 hover:bg-gray-50"
               }`
             }
           >
@@ -336,12 +350,12 @@ export default function Sidebar({ open, onClose }) {
           <div className="border-b dark:border-border border-gray-100 mb-2" />
 
           {categoryOrder.map((category) => {
-            const isActiveCategory = activeCategory === category
+            const isActiveCategory = activeCategory === category;
             const isCategoryExpanded = isSearching
-              ? searchExpandedCategories[category] ?? true
+              ? (searchExpandedCategories[category] ?? true)
               : isActiveCategory
                 ? true
-                : !collapsedCategories[category]
+                : !collapsedCategories[category];
 
             return (
               <div key={category} className="mb-3">
@@ -352,8 +366,8 @@ export default function Sidebar({ open, onClose }) {
                   className={`w-full relative flex items-center justify-between gap-2 pl-3.5 pr-2.5 py-2 text-[10px] font-bold uppercase tracking-widest transition-all duration-200 group rounded-md
                     ${
                       isActiveCategory
-                        ? 'bg-accent/20 text-indigo-600 dark:text-indigo-400 font-extrabold'
-                        : 'dark:text-text-primary text-gray-800 hover:bg-gray-100/70 dark:hover:bg-white/10 hover:text-accent dark:hover:text-white'
+                        ? "bg-accent/20 text-indigo-600 dark:text-indigo-400 font-extrabold"
+                        : "dark:text-text-primary text-gray-800 hover:bg-gray-100/70 dark:hover:bg-white/10 hover:text-accent dark:hover:text-white"
                     }`}
                 >
                   {isActiveCategory && (
@@ -385,13 +399,13 @@ export default function Sidebar({ open, onClose }) {
                 <div
                   className={`grid transition-all duration-200 ease-in-out ${
                     isCategoryExpanded
-                      ? 'grid-rows-[1fr] opacity-100 mt-0.5'
-                      : 'grid-rows-[0fr] opacity-0'
+                      ? "grid-rows-[1fr] opacity-100 mt-0.5"
+                      : "grid-rows-[0fr] opacity-0"
                   }`}
                 >
                   <div className="overflow-hidden">
                     {categories[category].map((agent) => {
-                      const IconComponent = Icons[agent.icon] || Icons.Bot
+                      const IconComponent = Icons[agent.icon] || Icons.Bot;
 
                       return (
                         <NavLink
@@ -402,8 +416,8 @@ export default function Sidebar({ open, onClose }) {
                             `relative flex items-center gap-2.5 pl-3.5 pr-2.5 py-2 rounded-md text-[13px] font-medium transition-all duration-200 mb-0.5 group
                             ${
                               isActive
-                                ? 'bg-accent/15 text-accent dark:text-accent font-semibold shadow-sm'
-                                : 'dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-white/10 text-gray-750 hover:text-gray-950 hover:bg-gray-150/50'
+                                ? "bg-accent/15 text-accent dark:text-accent font-semibold shadow-sm"
+                                : "dark:text-text-secondary dark:hover:text-text-primary dark:hover:bg-white/10 text-gray-750 hover:text-gray-950 hover:bg-gray-150/50"
                             }`
                           }
                         >
@@ -422,12 +436,12 @@ export default function Sidebar({ open, onClose }) {
                             </>
                           )}
                         </NavLink>
-                      )
+                      );
                     })}
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
 
           {filteredAgents.length === 0 && (
@@ -458,12 +472,12 @@ export default function Sidebar({ open, onClose }) {
             </a>
 
             <Link
-            to="/feedback"
-            onClick={() => onClose?.()}
-            className="text-sm text-gray-500 hover:text-accent transition-colors"
-          >
-            Feedback →
-          </Link>
+              to="/feedback"
+              onClick={() => onClose?.()}
+              className="text-sm text-gray-500 hover:text-accent transition-colors"
+            >
+              Feedback →
+            </Link>
 
             <span className="block text-[10px] dark:text-text-secondary/70 text-gray-400 font-medium">
               GSSoC 2026
@@ -472,5 +486,5 @@ export default function Sidebar({ open, onClose }) {
         </div>
       </aside>
     </>
-  )
+  );
 }

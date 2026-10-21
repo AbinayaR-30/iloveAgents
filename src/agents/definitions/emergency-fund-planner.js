@@ -1,12 +1,13 @@
 export default {
-  id: 'emergency-fund-planner',
-  name: 'Emergency Fund Planner',
-  description: 'Plan an emergency fund based on essential expenses, current savings, monthly contributions, and a target coverage period.',
-  category: 'Finance',
-  icon: 'ShieldCheck',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "emergency-fund-planner",
+  name: "Emergency Fund Planner",
+  description:
+    "Plan an emergency fund based on essential expenses, current savings, monthly contributions, and a target coverage period.",
+  category: "Finance",
+  icon: "ShieldCheck",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
 
   exampleInputs: {
     essentialExpenses: "25000",
@@ -18,45 +19,45 @@ export default {
 
   inputs: [
     {
-      id: 'essentialExpenses',
-      label: 'Monthly essential expenses',
-      type: 'text',
-      placeholder: 'e.g. 25000',
+      id: "essentialExpenses",
+      label: "Monthly essential expenses",
+      type: "text",
+      placeholder: "e.g. 25000",
       required: true,
     },
     {
-      id: 'currentSavings',
-      label: 'Current emergency savings',
-      type: 'text',
-      placeholder: 'e.g. 40000',
+      id: "currentSavings",
+      label: "Current emergency savings",
+      type: "text",
+      placeholder: "e.g. 40000",
       required: true,
     },
     {
-      id: 'monthlyContribution',
-      label: 'Monthly contribution',
-      type: 'text',
-      placeholder: 'e.g. 10000',
+      id: "monthlyContribution",
+      label: "Monthly contribution",
+      type: "text",
+      placeholder: "e.g. 10000",
       required: true,
     },
     {
-      id: 'targetMonths',
-      label: 'Target coverage',
-      type: 'select',
-      options: ['3', '6', '9', '12'],
-      defaultValue: '6',
+      id: "targetMonths",
+      label: "Target coverage",
+      type: "select",
+      options: ["3", "6", "9", "12"],
+      defaultValue: "6",
       required: true,
     },
     {
-      id: 'currency',
-      label: 'Currency',
-      type: 'select',
-      options: ['INR', 'USD', 'EUR', 'GBP'],
-      defaultValue: 'INR',
+      id: "currency",
+      label: "Currency",
+      type: "select",
+      options: ["INR", "USD", "EUR", "GBP"],
+      defaultValue: "INR",
       required: true,
     },
   ],
 
-systemPrompt: `You are an emergency fund planning assistant.
+  systemPrompt: `You are an emergency fund planning assistant.
 
 Help users plan an emergency fund using the financial information they provide.
 
@@ -125,5 +126,5 @@ Include current coverage, target amount, amount needed, and estimated time to ta
 
 ## Disclaimer
 This plan is for educational and planning purposes only and does not constitute professional financial advice.`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };

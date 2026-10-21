@@ -1,32 +1,38 @@
 const mockDataGenerator = {
-  id: 'mock-data-generator',
-  name: 'Mock Data Generator',
-  description: 'Describe a data schema and get realistic mock data in JSON format instantly — names, emails, addresses, dates, and more.',
-  category: 'Engineering',
-  icon: 'Database',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "mock-data-generator",
+  name: "Mock Data Generator",
+  description:
+    "Describe a data schema and get realistic mock data in JSON format instantly — names, emails, addresses, dates, and more.",
+  category: "Engineering",
+  icon: "Database",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'schema',
-      label: 'Data Schema or Description',
-      type: 'textarea',
-      placeholder: 'e.g. "User object with id, name, email, age, address, and createdAt date" or paste your actual JSON schema...',
+      id: "schema",
+      label: "Data Schema or Description",
+      type: "textarea",
+      placeholder:
+        'e.g. "User object with id, name, email, age, address, and createdAt date" or paste your actual JSON schema...',
       required: true,
     },
     {
-      id: 'count',
-      label: 'Number of Records',
-      type: 'select',
-      options: ['5', '10', '20', '50'],
+      id: "count",
+      label: "Number of Records",
+      type: "select",
+      options: ["5", "10", "20", "50"],
       required: true,
     },
     {
-      id: 'format',
-      label: 'Output Format',
-      type: 'select',
-      options: ['JSON Array', 'JSON Object (keyed by id)', 'TypeScript Interface + JSON'],
+      id: "format",
+      label: "Output Format",
+      type: "select",
+      options: [
+        "JSON Array",
+        "JSON Object (keyed by id)",
+        "TypeScript Interface + JSON",
+      ],
       required: false,
     },
   ],
@@ -50,7 +56,7 @@ Output format based on user selection:
 - "TypeScript Interface + JSON": first show the TypeScript interface, then the JSON array
 
 Return only the data — no explanation, no markdown prose around it. Just clean, copyable output.`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default mockDataGenerator;

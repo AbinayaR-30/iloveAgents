@@ -10,9 +10,12 @@ export default {
   defaultProvider: "openai",
   model: "gpt-4o",
   exampleInputs: {
-    product: "Nexura - An AI-powered platform that automates lead generation by analyzing social signals and intent data in real-time.",
-    prospectSituation: "VP of Sales at a B2B SaaS company struggling with manual prospecting and low conversion rates from cold outreach.",
-    lastInteraction: "Completed a 30-minute product demo where they liked the automation features but expressed concern over team onboarding timelines."
+    product:
+      "Nexura - An AI-powered platform that automates lead generation by analyzing social signals and intent data in real-time.",
+    prospectSituation:
+      "VP of Sales at a B2B SaaS company struggling with manual prospecting and low conversion rates from cold outreach.",
+    lastInteraction:
+      "Completed a 30-minute product demo where they liked the automation features but expressed concern over team onboarding timelines.",
   },
   inputs: [
     {
@@ -26,7 +29,8 @@ export default {
       id: "prospectSituation",
       label: "Prospect Situation",
       type: "textarea",
-      placeholder: "Describe the prospect's current situation, pain points, or needs...",
+      placeholder:
+        "Describe the prospect's current situation, pain points, or needs...",
       required: true,
     },
     {
@@ -35,7 +39,7 @@ export default {
       type: "textarea",
       placeholder: "Describe the most recent interaction with the prospect...",
       required: true,
-    }
+    },
   ],
   systemPrompt: `You are an expert sales communication strategist and elite B2B sales copywriter.
 
@@ -61,8 +65,5 @@ Rules:
 - Avoid generic corporate clichés, fluff, and fake scarcity tactics.
 - Use clean markdown formatting.`,
   outputType: "markdown",
-  suggestedChainFrom: [
-    "cold-email-writer",
-    "linkedin-outreach-message-writer",
-  ],
+  suggestedChainFrom: ["cold-email-writer", "linkedin-outreach-message-writer"],
 };

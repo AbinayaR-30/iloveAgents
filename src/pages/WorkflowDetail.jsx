@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Zap,
@@ -10,26 +10,30 @@ import {
   ArrowRight,
   AlertCircle,
   GitBranch,
-} from 'lucide-react'
-import * as Icons from 'lucide-react'
-import { useAgents } from '../lib/useAgents'
-import { fetchWorkflowById, subscribeToWorkflow } from '../hooks/useWorkflows'
-import { supabase } from '../lib/supabase'
-import { useDocumentTitle } from '../lib/useDocumentTitle'
+} from "lucide-react";
+import * as Icons from "lucide-react";
+import { useAgents } from "../lib/useAgents";
+import { fetchWorkflowById, subscribeToWorkflow } from "../hooks/useWorkflows";
+import { supabase } from "../lib/supabase";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 function AgentRow({ agentId, index, total, agents }) {
-  const agent = agents?.find((a) => a.id === agentId)
-  const IconComponent = (agent && Icons[agent.icon]) || Icons.Bot
+  const agent = agents?.find((a) => a.id === agentId);
+  const IconComponent = (agent && Icons[agent.icon]) || Icons.Bot;
 
   return (
     <div className="flex items-center gap-3">
       {/* Connector line */}
       <div className="flex flex-col items-center self-stretch w-6">
-        <div className={`w-px flex-1 dark:bg-border bg-gray-200 ${index === 0 ? 'opacity-0' : ''}`} />
+        <div
+          className={`w-px flex-1 dark:bg-border bg-gray-200 ${index === 0 ? "opacity-0" : ""}`}
+        />
         <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center text-[10px] font-bold text-accent flex-shrink-0">
           {index + 1}
         </div>
-        <div className={`w-px flex-1 dark:bg-border bg-gray-200 ${index === total - 1 ? 'opacity-0' : ''}`} />
+        <div
+          className={`w-px flex-1 dark:bg-border bg-gray-200 ${index === total - 1 ? "opacity-0" : ""}`}
+        />
       </div>
 
       {/* Agent card */}
@@ -45,82 +49,89 @@ function AgentRow({ agentId, index, total, agents }) {
             {agent?.name ?? agentId}
           </div>
           <div className="text-[11px] dark:text-text-muted text-gray-400">
-            {agent?.category ?? '—'}
+            {agent?.category ?? "—"}
           </div>
         </div>
         {index < total - 1 && (
-          <ArrowRight size={12} className="dark:text-text-muted text-gray-400 flex-shrink-0" />
+          <ArrowRight
+            size={12}
+            className="dark:text-text-muted text-gray-400 flex-shrink-0"
+          />
         )}
       </div>
     </div>
-  )
+  );
 }
 
 export default function WorkflowDetail() {
-  const { id } = useParams()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  const { agents } = useAgents()
+  const { agents } = useAgents();
 
-  const [workflow, setWorkflow] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [usageCount, setUsageCount] = useState(0)
-  const [copied, setCopied] = useState(false)
-  useDocumentTitle(workflow?.title ?? 'Workflow Details')
+  const [workflow, setWorkflow] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [usageCount, setUsageCount] = useState(0);
+  const [copied, setCopied] = useState(false);
+  useDocumentTitle(workflow?.title ?? "Workflow Details");
 
   // Fetch workflow
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
     fetchWorkflowById(id).then(({ data, error: fetchError }) => {
-      if (!mounted) return
+      if (!mounted) return;
       if (fetchError || !data) {
-        setError('Workflow not found.')
+        setError("Workflow not found.");
       } else {
-        setWorkflow(data)
-        setUsageCount(data.usage_count ?? 0)
+        setWorkflow(data);
+        setUsageCount(data.usage_count ?? 0);
       }
-      setLoading(false)
-    })
-    return () => { mounted = false }
-  }, [id])
+      setLoading(false);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [id]);
 
   // Realtime usage count subscription
   useEffect(() => {
-    if (!id) return
+    if (!id) return;
     const channel = subscribeToWorkflow(id, (payload) => {
-      setUsageCount(payload.new.usage_count ?? 0)
-    })
-    return () => supabase.removeChannel(channel)
-  }, [id])
+      setUsageCount(payload.new.usage_count ?? 0);
+    });
+    return () => supabase.removeChannel(channel);
+  }, [id]);
 
   const handleShare = async () => {
-    const url = window.location.href
+    const url = window.location.href;
     try {
-      await navigator.clipboard.writeText(url)
+      await navigator.clipboard.writeText(url);
     } catch {
-      const ta = document.createElement('textarea')
-      ta.value = url
-      document.body.appendChild(ta)
-      ta.select()
-      document.execCommand('copy')
-      document.body.removeChild(ta)
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
     }
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleRun = () => {
-    navigate(`/workflows/${id}/run`, { state: { workflow } })
-  }
+    navigate(`/workflows/${id}/run`, { state: { workflow } });
+  };
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3 animate-fade-in">
         <Loader2 size={24} className="animate-spin text-accent" />
-        <p className="text-sm dark:text-text-secondary text-gray-500">Loading workflow...</p>
+        <p className="text-sm dark:text-text-secondary text-gray-500">
+          Loading workflow...
+        </p>
       </div>
-    )
+    );
   }
 
   if (error || !workflow) {
@@ -128,23 +139,23 @@ export default function WorkflowDetail() {
       <div className="max-w-xl mx-auto text-center py-20 animate-fade-in">
         <AlertCircle size={28} className="text-red-400 mx-auto mb-3" />
         <p className="text-sm dark:text-text-secondary text-gray-500 mb-4">
-          {error ?? 'Workflow not found.'}
+          {error ?? "Workflow not found."}
         </p>
         <button
-          onClick={() => navigate('/workflows')}
+          onClick={() => navigate("/workflows")}
           className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-hover"
         >
           <ArrowLeft size={14} /> Back to Library
         </button>
       </div>
-    )
+    );
   }
 
   return (
     <div className="max-w-xl mx-auto animate-fade-in">
       {/* Back */}
       <button
-        onClick={() => navigate('/workflows')}
+        onClick={() => navigate("/workflows")}
         className="inline-flex items-center gap-1.5 mb-5 text-xs dark:text-text-muted text-gray-400 hover:underline"
       >
         <ArrowLeft size={13} />
@@ -175,18 +186,24 @@ export default function WorkflowDetail() {
         {/* Stats row */}
         <div className="flex items-center gap-4 mb-5">
           <div className="flex items-center gap-1.5">
-            <TrendingUp size={13} className="dark:text-text-muted text-gray-400" />
+            <TrendingUp
+              size={13}
+              className="dark:text-text-muted text-gray-400"
+            />
             <span className="text-sm font-semibold dark:text-text-primary text-gray-900">
               {usageCount}
             </span>
-            <span className="text-xs dark:text-text-muted text-gray-400">runs</span>
+            <span className="text-xs dark:text-text-muted text-gray-400">
+              runs
+            </span>
             <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-accent/10 text-accent border border-accent/20 ml-1">
               live
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="text-xs dark:text-text-muted text-gray-400">
-              {(workflow.agents ?? []).length} agent{workflow.agents?.length !== 1 ? 's' : ''}
+              {(workflow.agents ?? []).length} agent
+              {workflow.agents?.length !== 1 ? "s" : ""}
             </span>
           </div>
         </div>
@@ -249,5 +266,5 @@ export default function WorkflowDetail() {
         </p>
       </div>
     </div>
-  )
+  );
 }

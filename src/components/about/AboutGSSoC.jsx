@@ -1,15 +1,24 @@
-import { Award, HeartHandshake, Sparkles, ExternalLink, CheckCircle } from 'lucide-react'
+import {
+  Award,
+  HeartHandshake,
+  Sparkles,
+  ExternalLink,
+  CheckCircle,
+} from "lucide-react";
 
 export default function AboutGSSoC() {
   const highlights = [
-    'Mentorship & Code Review guidance for student contributors.',
-    'Beginner-friendly issues tagged with `gssoc2026` & `good first issue`.',
-    'Fast-tracked PR reviews and transparent feedback.',
-    'Opportunity to contribute to live AI agents used by real users.',
-  ]
+    "Mentorship & Code Review guidance for student contributors.",
+    "Beginner-friendly issues tagged with `gssoc2026` & `good first issue`.",
+    "Fast-tracked PR reviews and transparent feedback.",
+    "Opportunity to contribute to live AI agents used by real users.",
+  ];
 
   return (
-    <section aria-labelledby="about-gssoc-title" className="mb-12 rounded-3xl border border-indigo-500/30 dark:border-indigo-500/20 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-6 sm:p-10 shadow-lg backdrop-blur-xl">
+    <section
+      aria-labelledby="about-gssoc-title"
+      className="mb-12 rounded-3xl border border-indigo-500/30 dark:border-indigo-500/20 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-6 sm:p-10 shadow-lg backdrop-blur-xl"
+    >
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="space-y-3 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 text-xs font-bold tracking-wide">
@@ -17,17 +26,27 @@ export default function AboutGSSoC() {
             <span>Official Participating Project</span>
           </div>
 
-          <h2 id="about-gssoc-title" className="text-2xl sm:text-3xl font-extrabold dark:text-white text-gray-900 tracking-tight">
+          <h2
+            id="about-gssoc-title"
+            className="text-2xl sm:text-3xl font-extrabold dark:text-white text-gray-900 tracking-tight"
+          >
             GirlScript Summer of Code 2026 (GSSoC '26)
           </h2>
 
           <p className="text-sm dark:text-text-secondary text-gray-600 leading-relaxed">
-            <strong>iloveAgents</strong> is proud to participate in <strong>GSSoC 2026</strong> — a premier 3-month open-source program by GirlScript Foundation. We welcome contributors from around the globe to build features, create AI agents, and learn modern Web & AI engineering hands-on.
+            <strong>iloveAgents</strong> is proud to participate in{" "}
+            <strong>GSSoC 2026</strong> — a premier 3-month open-source program
+            by GirlScript Foundation. We welcome contributors from around the
+            globe to build features, create AI agents, and learn modern Web & AI
+            engineering hands-on.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
             {highlights.map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-xs font-medium dark:text-text-primary text-gray-800">
+              <div
+                key={idx}
+                className="flex items-center gap-2 text-xs font-medium dark:text-text-primary text-gray-800"
+              >
                 <CheckCircle size={14} className="text-accent shrink-0" />
                 <span>{item}</span>
               </div>
@@ -58,5 +77,5 @@ export default function AboutGSSoC() {
         </div>
       </div>
     </section>
-  )
+  );
 }

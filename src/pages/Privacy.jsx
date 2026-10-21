@@ -62,7 +62,7 @@ const sections = [
 ];
 
 export default function Privacy() {
-   const handleBack = () => {
+  const handleBack = () => {
     if (typeof window !== "undefined") {
       window.history.back();
     }
@@ -77,7 +77,7 @@ export default function Privacy() {
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-20 relative">
-      <div className="absolute top-6 left-6 md:top-10 md:left-6">
+        <div className="absolute top-6 left-6 md:top-10 md:left-6">
           <button
             onClick={handleBack}
             className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-slate-300 backdrop-blur-md transition duration-300 hover:text-cyan-400 hover:border-cyan-400/30 hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-fuchsia-500/10"
@@ -99,11 +99,10 @@ export default function Privacy() {
           </h1>
 
           <p className="max-w-3xl mx-auto mt-6 text-lg text-slate-400 leading-8">
-            Your privacy matters. This Privacy Policy explains what
-            information iLoveAgents collects, how it is used, how browser
-            storage is utilized, your rights regarding your data, and the
-            measures taken to protect your information while using the
-            platform.
+            Your privacy matters. This Privacy Policy explains what information
+            iLoveAgents collects, how it is used, how browser storage is
+            utilized, your rights regarding your data, and the measures taken to
+            protect your information while using the platform.
           </p>
         </div>
 
@@ -125,30 +124,23 @@ export default function Privacy() {
                   <Icon className="text-cyan-400" size={28} />
                 </div>
 
-                <h2 className="text-2xl font-semibold mb-4">
-                  {section.title}
-                </h2>
+                <h2 className="text-2xl font-semibold mb-4">{section.title}</h2>
 
-                <p className="text-slate-400 leading-8">
-                  {section.content}
-                </p>
+                <p className="text-slate-400 leading-8">{section.content}</p>
               </div>
             );
           })}
         </div>
 
         <div className="mt-20 rounded-3xl border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-fuchsia-500/10 p-10 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Transparency & Trust
-          </h2>
+          <h2 className="text-3xl font-bold mb-4">Transparency & Trust</h2>
 
           <p className="text-slate-400 max-w-3xl mx-auto leading-8">
-            We are committed to building an open-source AI ecosystem that
-            values transparency, security, and user control. As the platform
-            evolves, this Privacy Policy may be updated to reflect new
-            features, changes in data practices, or legal requirements.
-            Continued use of the platform after updates constitutes acceptance
-            of the revised policy.
+            We are committed to building an open-source AI ecosystem that values
+            transparency, security, and user control. As the platform evolves,
+            this Privacy Policy may be updated to reflect new features, changes
+            in data practices, or legal requirements. Continued use of the
+            platform after updates constitutes acceptance of the revised policy.
           </p>
         </div>
       </div>

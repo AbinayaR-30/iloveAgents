@@ -1,62 +1,74 @@
-import { useState, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  BarChart3, Activity, Users, Flame, Zap,
-  TrendingUp, ArrowRight, Trash2, Bot, Trophy,
-  Calendar, Clock, Target, Download, Filter,
-} from 'lucide-react'
-import { useAnalytics } from '../lib/useAnalytics'
-import { useSessionSpend } from '../lib/useSessionSpend'
-import { useDocumentTitle } from '../lib/useDocumentTitle'
+  BarChart3,
+  Activity,
+  Users,
+  Flame,
+  Zap,
+  TrendingUp,
+  ArrowRight,
+  Trash2,
+  Bot,
+  Trophy,
+  Calendar,
+  Clock,
+  Target,
+  Download,
+  Filter,
+} from "lucide-react";
+import { useAnalytics } from "../lib/useAnalytics";
+import { useSessionSpend } from "../lib/useSessionSpend";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 // ── Provider colors ─────────────────────────────────────────────────────────
 const PROVIDER_COLORS = {
-  openai:     { color: '#22c55e', label: 'OpenAI' },
-  anthropic:  { color: '#f97316', label: 'Anthropic' },
-  gemini:     { color: '#3b82f6', label: 'Gemini' },
-  openrouter: { color: '#06b6d4', label: 'OpenRouter' },
-  unknown:    { color: '#71717a', label: 'Unknown' },
-}
+  openai: { color: "#22c55e", label: "OpenAI" },
+  anthropic: { color: "#f97316", label: "Anthropic" },
+  gemini: { color: "#3b82f6", label: "Gemini" },
+  openrouter: { color: "#06b6d4", label: "OpenRouter" },
+  unknown: { color: "#71717a", label: "Unknown" },
+};
 
 // ── Category gradient mapping (matches HomePage categoryMeta) ───────────────
 const CATEGORY_COLORS = {
-  Productivity:      'from-blue-500 to-cyan-400',
-  Research:          'from-violet-500 to-purple-400',
-  Marketing:         'from-pink-500 to-rose-400',
-  Engineering:       'from-emerald-500 to-green-400',
-  HR:                'from-amber-500 to-yellow-400',
-  Business:          'from-orange-500 to-amber-400',
-  Education:         'from-indigo-500 to-blue-400',
-  Legal:             'from-red-500 to-rose-400',
-  Design:            'from-fuchsia-500 to-pink-400',
-  Product:           'from-teal-500 to-cyan-400',
-  'Developer Tools': 'from-slate-600 to-slate-400',
-  DevOps:            'from-lime-500 to-green-400',
-  Finance:           'from-emerald-500 to-teal-400',
-  Healthcare:        'from-rose-500 to-pink-400',
-  Sales:             'from-orange-500 to-red-400',
-  Cybersecurity:     'from-red-600 to-rose-500',
-  'Data Science':    'from-cyan-500 to-blue-400',
-  Gaming:            'from-purple-500 to-indigo-400',
-  'Real Estate':     'from-amber-500 to-orange-400',
-  Web3:              'from-violet-600 to-purple-500',
-}
-const DEFAULT_CATEGORY_COLOR = 'from-gray-500 to-gray-400'
+  Productivity: "from-blue-500 to-cyan-400",
+  Research: "from-violet-500 to-purple-400",
+  Marketing: "from-pink-500 to-rose-400",
+  Engineering: "from-emerald-500 to-green-400",
+  HR: "from-amber-500 to-yellow-400",
+  Business: "from-orange-500 to-amber-400",
+  Education: "from-indigo-500 to-blue-400",
+  Legal: "from-red-500 to-rose-400",
+  Design: "from-fuchsia-500 to-pink-400",
+  Product: "from-teal-500 to-cyan-400",
+  "Developer Tools": "from-slate-600 to-slate-400",
+  DevOps: "from-lime-500 to-green-400",
+  Finance: "from-emerald-500 to-teal-400",
+  Healthcare: "from-rose-500 to-pink-400",
+  Sales: "from-orange-500 to-red-400",
+  Cybersecurity: "from-red-600 to-rose-500",
+  "Data Science": "from-cyan-500 to-blue-400",
+  Gaming: "from-purple-500 to-indigo-400",
+  "Real Estate": "from-amber-500 to-orange-400",
+  Web3: "from-violet-600 to-purple-500",
+};
+const DEFAULT_CATEGORY_COLOR = "from-gray-500 to-gray-400";
 
 // ── Time range options ──────────────────────────────────────────────────────
 const TIME_RANGES = [
-  { value: 'all', label: 'All Time' },
-  { value: '7d',  label: 'Last 7 Days' },
-  { value: '30d', label: 'Last 30 Days' },
-  { value: '90d', label: 'Last 90 Days' },
-]
+  { value: "all", label: "All Time" },
+  { value: "7d", label: "Last 7 Days" },
+  { value: "30d", label: "Last 30 Days" },
+  { value: "90d", label: "Last 90 Days" },
+];
 
 // ── Heatmap intensity ───────────────────────────────────────────────────────
 function getHeatmapIntensity(count) {
-  if (count === 0) return 'bg-gray-100 dark:bg-white/5'
-  if (count <= 2) return 'bg-indigo-200 dark:bg-indigo-500/25'
-  if (count <= 5) return 'bg-indigo-400 dark:bg-indigo-500/50'
-  return 'bg-indigo-600 dark:bg-indigo-400/80'
+  if (count === 0) return "bg-gray-100 dark:bg-white/5";
+  if (count <= 2) return "bg-indigo-200 dark:bg-indigo-500/25";
+  if (count <= 5) return "bg-indigo-400 dark:bg-indigo-500/50";
+  return "bg-indigo-600 dark:bg-indigo-400/80";
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
@@ -64,23 +76,34 @@ function getHeatmapIntensity(count) {
 // ═════════════════════════════════════════════════════════════════════════════
 
 export default function AnalyticsPage() {
-  useDocumentTitle('Dashboard')
-  const navigate = useNavigate()
-  const [timeRange, setTimeRange] = useState('all')
-  const { stats, clearAnalytics } = useAnalytics(timeRange)
-  const { runs: spendRuns, totalSpend } = useSessionSpend()
+  useDocumentTitle("Dashboard");
+  const navigate = useNavigate();
+  const [timeRange, setTimeRange] = useState("all");
+  const { stats, clearAnalytics } = useAnalytics(timeRange);
+  const { runs: spendRuns, totalSpend } = useSessionSpend();
   const totalTokens = useMemo(
-    () => spendRuns.reduce((sum, r) => sum + (r.inputTokens || 0) + (r.outputTokens || 0), 0),
-    [spendRuns]
-  )
+    () =>
+      spendRuns.reduce(
+        (sum, r) => sum + (r.inputTokens || 0) + (r.outputTokens || 0),
+        0,
+      ),
+    [spendRuns],
+  );
 
   // ── Empty state ───────────────────────────────────────────────────────────
-  if (stats.totalRuns === 0 && timeRange === 'all') {
+  if (stats.totalRuns === 0 && timeRange === "all") {
     return (
       <div className="animate-fade-in max-w-4xl mx-auto">
-        <PageHeader onClear={clearAnalytics} hasData={false} timeRange={timeRange} setTimeRange={setTimeRange} />
-        <div className="rounded-2xl border p-12 text-center flex flex-col items-center gap-4
-          dark:bg-surface-card dark:border-border bg-white border-gray-200">
+        <PageHeader
+          onClear={clearAnalytics}
+          hasData={false}
+          timeRange={timeRange}
+          setTimeRange={setTimeRange}
+        />
+        <div
+          className="rounded-2xl border p-12 text-center flex flex-col items-center gap-4
+          dark:bg-surface-card dark:border-border bg-white border-gray-200"
+        >
           <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center">
             <BarChart3 size={32} className="text-accent" />
           </div>
@@ -88,11 +111,11 @@ export default function AnalyticsPage() {
             No analytics yet
           </h2>
           <p className="text-sm dark:text-text-secondary text-gray-500 max-w-md leading-relaxed">
-            Run a few agents and your usage stats will automatically appear here — 
-            top agents, provider breakdown, activity streaks, and more.
+            Run a few agents and your usage stats will automatically appear here
+            — top agents, provider breakdown, activity streaks, and more.
           </p>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white
               bg-accent hover:bg-accent-hover transition-all duration-200 active:scale-[0.97] mt-2"
           >
@@ -105,21 +128,36 @@ export default function AnalyticsPage() {
         {/* Session spend can exist even with no recorded analytics events
             (e.g. analytics was cleared but session spend wasn't) */}
         {spendRuns.length > 0 && (
-          <SectionCard title="Token Usage & Cost (This Session)" icon={<Zap size={16} />} delay={200}>
-            <TokenUsageSection runs={spendRuns} totalTokens={totalTokens} totalSpend={totalSpend} />
+          <SectionCard
+            title="Token Usage & Cost (This Session)"
+            icon={<Zap size={16} />}
+            delay={200}
+          >
+            <TokenUsageSection
+              runs={spendRuns}
+              totalTokens={totalTokens}
+              totalSpend={totalSpend}
+            />
           </SectionCard>
         )}
       </div>
-    )
+    );
   }
 
   // ── Filtered-empty state (has data but not in this range) ─────────────────
-  if (stats.totalRuns === 0 && timeRange !== 'all') {
+  if (stats.totalRuns === 0 && timeRange !== "all") {
     return (
       <div className="animate-fade-in max-w-5xl mx-auto">
-        <PageHeader onClear={clearAnalytics} hasData={true} timeRange={timeRange} setTimeRange={setTimeRange} />
-        <div className="rounded-2xl border p-12 text-center flex flex-col items-center gap-4
-          dark:bg-surface-card dark:border-border bg-white border-gray-200">
+        <PageHeader
+          onClear={clearAnalytics}
+          hasData={true}
+          timeRange={timeRange}
+          setTimeRange={setTimeRange}
+        />
+        <div
+          className="rounded-2xl border p-12 text-center flex flex-col items-center gap-4
+          dark:bg-surface-card dark:border-border bg-white border-gray-200"
+        >
           <div className="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center">
             <Filter size={28} className="text-amber-500" />
           </div>
@@ -127,10 +165,11 @@ export default function AnalyticsPage() {
             No data in this range
           </h2>
           <p className="text-sm dark:text-text-secondary text-gray-500 max-w-md leading-relaxed">
-            No agent runs found in the selected time range. Try selecting a broader range or "All Time".
+            No agent runs found in the selected time range. Try selecting a
+            broader range or "All Time".
           </p>
           <button
-            onClick={() => setTimeRange('all')}
+            onClick={() => setTimeRange("all")}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold
               text-accent border border-accent/30 hover:bg-accent/10 transition-all duration-200 active:scale-[0.97] mt-2"
           >
@@ -141,17 +180,30 @@ export default function AnalyticsPage() {
         {/* Session spend is not filtered by time range, so it can still
             be shown here even when the selected range has no runs */}
         {spendRuns.length > 0 && (
-          <SectionCard title="Token Usage & Cost (This Session)" icon={<Zap size={16} />} delay={200}>
-            <TokenUsageSection runs={spendRuns} totalTokens={totalTokens} totalSpend={totalSpend} />
+          <SectionCard
+            title="Token Usage & Cost (This Session)"
+            icon={<Zap size={16} />}
+            delay={200}
+          >
+            <TokenUsageSection
+              runs={spendRuns}
+              totalTokens={totalTokens}
+              totalSpend={totalSpend}
+            />
           </SectionCard>
         )}
       </div>
-    )
+    );
   }
 
   return (
     <div className="animate-fade-in max-w-5xl mx-auto">
-      <PageHeader onClear={clearAnalytics} hasData={true} timeRange={timeRange} setTimeRange={setTimeRange} />
+      <PageHeader
+        onClear={clearAnalytics}
+        hasData={true}
+        timeRange={timeRange}
+        setTimeRange={setTimeRange}
+      />
 
       {/* ── Primary Stat Cards ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
@@ -204,7 +256,7 @@ export default function AnalyticsPage() {
         <MiniStatCard
           icon={<Calendar size={14} />}
           label="Peak Day"
-          value={stats.mostProductiveDay || '—'}
+          value={stats.mostProductiveDay || "—"}
           color="text-violet-500"
           delay={320}
         />
@@ -225,43 +277,70 @@ export default function AnalyticsPage() {
       {/* ── Two-column: Top Agents + Provider Donut ── */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
         <div className="lg:col-span-3">
-          <SectionCard title="Top Agents" icon={<BarChart3 size={16} />} delay={460}>
+          <SectionCard
+            title="Top Agents"
+            icon={<BarChart3 size={16} />}
+            delay={460}
+          >
             <TopAgentsChart agents={stats.topAgents} navigate={navigate} />
           </SectionCard>
         </div>
         <div className="lg:col-span-2">
           <SectionCard title="Providers" icon={<Users size={16} />} delay={520}>
-            <ProviderDonut data={stats.providerDistribution} total={stats.totalRuns} />
+            <ProviderDonut
+              data={stats.providerDistribution}
+              total={stats.totalRuns}
+            />
           </SectionCard>
         </div>
       </div>
 
       {/* ── Two-column: Categories + Sparkline ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-        <SectionCard title="Categories" icon={<BarChart3 size={16} />} delay={580}>
+        <SectionCard
+          title="Categories"
+          icon={<BarChart3 size={16} />}
+          delay={580}
+        >
           <CategoryBars data={stats.categoryDistribution} />
         </SectionCard>
-        <SectionCard title="Last 30 Days" icon={<Activity size={16} />} delay={640}>
+        <SectionCard
+          title="Last 30 Days"
+          icon={<Activity size={16} />}
+          delay={640}
+        >
           <Sparkline data={stats.dailyRuns} />
         </SectionCard>
       </div>
 
       {/* ── Recent Activity Timeline ── */}
-      <SectionCard title="Recent Activity" icon={<Clock size={16} />} delay={700}>
+      <SectionCard
+        title="Recent Activity"
+        icon={<Clock size={16} />}
+        delay={700}
+      >
         <RecentTimeline runs={stats.recentRuns} navigate={navigate} />
       </SectionCard>
 
       {/* ── Token Usage & Cost (current session) ── */}
-        {spendRuns.length > 0 && (
-          <SectionCard title="Token Usage & Cost (This Session)" icon={<Zap size={16} />} delay={760}>
-            <TokenUsageSection runs={spendRuns} totalTokens={totalTokens} totalSpend={totalSpend} />
-          </SectionCard>
-        )}
+      {spendRuns.length > 0 && (
+        <SectionCard
+          title="Token Usage & Cost (This Session)"
+          icon={<Zap size={16} />}
+          delay={760}
+        >
+          <TokenUsageSection
+            runs={spendRuns}
+            totalTokens={totalTokens}
+            totalSpend={totalSpend}
+          />
+        </SectionCard>
+      )}
 
-        {/* ── Export Bar ── */}
-        <ExportBar stats={stats} />
+      {/* ── Export Bar ── */}
+      <ExportBar stats={stats} />
     </div>
-  )
+  );
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
@@ -276,8 +355,12 @@ function PageHeader({ onClear, hasData, timeRange, setTimeRange }) {
           <BarChart3 size={20} className="text-accent" />
         </div>
         <div>
-          <h1 className="text-lg font-bold dark:text-text-primary text-gray-900">Dashboard</h1>
-          <p className="text-xs dark:text-text-secondary text-gray-500">Your agent usage at a glance</p>
+          <h1 className="text-lg font-bold dark:text-text-primary text-gray-900">
+            Dashboard
+          </h1>
+          <p className="text-xs dark:text-text-secondary text-gray-500">
+            Your agent usage at a glance
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-2 flex-wrap">
@@ -288,9 +371,10 @@ function PageHeader({ onClear, hasData, timeRange, setTimeRange }) {
               key={range.value}
               onClick={() => setTimeRange(range.value)}
               className={`px-2.5 py-1 rounded-md text-[10px] font-semibold transition-all duration-200
-                ${timeRange === range.value
-                  ? 'bg-accent text-white shadow-sm'
-                  : 'text-gray-500 dark:text-text-muted hover:text-gray-700 dark:hover:text-text-primary'
+                ${
+                  timeRange === range.value
+                    ? "bg-accent text-white shadow-sm"
+                    : "text-gray-500 dark:text-text-muted hover:text-gray-700 dark:hover:text-text-primary"
                 }`}
             >
               {range.label}
@@ -309,7 +393,7 @@ function PageHeader({ onClear, hasData, timeRange, setTimeRange }) {
         )}
       </div>
     </div>
-  )
+  );
 }
 
 function StatCard({ icon, label, value, color, delay }) {
@@ -332,7 +416,7 @@ function StatCard({ icon, label, value, color, delay }) {
         {label}
       </div>
     </div>
-  )
+  );
 }
 
 function MiniStatCard({ icon, label, value, color, delay }) {
@@ -343,9 +427,7 @@ function MiniStatCard({ icon, label, value, color, delay }) {
         animate-fade-in transition-all duration-200 hover:shadow-md"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div className={`p-2 rounded-lg bg-current/10 ${color}`}>
-        {icon}
-      </div>
+      <div className={`p-2 rounded-lg bg-current/10 ${color}`}>{icon}</div>
       <div className="min-w-0">
         <div className="text-sm font-bold dark:text-text-primary text-gray-900 tabular-nums truncate">
           {value}
@@ -355,7 +437,7 @@ function MiniStatCard({ icon, label, value, color, delay }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function SectionCard({ title, icon, delay, children }) {
@@ -374,7 +456,7 @@ function SectionCard({ title, icon, delay, children }) {
       </div>
       {children}
     </div>
-  )
+  );
 }
 
 // ── Activity Heatmap ────────────────────────────────────────────────────────
@@ -382,19 +464,19 @@ function SectionCard({ title, icon, delay, children }) {
 function ActivityHeatmap({ data }) {
   // Group by weeks (columns)
   const weeks = useMemo(() => {
-    const w = []
-    let currentWeek = []
+    const w = [];
+    let currentWeek = [];
     data.forEach((day, i) => {
-      currentWeek.push(day)
+      currentWeek.push(day);
       if (currentWeek.length === 7 || i === data.length - 1) {
-        w.push(currentWeek)
-        currentWeek = []
+        w.push(currentWeek);
+        currentWeek = [];
       }
-    })
-    return w
-  }, [data])
+    });
+    return w;
+  }, [data]);
 
-  const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+  const dayLabels = ["S", "M", "T", "W", "T", "F", "S"];
 
   return (
     <div>
@@ -402,8 +484,11 @@ function ActivityHeatmap({ data }) {
         {/* Day labels */}
         <div className="flex flex-col gap-0.5 mr-1 shrink-0">
           {dayLabels.map((label, i) => (
-            <div key={i} className="h-[14px] w-4 flex items-center justify-center text-[8px] dark:text-text-muted text-gray-400 font-medium">
-              {i % 2 === 1 ? label : ''}
+            <div
+              key={i}
+              className="h-[14px] w-4 flex items-center justify-center text-[8px] dark:text-text-muted text-gray-400 font-medium"
+            >
+              {i % 2 === 1 ? label : ""}
             </div>
           ))}
         </div>
@@ -414,41 +499,51 @@ function ActivityHeatmap({ data }) {
               <div
                 key={day.date}
                 className={`h-[14px] w-[14px] rounded-[3px] transition-all duration-300 ${getHeatmapIntensity(day.count)}`}
-                title={`${day.date}: ${day.count} run${day.count !== 1 ? 's' : ''}`}
+                title={`${day.date}: ${day.count} run${day.count !== 1 ? "s" : ""}`}
               />
             ))}
             {/* Pad short weeks */}
-            {week.length < 7 && Array.from({ length: 7 - week.length }).map((_, i) => (
-              <div key={`pad-${i}`} className="h-[14px] w-[14px]" />
-            ))}
+            {week.length < 7 &&
+              Array.from({ length: 7 - week.length }).map((_, i) => (
+                <div key={`pad-${i}`} className="h-[14px] w-[14px]" />
+              ))}
           </div>
         ))}
       </div>
       {/* Legend */}
       <div className="flex items-center gap-2 mt-2">
-        <span className="text-[10px] dark:text-text-muted text-gray-400">Less</span>
+        <span className="text-[10px] dark:text-text-muted text-gray-400">
+          Less
+        </span>
         <div className="flex gap-0.5">
-          {['bg-gray-100 dark:bg-white/5', 'bg-indigo-200 dark:bg-indigo-500/25', 'bg-indigo-400 dark:bg-indigo-500/50', 'bg-indigo-600 dark:bg-indigo-400/80'].map((cls, i) => (
+          {[
+            "bg-gray-100 dark:bg-white/5",
+            "bg-indigo-200 dark:bg-indigo-500/25",
+            "bg-indigo-400 dark:bg-indigo-500/50",
+            "bg-indigo-600 dark:bg-indigo-400/80",
+          ].map((cls, i) => (
             <div key={i} className={`h-[10px] w-[10px] rounded-[2px] ${cls}`} />
           ))}
         </div>
-        <span className="text-[10px] dark:text-text-muted text-gray-400">More</span>
+        <span className="text-[10px] dark:text-text-muted text-gray-400">
+          More
+        </span>
       </div>
     </div>
-  )
+  );
 }
 
 // ── Top Agents Bar Chart ────────────────────────────────────────────────────
 
 function TopAgentsChart({ agents, navigate }) {
-  if (agents.length === 0) return <EmptyMini text="No agent data yet" />
+  if (agents.length === 0) return <EmptyMini text="No agent data yet" />;
 
-  const maxCount = agents[0]?.count || 1
+  const maxCount = agents[0]?.count || 1;
 
   return (
     <div className="space-y-2.5">
       {agents.map((agent, i) => {
-        const pct = Math.max(5, (agent.count / maxCount) * 100)
+        const pct = Math.max(5, (agent.count / maxCount) * 100);
         return (
           <div
             key={agent.agentId}
@@ -456,8 +551,10 @@ function TopAgentsChart({ agents, navigate }) {
             onClick={() => navigate(`/agent/${agent.agentId}`)}
           >
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-medium dark:text-text-primary text-gray-700 truncate max-w-[200px]
-                group-hover:text-accent transition-colors">
+              <span
+                className="text-xs font-medium dark:text-text-primary text-gray-700 truncate max-w-[200px]
+                group-hover:text-accent transition-colors"
+              >
                 {agent.agentName}
               </span>
               <span className="text-[11px] font-bold tabular-nums dark:text-text-muted text-gray-400">
@@ -475,39 +572,52 @@ function TopAgentsChart({ agents, navigate }) {
               />
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 // ── Provider Donut (SVG) ────────────────────────────────────────────────────
 
 function ProviderDonut({ data, total }) {
-  if (data.length === 0) return <EmptyMini text="No provider data" />
+  if (data.length === 0) return <EmptyMini text="No provider data" />;
 
-  const size = 140
-  const strokeWidth = 22
-  const radius = (size - strokeWidth) / 2
-  const circumference = 2 * Math.PI * radius
+  const size = 140;
+  const strokeWidth = 22;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
 
-  let cumulativeOffset = 0
+  let cumulativeOffset = 0;
   const segments = data.map((item) => {
-    const pct = item.count / total
-    const dash = pct * circumference
-    const offset = cumulativeOffset
-    cumulativeOffset += dash
-    const providerInfo = PROVIDER_COLORS[item.name] || PROVIDER_COLORS.unknown
-    return { ...item, dash, offset, color: providerInfo.color, label: providerInfo.label }
-  })
+    const pct = item.count / total;
+    const dash = pct * circumference;
+    const offset = cumulativeOffset;
+    cumulativeOffset += dash;
+    const providerInfo = PROVIDER_COLORS[item.name] || PROVIDER_COLORS.unknown;
+    return {
+      ...item,
+      dash,
+      offset,
+      color: providerInfo.color,
+      label: providerInfo.label,
+    };
+  });
 
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="relative">
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+        <svg
+          width={size}
+          height={size}
+          viewBox={`0 0 ${size} ${size}`}
+          className="-rotate-90"
+        >
           {/* Background ring */}
           <circle
-            cx={size / 2} cy={size / 2} r={radius}
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
             fill="none"
             stroke="currentColor"
             strokeWidth={strokeWidth}
@@ -517,7 +627,9 @@ function ProviderDonut({ data, total }) {
           {segments.map((seg, i) => (
             <circle
               key={seg.name}
-              cx={size / 2} cy={size / 2} r={radius}
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
               fill="none"
               stroke={seg.color}
               strokeWidth={strokeWidth}
@@ -531,15 +643,22 @@ function ProviderDonut({ data, total }) {
         </svg>
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-lg font-bold dark:text-text-primary text-gray-900 tabular-nums">{total}</span>
-          <span className="text-[9px] dark:text-text-muted text-gray-400 font-medium">RUNS</span>
+          <span className="text-lg font-bold dark:text-text-primary text-gray-900 tabular-nums">
+            {total}
+          </span>
+          <span className="text-[9px] dark:text-text-muted text-gray-400 font-medium">
+            RUNS
+          </span>
         </div>
       </div>
       {/* Legend */}
       <div className="flex flex-wrap justify-center gap-x-3 gap-y-1">
         {segments.map((seg) => (
           <div key={seg.name} className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: seg.color }} />
+            <div
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: seg.color }}
+            />
             <span className="text-[10px] font-medium dark:text-text-secondary text-gray-500">
               {seg.label} ({seg.pct}%)
             </span>
@@ -547,21 +666,21 @@ function ProviderDonut({ data, total }) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 // ── Category Breakdown Bars ─────────────────────────────────────────────────
 
 function CategoryBars({ data }) {
-  if (data.length === 0) return <EmptyMini text="No category data" />
+  if (data.length === 0) return <EmptyMini text="No category data" />;
 
-  const maxCount = data[0]?.count || 1
+  const maxCount = data[0]?.count || 1;
 
   return (
     <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
       {data.map((cat, i) => {
-        const pct = Math.max(5, (cat.count / maxCount) * 100)
-        const gradient = CATEGORY_COLORS[cat.name] || DEFAULT_CATEGORY_COLOR
+        const pct = Math.max(5, (cat.count / maxCount) * 100);
+        const gradient = CATEGORY_COLORS[cat.name] || DEFAULT_CATEGORY_COLOR;
         return (
           <div key={cat.name}>
             <div className="flex items-center justify-between mb-1">
@@ -579,34 +698,40 @@ function CategoryBars({ data }) {
               />
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 // ── Sparkline (last 30 days) ────────────────────────────────────────────────
 
 function Sparkline({ data }) {
-  if (!data || data.length < 2) return <EmptyMini text="Not enough data" />
+  if (!data || data.length < 2) return <EmptyMini text="Not enough data" />;
 
-  const maxCount = Math.max(...data.map((d) => d.count), 1)
-  const width = 400
-  const height = 100
-  const padding = 4
+  const maxCount = Math.max(...data.map((d) => d.count), 1);
+  const width = 400;
+  const height = 100;
+  const padding = 4;
 
   const points = data.map((d, i) => {
-    const x = padding + (i / (data.length - 1)) * (width - padding * 2)
-    const y = height - padding - ((d.count / maxCount) * (height - padding * 2))
-    return { x, y, ...d }
-  })
+    const x = padding + (i / (data.length - 1)) * (width - padding * 2);
+    const y = height - padding - (d.count / maxCount) * (height - padding * 2);
+    return { x, y, ...d };
+  });
 
-  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
-  const areaPath = `${linePath} L ${points[points.length - 1].x} ${height} L ${points[0].x} ${height} Z`
+  const linePath = points
+    .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`)
+    .join(" ");
+  const areaPath = `${linePath} L ${points[points.length - 1].x} ${height} L ${points[0].x} ${height} Z`;
 
   return (
     <div>
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-28" preserveAspectRatio="none">
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className="w-full h-28"
+        preserveAspectRatio="none"
+      >
         {/* Gradient fill */}
         <defs>
           <linearGradient id="sparkline-gradient" x1="0" y1="0" x2="0" y2="1">
@@ -617,43 +742,64 @@ function Sparkline({ data }) {
         {/* Area */}
         <path d={areaPath} fill="url(#sparkline-gradient)" />
         {/* Line */}
-        <path d={linePath} fill="none" stroke="rgb(99, 102, 241)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d={linePath}
+          fill="none"
+          stroke="rgb(99, 102, 241)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
         {/* Dots for days with runs */}
-        {points.filter((p) => p.count > 0).map((p, i) => (
-          <circle
-            key={i}
-            cx={p.x} cy={p.y} r="3"
-            fill="rgb(99, 102, 241)"
-            className="transition-all duration-300"
-          >
-            <title>{`${p.date}: ${p.count} run${p.count !== 1 ? 's' : ''}`}</title>
-          </circle>
-        ))}
+        {points
+          .filter((p) => p.count > 0)
+          .map((p, i) => (
+            <circle
+              key={i}
+              cx={p.x}
+              cy={p.y}
+              r="3"
+              fill="rgb(99, 102, 241)"
+              className="transition-all duration-300"
+            >
+              <title>{`${p.date}: ${p.count} run${p.count !== 1 ? "s" : ""}`}</title>
+            </circle>
+          ))}
       </svg>
       {/* X-axis labels */}
       <div className="flex justify-between mt-1">
-        <span className="text-[9px] dark:text-text-muted text-gray-400">30 days ago</span>
-        <span className="text-[9px] dark:text-text-muted text-gray-400">Today</span>
+        <span className="text-[9px] dark:text-text-muted text-gray-400">
+          30 days ago
+        </span>
+        <span className="text-[9px] dark:text-text-muted text-gray-400">
+          Today
+        </span>
       </div>
     </div>
-  )
+  );
 }
 
 // ── Recent Activity Timeline ────────────────────────────────────────────────
 
 function RecentTimeline({ runs, navigate }) {
-  if (!runs || runs.length === 0) return <EmptyMini text="No recent activity" />
+  if (!runs || runs.length === 0)
+    return <EmptyMini text="No recent activity" />;
 
   return (
     <div className="space-y-1">
       {runs.map((run, i) => {
-        const time = new Date(run.timestamp)
+        const time = new Date(run.timestamp);
         const timeStr = time.toLocaleString(undefined, {
-          month: 'short', day: 'numeric',
-          hour: '2-digit', minute: '2-digit',
-        })
-        const providerInfo = PROVIDER_COLORS[run.provider] || PROVIDER_COLORS.unknown
-        const durationStr = run.duration ? `${(run.duration / 1000).toFixed(1)}s` : null
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const providerInfo =
+          PROVIDER_COLORS[run.provider] || PROVIDER_COLORS.unknown;
+        const durationStr = run.duration
+          ? `${(run.duration / 1000).toFixed(1)}s`
+          : null;
 
         return (
           <div
@@ -663,8 +809,8 @@ function RecentTimeline({ runs, navigate }) {
               animate-fade-in"
             style={{ animationDelay: `${i * 40}ms` }}
             onClick={() => {
-              const agentId = run.id?.split('_')[0]
-              if (agentId) navigate(`/agent/${agentId}`)
+              const agentId = run.id?.split("_")[0];
+              if (agentId) navigate(`/agent/${agentId}`);
             }}
           >
             {/* Timeline dot */}
@@ -681,24 +827,33 @@ function RecentTimeline({ runs, navigate }) {
             {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold dark:text-text-primary text-gray-800 truncate
-                  group-hover:text-accent transition-colors">
-                  {run.agentName || 'Unknown Agent'}
+                <span
+                  className="text-xs font-semibold dark:text-text-primary text-gray-800 truncate
+                  group-hover:text-accent transition-colors"
+                >
+                  {run.agentName || "Unknown Agent"}
                 </span>
                 {run.category && (
-                  <span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full
-                    bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-text-muted shrink-0">
+                  <span
+                    className="text-[9px] font-medium px-1.5 py-0.5 rounded-full
+                    bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-text-muted shrink-0"
+                  >
                     {run.category}
                   </span>
                 )}
               </div>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-[10px] font-medium" style={{ color: providerInfo.color }}>
+                <span
+                  className="text-[10px] font-medium"
+                  style={{ color: providerInfo.color }}
+                >
                   {providerInfo.label}
                 </span>
                 {run.model && (
                   <>
-                    <span className="text-[10px] dark:text-text-muted text-gray-300">·</span>
+                    <span className="text-[10px] dark:text-text-muted text-gray-300">
+                      ·
+                    </span>
                     <span className="text-[10px] dark:text-text-muted text-gray-400 truncate max-w-[120px]">
                       {run.model}
                     </span>
@@ -706,7 +861,9 @@ function RecentTimeline({ runs, navigate }) {
                 )}
                 {durationStr && (
                   <>
-                    <span className="text-[10px] dark:text-text-muted text-gray-300">·</span>
+                    <span className="text-[10px] dark:text-text-muted text-gray-300">
+                      ·
+                    </span>
                     <span className="text-[10px] dark:text-text-muted text-gray-400 flex items-center gap-0.5">
                       <Clock size={8} />
                       {durationStr}
@@ -721,22 +878,22 @@ function RecentTimeline({ runs, navigate }) {
               {timeStr}
             </span>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 // ── Token Usage & Cost Section ──────────────────────────────────────────────
 
 function formatSpend(cost) {
-  if (cost == null || isNaN(cost)) return '—'
-  if (cost < 0.01) return `$${cost.toFixed(4)}`
-  return `$${cost.toFixed(2)}`
+  if (cost == null || isNaN(cost)) return "—";
+  if (cost < 0.01) return `$${cost.toFixed(4)}`;
+  return `$${cost.toFixed(2)}`;
 }
 
 function TokenUsageSection({ runs, totalTokens, totalSpend }) {
-  const recentRuns = runs.slice(0, 10)
+  const recentRuns = runs.slice(0, 10);
 
   return (
     <div>
@@ -771,10 +928,11 @@ function TokenUsageSection({ runs, totalTokens, totalSpend }) {
           >
             <div className="min-w-0">
               <div className="text-xs font-medium dark:text-text-primary text-gray-800 truncate max-w-[160px]">
-                {run.model || 'Unknown model'}
+                {run.model || "Unknown model"}
               </div>
               <div className="text-[10px] dark:text-text-muted text-gray-400">
-                {(run.inputTokens || 0).toLocaleString()} in · {(run.outputTokens || 0).toLocaleString()} out
+                {(run.inputTokens || 0).toLocaleString()} in ·{" "}
+                {(run.outputTokens || 0).toLocaleString()} out
               </div>
             </div>
             <div className="text-xs font-semibold dark:text-text-primary text-gray-900 tabular-nums shrink-0">
@@ -784,7 +942,7 @@ function TokenUsageSection({ runs, totalTokens, totalSpend }) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 // ── Export Bar ───────────────────────────────────────────────────────────────
@@ -806,21 +964,26 @@ function ExportBar({ stats }) {
       providerDistribution: stats.providerDistribution,
       categoryDistribution: stats.categoryDistribution,
       dailyRuns: stats.dailyRuns,
-    }
+    };
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `dashboard-export-${new Date().toISOString().slice(0, 10)}.json`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `dashboard-export-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
-    <div className="flex justify-center mb-8 animate-fade-in" style={{ animationDelay: '760ms' }}>
+    <div
+      className="flex justify-center mb-8 animate-fade-in"
+      style={{ animationDelay: "760ms" }}
+    >
       <button
         onClick={handleExport}
         className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold
@@ -834,7 +997,7 @@ function ExportBar({ stats }) {
         Export Dashboard Data
       </button>
     </div>
-  )
+  );
 }
 
 // ── Tiny empty state ────────────────────────────────────────────────────────
@@ -844,12 +1007,17 @@ function EmptyMini({ text }) {
     <div className="py-6 text-center text-xs dark:text-text-muted text-gray-400">
       {text}
     </div>
-  )
+  );
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatProvider(p) {
-  const labels = { openai: 'OpenAI', anthropic: 'Anthropic', gemini: 'Gemini', openrouter: 'OpenRouter' }
-  return labels[p] || p || '—'
+  const labels = {
+    openai: "OpenAI",
+    anthropic: "Anthropic",
+    gemini: "Gemini",
+    openrouter: "OpenRouter",
+  };
+  return labels[p] || p || "—";
 }

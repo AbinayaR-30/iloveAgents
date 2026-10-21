@@ -10,8 +10,7 @@ export default {
   defaultProvider: "anthropic",
   model: "claude-sonnet-4-6",
   exampleInputs: {
-    log_output:
-      `2026-06-04T03:12:01Z INFO  [auth-service] User login attempt: user_id=4821
+    log_output: `2026-06-04T03:12:01Z INFO  [auth-service] User login attempt: user_id=4821
 2026-06-04T03:12:02Z INFO  [auth-service] Token issued: user_id=4821
 2026-06-04T03:12:45Z WARN  [db-pool] Connection pool at 85% capacity (85/100)
 2026-06-04T03:13:10Z WARN  [db-pool] Connection pool at 92% capacity (92/100)

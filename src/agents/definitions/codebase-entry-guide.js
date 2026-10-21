@@ -1,26 +1,27 @@
 const codebaseEntryGuide = {
-  id: 'codebase-entry-guide',
-  name: 'Codebase Entry Guide Agent',
-  description: 'Understand a new codebase quickly with key files, entry points, and architecture overview.',
-  category: 'Engineering',
-  icon: 'FileSearch',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "codebase-entry-guide",
+  name: "Codebase Entry Guide Agent",
+  description:
+    "Understand a new codebase quickly with key files, entry points, and architecture overview.",
+  category: "Engineering",
+  icon: "FileSearch",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
 
   inputs: [
     {
-      id: 'repo_structure',
-      label: 'Repository Structure / Files',
-      type: 'textarea',
-      placeholder: 'Paste folder structure or key files...',
+      id: "repo_structure",
+      label: "Repository Structure / Files",
+      type: "textarea",
+      placeholder: "Paste folder structure or key files...",
       required: true,
     },
     {
-      id: 'additional_context',
-      label: 'Additional Context (optional)',
-      type: 'textarea',
-      placeholder: 'Any notes about the project...',
+      id: "additional_context",
+      label: "Additional Context (optional)",
+      type: "textarea",
+      placeholder: "Any notes about the project...",
       required: false,
     },
   ],
@@ -49,7 +50,7 @@ Your output MUST include:
 Keep explanations simple, practical, and beginner-friendly.
 Avoid jargon where possible.`,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default codebaseEntryGuide;

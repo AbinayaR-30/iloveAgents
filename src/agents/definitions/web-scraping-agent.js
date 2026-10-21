@@ -10,7 +10,8 @@ export default {
   defaultProvider: "anthropic",
   model: "claude-sonnet-4-6",
   exampleInputs: {
-    content: "<div class='product'><h2>Wireless Mouse</h2><span class='price'>$24.99</span></div>",
+    content:
+      "<div class='product'><h2>Wireless Mouse</h2><span class='price'>$24.99</span></div>",
     fields: "name, price",
   },
   inputs: [

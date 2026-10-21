@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom'
-import { GitBranch } from 'lucide-react'
-import * as Icons from 'lucide-react'
-import { useAgents } from '../lib/useAgents'
+import { useNavigate } from "react-router-dom";
+import { GitBranch } from "lucide-react";
+import * as Icons from "lucide-react";
+import { useAgents } from "../lib/useAgents";
 
 /**
  * Renders "Works well after" clickable pills for agents that define
@@ -11,26 +11,26 @@ import { useAgents } from '../lib/useAgents'
  * pre-selected via React Router state.
  */
 export default function SuggestedChainPills({ agent }) {
-  const navigate = useNavigate()
-  const { agents } = useAgents()
+  const navigate = useNavigate();
+  const { agents } = useAgents();
 
-  if (!agent.suggestedChainFrom?.length) return null
+  if (!agent.suggestedChainFrom?.length) return null;
 
   const predecessors = agents.length
     ? agent.suggestedChainFrom
         .map((id) => agents.find((a) => a.id === id))
         .filter(Boolean)
-    : []
+    : [];
 
-  if (!predecessors.length) return null
+  if (!predecessors.length) return null;
 
   const handlePillClick = (predecessor) => {
-    navigate('/workflows/build', {
+    navigate("/workflows/build", {
       state: {
         preselectedAgents: [predecessor.id, agent.id],
       },
-    })
-  }
+    });
+  };
 
   return (
     <div
@@ -48,7 +48,7 @@ export default function SuggestedChainPills({ agent }) {
       </div>
       <div className="flex flex-wrap gap-2">
         {predecessors.map((pred) => {
-          const IconComponent = Icons[pred.icon] || Icons.Bot
+          const IconComponent = Icons[pred.icon] || Icons.Bot;
           return (
             <button
               key={pred.id}
@@ -64,9 +64,9 @@ export default function SuggestedChainPills({ agent }) {
               <IconComponent size={11} />
               {pred.name}
             </button>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }

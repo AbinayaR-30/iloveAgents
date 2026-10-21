@@ -1,68 +1,67 @@
 const aiStudyPlanner = {
-  id: 'ai-study-planner',
+  id: "ai-study-planner",
 
-  name: 'AI Study Planner',
+  name: "AI Study Planner",
 
   description:
-    'Creates personalized study schedules, revision plans, and smart learning recommendations based on exams, subjects, and study goals.',
+    "Creates personalized study schedules, revision plans, and smart learning recommendations based on exams, subjects, and study goals.",
 
-  category: 'Productivity',
+  category: "Productivity",
 
-  icon: 'Calendar',
+  icon: "Calendar",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'gemini',
+  defaultProvider: "gemini",
 
-  model: 'gemini-1.5-pro',
+  model: "gemini-1.5-pro",
 
   inputs: [
     {
-      id: 'subjects',
-      label: 'Subjects or Courses',
-      type: 'textarea',
-      placeholder: 'e.g. Maths, English, Science',
+      id: "subjects",
+      label: "Subjects or Courses",
+      type: "textarea",
+      placeholder: "e.g. Maths, English, Science",
       required: true,
     },
 
     {
-      id: 'exam_dates',
-      label: 'Exam Dates',
-      type: 'textarea',
-      placeholder:
-        'e.g.\nMaths - 10-11-2026\nEnglish - 11-11-2026',
+      id: "exam_dates",
+      label: "Exam Dates",
+      type: "textarea",
+      placeholder: "e.g.\nMaths - 10-11-2026\nEnglish - 11-11-2026",
       required: true,
     },
 
     {
-      id: 'study_hours',
-      label: 'Daily Available Study Hours',
-      type: 'text',
-      placeholder: 'e.g. 4 hours per day',
+      id: "study_hours",
+      label: "Daily Available Study Hours",
+      type: "text",
+      placeholder: "e.g. 4 hours per day",
       required: true,
     },
 
     {
-      id: 'weak_topics',
-      label: 'Weak Subjects or Topics',
-      type: 'textarea',
-      placeholder: 'e.g. Algebra, Grammar, Trigonometry',
+      id: "weak_topics",
+      label: "Weak Subjects or Topics",
+      type: "textarea",
+      placeholder: "e.g. Algebra, Grammar, Trigonometry",
       required: true,
     },
 
     {
-      id: 'preferred_study_time',
-      label: 'Preferred Study Time',
-      type: 'select',
+      id: "preferred_study_time",
+      label: "Preferred Study Time",
+      type: "select",
       required: true,
-      options: ['Morning', 'Evening', 'Night'],
+      options: ["Morning", "Evening", "Night"],
     },
 
     {
-      id: 'target_score',
-      label: 'Study Goal or Target Score',
-      type: 'text',
-      placeholder: 'e.g. 90%, Top Rank, Pass Exam',
+      id: "target_score",
+      label: "Study Goal or Target Score",
+      type: "text",
+      placeholder: "e.g. 90%, Top Rank, Pass Exam",
       required: true,
     },
   ],
@@ -117,7 +116,7 @@ Include realistic study timings and balanced scheduling.
 - A short motivational message for the student
 `,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default aiStudyPlanner;

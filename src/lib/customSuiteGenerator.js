@@ -56,9 +56,9 @@ Rules:
   });
 
   recordAnalyticsRun({
-    agentId: 'custom-suite-generator',
-    agentName: 'Custom Suite Generator',
-    category: 'Suites',
+    agentId: "custom-suite-generator",
+    agentName: "Custom Suite Generator",
+    category: "Suites",
     provider,
     model: MODEL_DEFAULTS[provider] || "gemini-2.5-flash",
     duration: result.duration,

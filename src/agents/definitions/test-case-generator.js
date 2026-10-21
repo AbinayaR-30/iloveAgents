@@ -85,5 +85,9 @@ Quality rules:
 - Use stable IDs like TC-001, TC-002, TC-003.
 - Do not include generic advice, implementation notes, or code.`,
   outputType: "markdown",
-  suggestedChainFrom: ["prd-generator", "user-story-writer", "bug-report-generator"],
+  suggestedChainFrom: [
+    "prd-generator",
+    "user-story-writer",
+    "bug-report-generator",
+  ],
 };

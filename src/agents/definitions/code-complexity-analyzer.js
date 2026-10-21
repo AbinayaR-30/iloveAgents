@@ -1,50 +1,49 @@
 export default {
-  id: 'code-complexity-analyzer',
+  id: "code-complexity-analyzer",
 
-  name: 'Code Complexity Analyzer',
+  name: "Code Complexity Analyzer",
 
   description:
-    'Analyzes functions or classes for cyclomatic complexity, maintainability issues, and refactoring opportunities.',
+    "Analyzes functions or classes for cyclomatic complexity, maintainability issues, and refactoring opportunities.",
 
-  category: 'Engineering',
+  category: "Engineering",
 
-  icon: 'Bug',
+  icon: "Bug",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'gemini',
+  defaultProvider: "gemini",
 
-  model: 'gemini-2.0-flash',
+  model: "gemini-2.0-flash",
 
   inputs: [
     {
-      id: 'language',
-      label: 'Programming Language',
-      type: 'text',
-      placeholder: 'e.g. JavaScript, Python, Java, C++',
+      id: "language",
+      label: "Programming Language",
+      type: "text",
+      placeholder: "e.g. JavaScript, Python, Java, C++",
       required: true,
     },
 
     {
-      id: 'code',
-      label: 'Code Snippet',
-      type: 'code',
-      placeholder:
-        'Paste a function, class, or module you want analyzed...',
+      id: "code",
+      label: "Code Snippet",
+      type: "code",
+      placeholder: "Paste a function, class, or module you want analyzed...",
       required: true,
     },
 
     {
-      id: 'focus',
-      label: 'Analysis Focus',
-      type: 'select',
+      id: "focus",
+      label: "Analysis Focus",
+      type: "select",
       required: false,
       options: [
-        'Overall Complexity',
-        'Cyclomatic Complexity',
-        'Maintainability',
-        'Performance Risks',
-        'Refactoring Suggestions',
+        "Overall Complexity",
+        "Cyclomatic Complexity",
+        "Maintainability",
+        "Performance Risks",
+        "Refactoring Suggestions",
       ],
     },
   ],
@@ -103,5 +102,5 @@ Rules:
 - If code is already clean, explain why.
 `,
 
-  outputType: 'markdown',
-}
+  outputType: "markdown",
+};

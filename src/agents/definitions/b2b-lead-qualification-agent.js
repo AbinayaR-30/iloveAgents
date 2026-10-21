@@ -2,7 +2,8 @@ export default {
   id: "b2b-lead-qualification-agent",
   createdAt: "2026-06-22",
   name: "B2B Lead Qualification Agent",
-  description: "Analyzes company and lead information to qualify B2B prospects, detect agencies, identify buying signals, and generate personalized outreach messages.",
+  description:
+    "Analyzes company and lead information to qualify B2B prospects, detect agencies, identify buying signals, and generate personalized outreach messages.",
   category: "Sales",
   icon: "Target",
   provider: "any",
@@ -13,7 +14,8 @@ export default {
     company_size: "51-200 employees",
     industry: "SaaS & Cloud Services",
     linkedin_url: "https://linkedin.com/company/techcorp-solutions",
-    recent_activity: "Recently hired 5 Sales Engineers, expanded to 3 new markets",
+    recent_activity:
+      "Recently hired 5 Sales Engineers, expanded to 3 new markets",
     pain_points: "Customer acquisition cost, sales team scaling",
     decision_makers: "VP Sales, Head of Marketing",
     budget_signals: "Series B funding, new product launch",

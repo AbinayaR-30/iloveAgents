@@ -3,7 +3,7 @@
  * Renders as an inline SVG so it stays crisp at every size and
  * automatically adapts to dark / light mode via currentColor.
  */
-export default function Logo({ className = '', height = 28 }) {
+export default function Logo({ className = "", height = 28 }) {
   // The viewBox is tuned so the heart sits snugly between "I" and "Agents"
   return (
     <svg
@@ -54,5 +54,5 @@ export default function Logo({ className = '', height = 28 }) {
         Agents
       </text>
     </svg>
-  )
+  );
 }

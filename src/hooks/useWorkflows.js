@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { supabase } from "../lib/supabase";
 
 /**
  * Get the currently authenticated user's ID.
@@ -7,12 +7,15 @@ import { supabase } from '../lib/supabase'
  */
 async function getCurrentUserId() {
   try {
-    const { data: { user }, error } = await supabase.auth.getUser()
-    if (error || !user) return null
-    return user.id
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    if (error || !user) return null;
+    return user.id;
   } catch (err) {
-    console.warn('Failed to get current user:', err)
-    return null
+    console.warn("Failed to get current user:", err);
+    return null;
   }
 }
 
@@ -22,12 +25,12 @@ async function getCurrentUserId() {
  */
 export async function fetchWorkflows() {
   const { data, error } = await supabase
-    .from('workflows')
-    .select('*')
-    .eq('is_public', true)
-    .order('created_at', { ascending: false })
+    .from("workflows")
+    .select("*")
+    .eq("is_public", true)
+    .order("created_at", { ascending: false });
 
-  return { data: data ?? [], error }
+  return { data: data ?? [], error };
 }
 
 /**
@@ -37,12 +40,12 @@ export async function fetchWorkflows() {
  */
 export async function fetchWorkflowById(id) {
   const { data, error } = await supabase
-    .from('workflows')
-    .select('*')
-    .eq('id', id)
-    .single()
+    .from("workflows")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-  return { data: data ?? null, error }
+  return { data: data ?? null, error };
 }
 
 /**
@@ -52,34 +55,35 @@ export async function fetchWorkflowById(id) {
  * @returns {Promise<{ data: object|null, error: object|null }>}
  */
 export async function saveWorkflow(workflow) {
-  const userId = await getCurrentUserId()
+  const userId = await getCurrentUserId();
 
   // Require user authentication to prevent unauthorized writes
   if (!userId) {
     return {
       data: null,
       error: {
-        message: 'User must be authenticated to save workflows. Please log in first.',
+        message:
+          "User must be authenticated to save workflows. Please log in first.",
       },
-    }
+    };
   }
 
   const { data, error } = await supabase
-    .from('workflows')
+    .from("workflows")
     .insert([
       {
         user_id: userId,
         title: workflow.title,
-        description: workflow.description || '',
+        description: workflow.description || "",
         agents: workflow.agents,
         is_public: true,
         usage_count: 0,
       },
     ])
     .select()
-    .single()
+    .single();
 
-  return { data: data ?? null, error }
+  return { data: data ?? null, error };
 }
 
 /**
@@ -90,50 +94,51 @@ export async function saveWorkflow(workflow) {
  * @returns {Promise<{ data: object|null, error: object|null }>}
  */
 export async function updateWorkflow(id, updates) {
-  const userId = await getCurrentUserId()
+  const userId = await getCurrentUserId();
 
   if (!userId) {
     return {
       data: null,
       error: {
-        message: 'User must be authenticated to update workflows.',
+        message: "User must be authenticated to update workflows.",
       },
-    }
+    };
   }
 
   // Verify ownership: fetch workflow and check user_id matches
   const { data: workflow, error: fetchError } = await supabase
-    .from('workflows')
-    .select('user_id')
-    .eq('id', id)
-    .single()
+    .from("workflows")
+    .select("user_id")
+    .eq("id", id)
+    .single();
 
   if (fetchError || !workflow) {
     return {
       data: null,
-      error: fetchError || { message: 'Workflow not found.' },
-    }
+      error: fetchError || { message: "Workflow not found." },
+    };
   }
 
   if (workflow.user_id !== userId) {
     return {
       data: null,
       error: {
-        message: 'You do not have permission to update this workflow. Only the owner can make changes.',
+        message:
+          "You do not have permission to update this workflow. Only the owner can make changes.",
       },
-    }
+    };
   }
 
   // Proceed with update (ownership verified)
   const { data, error } = await supabase
-    .from('workflows')
+    .from("workflows")
     .update(updates)
-    .eq('id', id)
-    .eq('user_id', userId)
+    .eq("id", id)
+    .eq("user_id", userId)
     .select()
-    .single()
+    .single();
 
-  return { data: data ?? null, error }
+  return { data: data ?? null, error };
 }
 
 /**
@@ -143,45 +148,46 @@ export async function updateWorkflow(id, updates) {
  * @returns {Promise<{ error: object|null }>}
  */
 export async function deleteWorkflow(id) {
-  const userId = await getCurrentUserId()
+  const userId = await getCurrentUserId();
 
   if (!userId) {
     return {
       error: {
-        message: 'User must be authenticated to delete workflows.',
+        message: "User must be authenticated to delete workflows.",
       },
-    }
+    };
   }
 
   // Verify ownership: fetch workflow and check user_id matches
   const { data: workflow, error: fetchError } = await supabase
-    .from('workflows')
-    .select('user_id')
-    .eq('id', id)
-    .single()
+    .from("workflows")
+    .select("user_id")
+    .eq("id", id)
+    .single();
 
   if (fetchError || !workflow) {
     return {
-      error: fetchError || { message: 'Workflow not found.' },
-    }
+      error: fetchError || { message: "Workflow not found." },
+    };
   }
 
   if (workflow.user_id !== userId) {
     return {
       error: {
-        message: 'You do not have permission to delete this workflow. Only the owner can delete it.',
+        message:
+          "You do not have permission to delete this workflow. Only the owner can delete it.",
       },
-    }
+    };
   }
 
   // Proceed with deletion (ownership verified)
   const { error } = await supabase
-    .from('workflows')
+    .from("workflows")
     .delete()
-    .eq('id', id)
-    .eq('user_id', userId)
+    .eq("id", id)
+    .eq("user_id", userId);
 
-  return { error }
+  return { error };
 }
 
 /**
@@ -197,38 +203,40 @@ export async function deleteWorkflow(id) {
  * @returns {Promise<{ error: object|null }>}
  */
 export async function incrementUsage(id) {
-  const { error: rpcError } = await supabase.rpc('increment_workflow_usage', { workflow_id: id })
+  const { error: rpcError } = await supabase.rpc("increment_workflow_usage", {
+    workflow_id: id,
+  });
 
   // 1. If the RPC works perfectly, exit immediately with no error.
   if (!rpcError) {
-    return { error: null }
+    return { error: null };
   }
 
   // 2. If we reach this point, the RPC failed. Attempt client-side fallback.
-  console.warn('RPC failed, executing client-side fallback:', rpcError.message)
+  console.warn("RPC failed, executing client-side fallback:", rpcError.message);
 
   const { data: current } = await supabase
-    .from('workflows')
-    .select('usage_count')
-    .eq('id', id)
-    .single()
+    .from("workflows")
+    .select("usage_count")
+    .eq("id", id)
+    .single();
 
   if (current) {
     const { error: updateError } = await supabase
-      .from('workflows')
+      .from("workflows")
       .update({ usage_count: (current.usage_count ?? 0) + 1 })
-      .eq('id', id)
-    
-    return { error: updateError }
+      .eq("id", id);
+
+    return { error: updateError };
   }
 
   // 3. THE FIX: If 'current' is null (row not found), return a clear contextual error
   // instead of letting it slip through to return the old rpcError.
-  return { 
-    error: { 
-      message: `Failed to increment usage. Workflow with ID ${id} could not be found during fallback.` 
-    } 
-  }
+  return {
+    error: {
+      message: `Failed to increment usage. Workflow with ID ${id} could not be found during fallback.`,
+    },
+  };
 }
 
 /**
@@ -242,20 +250,20 @@ export function subscribeToWorkflow(workflowId, callback) {
   const channel = supabase
     .channel(`workflow-usage-${workflowId}`)
     .on(
-      'postgres_changes',
+      "postgres_changes",
       {
-        event: 'UPDATE',
-        schema: 'public',
-        table: 'workflows',
+        event: "UPDATE",
+        schema: "public",
+        table: "workflows",
         filter: `id=eq.${workflowId}`,
       },
       (payload) => {
-        callback(payload)
-      }
+        callback(payload);
+      },
     )
-    .subscribe()
+    .subscribe();
 
-  return channel
+  return channel;
 }
 
 /**
@@ -266,19 +274,19 @@ export function subscribeToWorkflow(workflowId, callback) {
  */
 export function subscribeToAllWorkflows(callback) {
   const channel = supabase
-    .channel('workflow-usage-all')
+    .channel("workflow-usage-all")
     .on(
-      'postgres_changes',
+      "postgres_changes",
       {
-        event: 'UPDATE',
-        schema: 'public',
-        table: 'workflows',
+        event: "UPDATE",
+        schema: "public",
+        table: "workflows",
       },
       (payload) => {
-        callback(payload)
-      }
+        callback(payload);
+      },
     )
-    .subscribe()
+    .subscribe();
 
-  return channel
+  return channel;
 }

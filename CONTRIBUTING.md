@@ -25,14 +25,16 @@ If it fails, fix the errors before submitting. PRs with failing builds will be a
 **Common mistake to avoid:**
 
 Never do this:
+
 ```js
-import agents from '../agents/registry'  // ❌ WRONG
+import agents from "../agents/registry"; // ❌ WRONG
 ```
 
 Always do this instead:
+
 ```js
-import { useAgents } from '../lib/useAgents'  // ✅ CORRECT
-const { agents } = useAgents()
+import { useAgents } from "../lib/useAgents"; // ✅ CORRECT
+const { agents } = useAgents();
 ```
 
 ---
@@ -49,14 +51,14 @@ Let's build something great together.
 
 ## What Can You Contribute?
 
-| Type | Difficulty |
-|------|------------|
-| 🤖 Add a new agent | Beginner |
-| 🐛 Fix a bug | Beginner – Intermediate |
-| 🎨 UI / UX improvement | Intermediate |
-| ♿ Accessibility improvement | Intermediate |
-| 📝 Improve documentation | Beginner |
-| 🧪 Add tests | Intermediate |
+| Type                         | Difficulty              |
+| ---------------------------- | ----------------------- |
+| 🤖 Add a new agent           | Beginner                |
+| 🐛 Fix a bug                 | Beginner – Intermediate |
+| 🎨 UI / UX improvement       | Intermediate            |
+| ♿ Accessibility improvement | Intermediate            |
+| 📝 Improve documentation     | Beginner                |
+| 🧪 Add tests                 | Intermediate            |
 
 ---
 
@@ -107,26 +109,26 @@ Paste this template into your new file and fill in your details:
 
 ```js
 const yourAgentName = {
-  id: 'your-agent-id',           // lowercase, kebab-case, URL safe
-  name: 'Your Agent Name',
-  description: 'One line description of what this agent does.',
-  category: 'Category',          // Productivity | Research | Marketing | Engineering | HR | Business | Education | Design | Product | Legal | Healthcare | DevOps | Data Science | Cybersecurity | Gaming | Web3 | Finance | Real Estate | Sales | Developer Tools
-  icon: 'IconName',              // Any icon from lucide.dev/icons
-  provider: 'any',               // 'openai' | 'anthropic' | 'gemini' | 'any'
-  defaultProvider: 'openai',     // Only needed if provider is 'any'
-  model: 'gpt-4o',
+  id: "your-agent-id", // lowercase, kebab-case, URL safe
+  name: "Your Agent Name",
+  description: "One line description of what this agent does.",
+  category: "Category", // Productivity | Research | Marketing | Engineering | HR | Business | Education | Design | Product | Legal | Healthcare | DevOps | Data Science | Cybersecurity | Gaming | Web3 | Finance | Real Estate | Sales | Developer Tools
+  icon: "IconName", // Any icon from lucide.dev/icons
+  provider: "any", // 'openai' | 'anthropic' | 'gemini' | 'any'
+  defaultProvider: "openai", // Only needed if provider is 'any'
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'input_field',
-      label: 'Field Label',
-      type: 'textarea',          // text | textarea | code | select | multiselect
-      placeholder: 'Hint text for the user...',
+      id: "input_field",
+      label: "Field Label",
+      type: "textarea", // text | textarea | code | select | multiselect
+      placeholder: "Hint text for the user...",
       required: true,
     },
   ],
   systemPrompt: `Write your system prompt here.
     Be specific about the output format you want.`,
-  outputType: 'markdown',        // markdown | text | json
+  outputType: "markdown", // markdown | text | json
 };
 
 export default yourAgentName;
@@ -167,21 +169,21 @@ That is it. I will review it as fast as I can. 🚀
 
 ## Input Types
 
-| Type | What it renders |
-|------|----------------|
-| `text` | Single line text input |
-| `textarea` | Multi line text area |
-| `code` | Monospace code editor |
-| `select` | Dropdown with options |
-| `multiselect` | Toggle button group |
+| Type          | What it renders        |
+| ------------- | ---------------------- |
+| `text`        | Single line text input |
+| `textarea`    | Multi line text area   |
+| `code`        | Monospace code editor  |
+| `select`      | Dropdown with options  |
+| `multiselect` | Toggle button group    |
 
 ## Output Types
 
-| Type | What it renders |
-|------|----------------|
-| `markdown` | Rendered markdown with syntax highlighting |
-| `text` | Plain text with a copy button |
-| `json` | Visual scorecard (needs a specific JSON structure) |
+| Type       | What it renders                                    |
+| ---------- | -------------------------------------------------- |
+| `markdown` | Rendered markdown with syntax highlighting         |
+| `text`     | Plain text with a copy button                      |
+| `json`     | Visual scorecard (needs a specific JSON structure) |
 
 ---
 
@@ -221,4 +223,4 @@ Thank you for spending your time on this. It genuinely means a lot. 🙏
 
 ---
 
-*Read something confusing in this guide? Open an issue and tell me. I will fix it.*
+_Read something confusing in this guide? Open an issue and tell me. I will fix it._

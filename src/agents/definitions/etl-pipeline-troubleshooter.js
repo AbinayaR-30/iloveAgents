@@ -11,8 +11,10 @@ export default {
   model: "gemini-2.5-flash",
   exampleInputs: {
     tool: "ODI",
-    errorMessage: "ODI-1228: Task SrcSet fails on the target connection. java.sql.SQLException: ORA-00904: invalid identifier",
-    pipelineContext: "Loading customer master data from Oracle EBS to Snowflake",
+    errorMessage:
+      "ODI-1228: Task SrcSet fails on the target connection. java.sql.SQLException: ORA-00904: invalid identifier",
+    pipelineContext:
+      "Loading customer master data from Oracle EBS to Snowflake",
   },
   inputs: [
     {
@@ -44,7 +46,8 @@ export default {
       id: "pipelineContext",
       label: "Pipeline Context",
       type: "textarea",
-      placeholder: "Briefly describe what your pipeline does e.g. Loading sales orders from Oracle EBS to Snowflake",
+      placeholder:
+        "Briefly describe what your pipeline does e.g. Loading sales orders from Oracle EBS to Snowflake",
       required: false,
     },
   ],

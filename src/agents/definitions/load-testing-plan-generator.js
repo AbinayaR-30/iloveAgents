@@ -1,75 +1,73 @@
 export default {
-  id: 'load-testing-plan-generator',
+  id: "load-testing-plan-generator",
 
-  createdAt: '2026-07-02',
+  createdAt: "2026-07-02",
 
-  name: 'Load Testing Plan Generator',
+  name: "Load Testing Plan Generator",
 
   description:
     "Describe your app or API and get a complete load testing plan with ready-to-run scripts for k6, JMeter, Locust, Artillery, or ab.",
 
-  category: 'Engineering',
+  category: "Engineering",
 
-  icon: 'Activity',
+  icon: "Activity",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'openai',
+  defaultProvider: "openai",
 
-  model: 'gpt-4o',
+  model: "gpt-4o",
 
   exampleInputs: {
     appDescription:
-      'REST API with GET /users, POST /orders (creates an order in PostgreSQL), GET /products (cached via Redis). Auth via JWT token in Authorization header.',
-    loadTestingTool: 'k6',
-    targetLoad: '500 concurrent users, 10,000 requests/min',
-    testDuration: '10 minutes ramp-up, 30 minutes sustained',
-    environment: 'staging',
+      "REST API with GET /users, POST /orders (creates an order in PostgreSQL), GET /products (cached via Redis). Auth via JWT token in Authorization header.",
+    loadTestingTool: "k6",
+    targetLoad: "500 concurrent users, 10,000 requests/min",
+    testDuration: "10 minutes ramp-up, 30 minutes sustained",
+    environment: "staging",
   },
 
   inputs: [
     {
-      id: 'appDescription',
-      label: 'App/API Description',
-      type: 'textarea',
+      id: "appDescription",
+      label: "App/API Description",
+      type: "textarea",
       placeholder:
-        'Describe your endpoints, critical paths, authentication, database queries, caching layers, and any known bottlenecks...',
+        "Describe your endpoints, critical paths, authentication, database queries, caching layers, and any known bottlenecks...",
       required: true,
     },
 
     {
-      id: 'loadTestingTool',
-      label: 'Load Testing Tool',
-      type: 'select',
-      options: ['k6', 'JMeter', 'Locust', 'Artillery', 'ab'],
-      defaultValue: 'k6',
+      id: "loadTestingTool",
+      label: "Load Testing Tool",
+      type: "select",
+      options: ["k6", "JMeter", "Locust", "Artillery", "ab"],
+      defaultValue: "k6",
       required: true,
     },
 
     {
-      id: 'targetLoad',
-      label: 'Target Load',
-      type: 'text',
-      placeholder:
-        'e.g. 500 concurrent users, 10,000 requests/min',
+      id: "targetLoad",
+      label: "Target Load",
+      type: "text",
+      placeholder: "e.g. 500 concurrent users, 10,000 requests/min",
       required: true,
     },
 
     {
-      id: 'testDuration',
-      label: 'Test Duration',
-      type: 'text',
-      placeholder:
-        'e.g. 10 minutes ramp-up, 30 minutes sustained',
+      id: "testDuration",
+      label: "Test Duration",
+      type: "text",
+      placeholder: "e.g. 10 minutes ramp-up, 30 minutes sustained",
       required: false,
     },
 
     {
-      id: 'environment',
-      label: 'Environment',
-      type: 'select',
-      options: ['staging', 'production'],
-      defaultValue: 'staging',
+      id: "environment",
+      label: "Environment",
+      type: "select",
+      options: ["staging", "production"],
+      defaultValue: "staging",
       required: true,
     },
   ],
@@ -129,5 +127,5 @@ Rules:
 - If it mentions auth, include proper authentication in the script.
 - Tailor thresholds to the target load — don't use defaults for everything.
 - The script must be ready to copy, paste, and run with zero modifications (except API keys/secrets).`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };

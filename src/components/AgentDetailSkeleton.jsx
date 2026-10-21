@@ -4,7 +4,10 @@
  */
 export default function AgentDetailSkeleton() {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 animate-pulse" aria-hidden="true">
+    <div
+      className="max-w-7xl mx-auto px-4 py-8 animate-pulse"
+      aria-hidden="true"
+    >
       {/* Header Skeleton */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b dark:border-border border-gray-200">
         <div className="flex items-center gap-4">
@@ -56,5 +59,5 @@ export default function AgentDetailSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
 }

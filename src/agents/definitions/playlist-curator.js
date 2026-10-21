@@ -1,4 +1,4 @@
-export default{
+export default {
   id: "playlist-curator-agent",
   createdAt: "2026-07-03",
   name: "Playlist Curator",
@@ -6,19 +6,21 @@ export default{
   category: "Design",
   icon: "Music",
   provider: "any",
-  defaultProvider:  "gemini", 
+  defaultProvider: "gemini",
   model: "gemini-3.1-flash",
- exampleInputs: {
-  problem_description: "Give me a playlist of hit Taylor Swift Songs that are upbeat and lighthearted.",
-},
+  exampleInputs: {
+    problem_description:
+      "Give me a playlist of hit Taylor Swift Songs that are upbeat and lighthearted.",
+  },
   inputs: [
     {
       id: "playlist_description",
       label: "Describe your playlist.",
       type: "textarea",
       placeholder: "Describe your vibe and get playlists.",
-      required: true
-    } ],
+      required: true,
+    },
+  ],
   systemPrompt: `You are an expert music curator with deep knowledge of songs across all genres, eras and moods. Your job is to create personalised themed playlists based on the user's mood, activity and preferences.
 
 Always respond in this exact format:
@@ -54,6 +56,5 @@ Rules:
 - Include a mix of well known and lesser known tracks — not just top hits
 - The playlist title should be creative and specific to the mood, not generic`,
 
-  outputType: "markdown" 
-
+  outputType: "markdown",
 };

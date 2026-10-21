@@ -1,32 +1,33 @@
 export default {
-  id: 'git-branch-naming-generator',
-  name: 'Git Branch Naming Generator',
-  description: 'Generate 3-5 clean, consistent branch name options from a ticket number, title, and branch type following common conventions like feature/ILA-123-add-login-page.',
-  category: 'Engineering',
-  icon: 'GitBranch',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "git-branch-naming-generator",
+  name: "Git Branch Naming Generator",
+  description:
+    "Generate 3-5 clean, consistent branch name options from a ticket number, title, and branch type following common conventions like feature/ILA-123-add-login-page.",
+  category: "Engineering",
+  icon: "GitBranch",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'ticket_number',
-      label: 'Ticket Number (optional)',
-      type: 'text',
-      placeholder: 'e.g. ILA-123 or 42',
+      id: "ticket_number",
+      label: "Ticket Number (optional)",
+      type: "text",
+      placeholder: "e.g. ILA-123 or 42",
       required: false,
     },
     {
-      id: 'ticket_title',
-      label: 'Ticket Title',
-      type: 'text',
-      placeholder: 'e.g. Add login page with OAuth support',
+      id: "ticket_title",
+      label: "Ticket Title",
+      type: "text",
+      placeholder: "e.g. Add login page with OAuth support",
       required: true,
     },
     {
-      id: 'branch_type',
-      label: 'Branch Type',
-      type: 'select',
-      options: ['feature', 'fix', 'hotfix', 'chore', 'refactor', 'docs'],
+      id: "branch_type",
+      label: "Branch Type",
+      type: "select",
+      options: ["feature", "fix", "hotfix", "chore", "refactor", "docs"],
       required: true,
     },
   ],
@@ -59,8 +60,5 @@ feature/ILA-123-login-oauth-support
 
 ## Why these names?
 Brief explanation of the naming choices made.`,
-  outputType: 'markdown',
-}
-
-
-
+  outputType: "markdown",
+};

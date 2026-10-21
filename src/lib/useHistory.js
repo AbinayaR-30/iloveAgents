@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from "react";
 
-const STORAGE_KEY = 'iloveAgents_history';
+const STORAGE_KEY = "iloveAgents_history";
 const MAX_HISTORY = 10;
 
 function loadHistory() {
@@ -8,7 +8,7 @@ function loadHistory() {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
   } catch (error) {
-    console.error('Error loading history from localStorage:', error);
+    console.error("Error loading history from localStorage:", error);
     return [];
   }
 }
@@ -17,10 +17,10 @@ function saveHistory(history) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
   } catch (error) {
-    if (error.name === 'QuotaExceededError') {
-      console.error('LocalStorage quota exceeded. History might be truncated.');
+    if (error.name === "QuotaExceededError") {
+      console.error("LocalStorage quota exceeded. History might be truncated.");
     } else {
-      console.error('Error saving history to localStorage:', error);
+      console.error("Error saving history to localStorage:", error);
     }
   }
 }
@@ -46,8 +46,8 @@ export const useHistory = () => {
         setHistory(loadHistory());
       }
     };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   /**

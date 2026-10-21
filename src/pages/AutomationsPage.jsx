@@ -1,123 +1,150 @@
-import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  Clock, Play, Trash2, ToggleLeft, ToggleRight,
-  ChevronRight, AlertCircle, CheckCircle2, Calendar, Zap,
-  Loader2, Plus, ShieldCheck, Mail, Search, Filter,
-  Activity, ArrowUpRight, Lock, Sparkles, RefreshCw
-} from 'lucide-react'
+  Clock,
+  Play,
+  Trash2,
+  ToggleLeft,
+  ToggleRight,
+  ChevronRight,
+  AlertCircle,
+  CheckCircle2,
+  Calendar,
+  Zap,
+  Loader2,
+  Plus,
+  ShieldCheck,
+  Mail,
+  Search,
+  Filter,
+  Activity,
+  ArrowUpRight,
+  Lock,
+  Sparkles,
+  RefreshCw,
+} from "lucide-react";
 import {
-  loadAutomations, loadRuns, toggleAutomation, deleteAutomation,
-  runAutomationNow, initAutomationEngine
-} from '../lib/automationsService'
-import { useDocumentTitle } from '../lib/useDocumentTitle'
-import CreateAutomationModal from '../components/CreateAutomationModal'
+  loadAutomations,
+  loadRuns,
+  toggleAutomation,
+  deleteAutomation,
+  runAutomationNow,
+  initAutomationEngine,
+} from "../lib/automationsService";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
+import CreateAutomationModal from "../components/CreateAutomationModal";
 
 export default function AutomationsPage() {
-  useDocumentTitle('Scheduled Automations')
-  const navigate = useNavigate()
+  useDocumentTitle("Scheduled Automations");
+  const navigate = useNavigate();
 
-  const [automations, setAutomations] = useState([])
-  const [runs, setRuns] = useState([])
-  const [runningMap, setRunningMap] = useState({})
-  const [searchQuery, setSearchQuery] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all') // all | active | paused
-  const [scheduleFilter, setScheduleFilter] = useState('all') // all | hourly | daily | weekly
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [editingAutomation, setEditingAutomation] = useState(null)
-  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
+  const [automations, setAutomations] = useState([]);
+  const [runs, setRuns] = useState([]);
+  const [runningMap, setRunningMap] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all"); // all | active | paused
+  const [scheduleFilter, setScheduleFilter] = useState("all"); // all | hourly | daily | weekly
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingAutomation, setEditingAutomation] = useState(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [notificationBanner, setNotificationBanner] = useState(
-    'Notification' in window ? Notification.permission : 'unsupported'
-  )
+    "Notification" in window ? Notification.permission : "unsupported",
+  );
 
   const reloadData = () => {
-    setAutomations(loadAutomations())
-    setRuns(loadRuns())
-  }
+    setAutomations(loadAutomations());
+    setRuns(loadRuns());
+  };
 
   useEffect(() => {
-    reloadData()
-    initAutomationEngine()
-    const interval = setInterval(reloadData, 5000)
-    return () => clearInterval(interval)
-  }, [])
+    reloadData();
+    initAutomationEngine();
+    const interval = setInterval(reloadData, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleToggle = async (id) => {
-    await toggleAutomation(id)
-    reloadData()
-  }
+    await toggleAutomation(id);
+    reloadData();
+  };
 
   const handleDelete = async (id) => {
-    await deleteAutomation(id)
-    setConfirmDeleteId(null)
-    reloadData()
-  }
+    await deleteAutomation(id);
+    setConfirmDeleteId(null);
+    reloadData();
+  };
 
   const handleRunNow = async (id) => {
-    setRunningMap(prev => ({ ...prev, [id]: true }))
+    setRunningMap((prev) => ({ ...prev, [id]: true }));
     try {
-      await runAutomationNow(id)
+      await runAutomationNow(id);
     } catch (err) {
-      alert(err.message || 'Run failed')
+      alert(err.message || "Run failed");
     } finally {
-      setRunningMap(prev => ({ ...prev, [id]: false }))
-      reloadData()
+      setRunningMap((prev) => ({ ...prev, [id]: false }));
+      reloadData();
     }
-  }
+  };
 
   const requestNotificationPermission = async () => {
-    if ('Notification' in window) {
-      const perm = await Notification.requestPermission()
-      setNotificationBanner(perm)
+    if ("Notification" in window) {
+      const perm = await Notification.requestPermission();
+      setNotificationBanner(perm);
     }
-  }
+  };
 
   // KPIs
-  const totalCount = automations.length
-  const activeCount = automations.filter(a => a.enabled).length
-  const totalRunsCount = runs.length
-  const successfulRuns = runs.filter(r => r.status === 'success').length
-  const successRate = totalRunsCount > 0 ? Math.round((successfulRuns / totalRunsCount) * 100) : 100
+  const totalCount = automations.length;
+  const activeCount = automations.filter((a) => a.enabled).length;
+  const totalRunsCount = runs.length;
+  const successfulRuns = runs.filter((r) => r.status === "success").length;
+  const successRate =
+    totalRunsCount > 0
+      ? Math.round((successfulRuns / totalRunsCount) * 100)
+      : 100;
 
   // Filtered list
-  const filtered = automations.filter(item => {
+  const filtered = automations.filter((item) => {
     const matchesSearch =
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.agentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item.category && item.category.toLowerCase().includes(searchQuery.toLowerCase()))
+      (item.category &&
+        item.category.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesStatus =
-      statusFilter === 'all' ? true :
-      statusFilter === 'active' ? item.enabled :
-      !item.enabled
+      statusFilter === "all"
+        ? true
+        : statusFilter === "active"
+          ? item.enabled
+          : !item.enabled;
 
     const matchesSchedule =
-      scheduleFilter === 'all' ? true : item.schedule === scheduleFilter
+      scheduleFilter === "all" ? true : item.schedule === scheduleFilter;
 
-    return matchesSearch && matchesStatus && matchesSchedule
-  })
+    return matchesSearch && matchesStatus && matchesSchedule;
+  });
 
   const formatCountdown = (nextRunAt) => {
-    if (!nextRunAt) return '—'
-    const diff = nextRunAt - Date.now()
-    if (diff <= 0) return 'Due now'
-    const mins = Math.floor(diff / 60000)
-    const hrs = Math.floor(mins / 60)
-    const days = Math.floor(hrs / 24)
-    if (days > 0) return `in ${days}d ${hrs % 24}h`
-    if (hrs > 0) return `in ${hrs}h ${mins % 60}m`
-    return `in ${mins}m`
-  }
+    if (!nextRunAt) return "—";
+    const diff = nextRunAt - Date.now();
+    if (diff <= 0) return "Due now";
+    const mins = Math.floor(diff / 60000);
+    const hrs = Math.floor(mins / 60);
+    const days = Math.floor(hrs / 24);
+    if (days > 0) return `in ${days}d ${hrs % 24}h`;
+    if (hrs > 0) return `in ${hrs}h ${mins % 60}m`;
+    return `in ${mins}m`;
+  };
 
   const formatDate = (ts) => {
-    if (!ts) return 'Never'
+    if (!ts) return "Never";
     return new Date(ts).toLocaleString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-  }
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 animate-fade-in pb-16">
@@ -136,12 +163,13 @@ export default function AutomationsPage() {
             </span>
           </div>
           <p className="text-xs sm:text-sm text-gray-500 dark:text-text-secondary">
-            Set your favorite AI agents on autopilot with recurring schedules, execution history, and Resend email alerts.
+            Set your favorite AI agents on autopilot with recurring schedules,
+            execution history, and Resend email alerts.
           </p>
         </div>
 
         <div className="flex items-center gap-2.5">
-          {notificationBanner === 'default' && (
+          {notificationBanner === "default" && (
             <button
               onClick={requestNotificationPermission}
               className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/30 transition-all flex items-center gap-1.5"
@@ -153,8 +181,8 @@ export default function AutomationsPage() {
 
           <button
             onClick={() => {
-              setEditingAutomation(null)
-              setIsCreateModalOpen(true)
+              setEditingAutomation(null);
+              setIsCreateModalOpen(true);
             }}
             className="px-4 py-2.5 rounded-xl text-xs font-bold text-white
               bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500
@@ -182,7 +210,9 @@ export default function AutomationsPage() {
               </span>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              Provider API keys are encrypted at rest with explicit opt-in consent. Standard interactive runs continue to remain browser-only.
+              Provider API keys are encrypted at rest with explicit opt-in
+              consent. Standard interactive runs continue to remain
+              browser-only.
             </p>
           </div>
         </div>
@@ -203,7 +233,9 @@ export default function AutomationsPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-4 sm:p-5 rounded-2xl border dark:border-border/80 border-gray-200 dark:bg-surface-card bg-white shadow-sm hover:border-accent/30 transition-all">
           <div className="flex items-center justify-between text-gray-400 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Total Automations</span>
+            <span className="text-xs font-bold uppercase tracking-wider">
+              Total Automations
+            </span>
             <Calendar size={16} className="text-accent" />
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tabular-nums">
@@ -214,7 +246,9 @@ export default function AutomationsPage() {
 
         <div className="p-4 sm:p-5 rounded-2xl border dark:border-border/80 border-gray-200 dark:bg-surface-card bg-white shadow-sm hover:border-emerald-500/30 transition-all">
           <div className="flex items-center justify-between text-gray-400 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Active Autopilots</span>
+            <span className="text-xs font-bold uppercase tracking-wider">
+              Active Autopilots
+            </span>
             <Activity size={16} className="text-emerald-500" />
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-emerald-500 tabular-nums">
@@ -225,36 +259,47 @@ export default function AutomationsPage() {
 
         <div className="p-4 sm:p-5 rounded-2xl border dark:border-border/80 border-gray-200 dark:bg-surface-card bg-white shadow-sm hover:border-purple-500/30 transition-all">
           <div className="flex items-center justify-between text-gray-400 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Recorded Runs</span>
+            <span className="text-xs font-bold uppercase tracking-wider">
+              Recorded Runs
+            </span>
             <Zap size={16} className="text-purple-500" />
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tabular-nums">
             {totalRunsCount}
           </div>
-          <p className="text-[11px] text-gray-400 mt-1">Captured in run history</p>
+          <p className="text-[11px] text-gray-400 mt-1">
+            Captured in run history
+          </p>
         </div>
 
         <div className="p-4 sm:p-5 rounded-2xl border dark:border-border/80 border-gray-200 dark:bg-surface-card bg-white shadow-sm hover:border-indigo-500/30 transition-all">
           <div className="flex items-center justify-between text-gray-400 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Success Rate</span>
+            <span className="text-xs font-bold uppercase tracking-wider">
+              Success Rate
+            </span>
             <CheckCircle2 size={16} className="text-indigo-500" />
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-indigo-500 tabular-nums">
             {successRate}%
           </div>
-          <p className="text-[11px] text-gray-400 mt-1">{successfulRuns} of {totalRunsCount} completed</p>
+          <p className="text-[11px] text-gray-400 mt-1">
+            {successfulRuns} of {totalRunsCount} completed
+          </p>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
       <div className="p-3 sm:p-4 rounded-2xl border dark:border-border/80 border-gray-200 dark:bg-surface-card bg-white flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="relative w-full sm:w-80">
-          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search
+            size={15}
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+          />
           <input
             type="text"
             placeholder="Search automations or agents..."
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-9 pl-9 pr-4 rounded-xl text-xs dark:bg-surface-input dark:border-border bg-gray-50 border border-gray-200 outline-none focus:ring-1 focus:ring-accent"
           />
         </div>
@@ -263,7 +308,7 @@ export default function AutomationsPage() {
           {/* Status Filter */}
           <select
             value={statusFilter}
-            onChange={e => setStatusFilter(e.target.value)}
+            onChange={(e) => setStatusFilter(e.target.value)}
             className="h-9 px-3 rounded-xl text-xs dark:bg-surface-input dark:border-border bg-gray-50 border border-gray-200 outline-none"
           >
             <option value="all">All Statuses</option>
@@ -274,7 +319,7 @@ export default function AutomationsPage() {
           {/* Schedule Interval Filter */}
           <select
             value={scheduleFilter}
-            onChange={e => setScheduleFilter(e.target.value)}
+            onChange={(e) => setScheduleFilter(e.target.value)}
             className="h-9 px-3 rounded-xl text-xs dark:bg-surface-input dark:border-border bg-gray-50 border border-gray-200 outline-none"
           >
             <option value="all">All Schedules</option>
@@ -303,14 +348,14 @@ export default function AutomationsPage() {
             No automations found
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-6">
-            {searchQuery || statusFilter !== 'all' || scheduleFilter !== 'all'
-              ? 'Try adjusting your search query or filters to find what you are looking for.'
-              : 'Put your favorite agents on recurring autopilot with automated runs and email reports.'}
+            {searchQuery || statusFilter !== "all" || scheduleFilter !== "all"
+              ? "Try adjusting your search query or filters to find what you are looking for."
+              : "Put your favorite agents on recurring autopilot with automated runs and email reports."}
           </p>
           <button
             onClick={() => {
-              setEditingAutomation(null)
-              setIsCreateModalOpen(true)
+              setEditingAutomation(null);
+              setIsCreateModalOpen(true);
             }}
             className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-accent hover:bg-accent-hover shadow-md transition-all"
           >
@@ -322,26 +367,30 @@ export default function AutomationsPage() {
       {/* Automations Cards Grid */}
       {filtered.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filtered.map(auto => {
-            const isRunning = runningMap[auto.id]
-            const autoRuns = runs.filter(r => r.automationId === auto.id)
-            const lastRun = autoRuns[0]
+          {filtered.map((auto) => {
+            const isRunning = runningMap[auto.id];
+            const autoRuns = runs.filter((r) => r.automationId === auto.id);
+            const lastRun = autoRuns[0];
 
             return (
               <div
                 key={auto.id}
                 className={`rounded-2xl border p-5 transition-all duration-200 relative group flex flex-col justify-between
                   dark:bg-surface-card dark:border-border/80 bg-white border-gray-200 shadow-sm hover:shadow-md
-                  ${!auto.enabled ? 'opacity-75 bg-gray-50/50 dark:bg-surface/50' : ''}`}
+                  ${!auto.enabled ? "opacity-75 bg-gray-50/50 dark:bg-surface/50" : ""}`}
               >
                 <div>
                   {/* Top Bar: Status Toggle & Badges */}
                   <div className="flex items-center justify-between gap-3 mb-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase ${
-                        auto.enabled ? 'bg-emerald-500/15 text-emerald-500' : 'bg-gray-200 dark:bg-gray-800 text-gray-500'
-                      }`}>
-                        {auto.enabled ? 'Active' : 'Paused'}
+                      <span
+                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase ${
+                          auto.enabled
+                            ? "bg-emerald-500/15 text-emerald-500"
+                            : "bg-gray-200 dark:bg-gray-800 text-gray-500"
+                        }`}
+                      >
+                        {auto.enabled ? "Active" : "Paused"}
                       </span>
                       <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-accent/10 text-accent">
                         {auto.schedule} ({auto.cron})
@@ -355,10 +404,16 @@ export default function AutomationsPage() {
 
                     <button
                       onClick={() => handleToggle(auto.id)}
-                      className={`transition-colors ${auto.enabled ? 'text-accent' : 'text-gray-300 dark:text-gray-600'}`}
-                      title={auto.enabled ? 'Pause Autopilot' : 'Resume Autopilot'}
+                      className={`transition-colors ${auto.enabled ? "text-accent" : "text-gray-300 dark:text-gray-600"}`}
+                      title={
+                        auto.enabled ? "Pause Autopilot" : "Resume Autopilot"
+                      }
                     >
-                      {auto.enabled ? <ToggleRight size={24} /> : <ToggleLeft size={24} />}
+                      {auto.enabled ? (
+                        <ToggleRight size={24} />
+                      ) : (
+                        <ToggleLeft size={24} />
+                      )}
                     </button>
                   </div>
 
@@ -373,23 +428,33 @@ export default function AutomationsPage() {
                   </Link>
 
                   <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    <span className="font-medium text-gray-700 dark:text-gray-300">{auto.agentName}</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {auto.agentName}
+                    </span>
                     <span>•</span>
-                    <span className="font-mono text-[11px]">{auto.provider} ({auto.model})</span>
+                    <span className="font-mono text-[11px]">
+                      {auto.provider} ({auto.model})
+                    </span>
                   </div>
 
                   {/* Timestamps */}
                   <div className="grid grid-cols-2 gap-2 mt-4 p-3 rounded-xl dark:bg-surface-hover/60 bg-gray-50 text-xs">
                     <div>
-                      <span className="text-[10px] font-medium text-gray-400 block">Last Run</span>
+                      <span className="text-[10px] font-medium text-gray-400 block">
+                        Last Run
+                      </span>
                       <span className="font-medium dark:text-gray-200 text-gray-700">
                         {formatDate(auto.lastRunAt)}
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] font-medium text-gray-400 block">Next Autopilot Trigger</span>
+                      <span className="text-[10px] font-medium text-gray-400 block">
+                        Next Autopilot Trigger
+                      </span>
                       <span className="font-medium text-accent">
-                        {auto.enabled ? formatCountdown(auto.nextRunAt) : 'Paused'}
+                        {auto.enabled
+                          ? formatCountdown(auto.nextRunAt)
+                          : "Paused"}
                       </span>
                     </div>
                   </div>
@@ -404,8 +469,12 @@ export default function AutomationsPage() {
                       className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-accent/10 hover:bg-accent/20 text-accent transition-all flex items-center gap-1.5 disabled:opacity-50"
                       title="Execute Autopilot Run Now"
                     >
-                      {isRunning ? <Loader2 size={13} className="animate-spin" /> : <Play size={13} />}
-                      <span>{isRunning ? 'Running...' : 'Run Now'}</span>
+                      {isRunning ? (
+                        <Loader2 size={13} className="animate-spin" />
+                      ) : (
+                        <Play size={13} />
+                      )}
+                      <span>{isRunning ? "Running..." : "Run Now"}</span>
                     </button>
 
                     <Link
@@ -420,8 +489,8 @@ export default function AutomationsPage() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => {
-                        setEditingAutomation(auto)
-                        setIsCreateModalOpen(true)
+                        setEditingAutomation(auto);
+                        setIsCreateModalOpen(true);
                       }}
                       className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-surface-hover transition-colors text-xs font-medium"
                       title="Edit Automation"
@@ -448,7 +517,7 @@ export default function AutomationsPage() {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       )}
@@ -457,12 +526,12 @@ export default function AutomationsPage() {
       <CreateAutomationModal
         isOpen={isCreateModalOpen}
         onClose={() => {
-          setIsCreateModalOpen(false)
-          setEditingAutomation(null)
+          setIsCreateModalOpen(false);
+          setEditingAutomation(null);
         }}
         initialData={editingAutomation}
         onSuccess={reloadData}
       />
     </div>
-  )
+  );
 }

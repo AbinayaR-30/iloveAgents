@@ -1,32 +1,40 @@
 const researchGapFinder = {
-  id: 'research-gap-finder',
-  name: 'Research Gap Finder',
-  description: 'Paste paper summaries and get unexplored areas, shared limits, and future research directions.',
-  category: 'Research',
-  icon: 'Microscope',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "research-gap-finder",
+  name: "Research Gap Finder",
+  description:
+    "Paste paper summaries and get unexplored areas, shared limits, and future research directions.",
+  category: "Research",
+  icon: "Microscope",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'paper_notes',
-      label: 'Paper Summaries or Notes',
-      type: 'textarea',
-      placeholder: 'Paste 2-10 paper summaries with methods, findings and stated limits...',
+      id: "paper_notes",
+      label: "Paper Summaries or Notes",
+      type: "textarea",
+      placeholder:
+        "Paste 2-10 paper summaries with methods, findings and stated limits...",
       required: true,
     },
     {
-      id: 'field',
-      label: 'Research Field',
-      type: 'text',
-      placeholder: 'e.g. computer vision for medical imaging',
+      id: "field",
+      label: "Research Field",
+      type: "text",
+      placeholder: "e.g. computer vision for medical imaging",
       required: true,
     },
     {
-      id: 'focus',
-      label: 'Gap Focus',
-      type: 'select',
-      options: ['Unexplored areas', 'Method combinations', 'Limitations', 'Emerging trends', 'Future directions'],
+      id: "focus",
+      label: "Gap Focus",
+      type: "select",
+      options: [
+        "Unexplored areas",
+        "Method combinations",
+        "Limitations",
+        "Emerging trends",
+        "Future directions",
+      ],
       required: true,
     },
   ],
@@ -55,7 +63,7 @@ Return:
 
 # Suggested Next Steps
 - 3 prioritized directions ordered by feasibility, each with a first experiment or study design in one line.`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default researchGapFinder;

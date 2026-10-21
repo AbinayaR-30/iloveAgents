@@ -1,38 +1,49 @@
-import { useTokenCounter } from '../lib/useTokenCounter'
-import { getPricing, getContextWindow } from '../lib/modelPricing'
+import { useTokenCounter } from "../lib/useTokenCounter";
+import { getPricing, getContextWindow } from "../lib/modelPricing";
 
 function formatCost(cost) {
-  if (cost == null || isNaN(cost)) return '—'
-  if (cost < 0.0001) return '< $0.0001'
-  return `$${cost.toFixed(4)}`
+  if (cost == null || isNaN(cost)) return "—";
+  if (cost < 0.0001) return "< $0.0001";
+  return `$${cost.toFixed(4)}`;
 }
 
 function formatCostShort(cost) {
-  if (cost == null || isNaN(cost)) return '—'
-  if (cost < 0.0001) return '<$0.0001'
-  if (cost < 0.01) return `$${cost.toFixed(4)}`
-  return `$${cost.toFixed(2)}`
+  if (cost == null || isNaN(cost)) return "—";
+  if (cost < 0.0001) return "<$0.0001";
+  if (cost < 0.01) return `$${cost.toFixed(4)}`;
+  return `$${cost.toFixed(2)}`;
 }
 
-export default function CostEstimator({ inputText = '', systemPrompt = '', modelId = '' }) {
-  const { tokens: inputTokens } = useTokenCounter(inputText)
-  const { tokens: systemTokens } = useTokenCounter(systemPrompt)
-  const totalInputTokens = inputTokens + systemTokens
+export default function CostEstimator({
+  inputText = "",
+  systemPrompt = "",
+  modelId = "",
+}) {
+  const { tokens: inputTokens } = useTokenCounter(inputText);
+  const { tokens: systemTokens } = useTokenCounter(systemPrompt);
+  const totalInputTokens = inputTokens + systemTokens;
 
-  const pricing = getPricing(modelId)
-  const contextWindow = getContextWindow(modelId)
-  const ratio = contextWindow > 0 ? totalInputTokens / contextWindow : 0
+  const pricing = getPricing(modelId);
+  const contextWindow = getContextWindow(modelId);
+  const ratio = contextWindow > 0 ? totalInputTokens / contextWindow : 0;
 
-  const isNearLimit = ratio > 0.7
-  const isOverLimit = ratio > 0.95
+  const isNearLimit = ratio > 0.7;
+  const isOverLimit = ratio > 0.95;
 
-  const projectedOutputTokens = Math.min(Math.round(totalInputTokens * 0.5), 4096)
+  const projectedOutputTokens = Math.min(
+    Math.round(totalInputTokens * 0.5),
+    4096,
+  );
 
-  const inputCost = pricing ? (totalInputTokens / 1_000_000) * pricing.inputCostPer1M : null
-  const outputCost = pricing ? (projectedOutputTokens / 1_000_000) * pricing.outputCostPer1M : null
-  const totalCost = (inputCost ?? 0) + (outputCost ?? 0)
+  const inputCost = pricing
+    ? (totalInputTokens / 1_000_000) * pricing.inputCostPer1M
+    : null;
+  const outputCost = pricing
+    ? (projectedOutputTokens / 1_000_000) * pricing.outputCostPer1M
+    : null;
+  const totalCost = (inputCost ?? 0) + (outputCost ?? 0);
 
-  if (!pricing) return null
+  if (!pricing) return null;
 
   return (
     <div className="rounded-lg border dark:bg-surface-card dark:border-border bg-white border-gray-200 p-3 text-xs">
@@ -55,12 +66,16 @@ export default function CostEstimator({ inputText = '', systemPrompt = '', model
           Cost Estimate
         </span>
         <span className="dark:text-text-muted text-gray-400">·</span>
-        <span className="dark:text-text-muted text-gray-400">{pricing.provider}</span>
+        <span className="dark:text-text-muted text-gray-400">
+          {pricing.provider}
+        </span>
       </div>
 
       <div className="space-y-1.5">
         <div className="flex justify-between">
-          <span className="dark:text-text-secondary text-gray-500">Input ({totalInputTokens.toLocaleString()} tokens)</span>
+          <span className="dark:text-text-secondary text-gray-500">
+            Input ({totalInputTokens.toLocaleString()} tokens)
+          </span>
           <span className="dark:text-text-primary text-gray-900 font-medium tabular-nums">
             {formatCost(inputCost)}
           </span>
@@ -74,7 +89,9 @@ export default function CostEstimator({ inputText = '', systemPrompt = '', model
           </span>
         </div>
         <div className="border-t dark:border-border border-gray-200 pt-1.5 mt-1.5 flex justify-between">
-          <span className="font-semibold dark:text-text-primary text-gray-900">Estimated Total</span>
+          <span className="font-semibold dark:text-text-primary text-gray-900">
+            Estimated Total
+          </span>
           <span className="font-bold dark:text-text-primary text-gray-900 tabular-nums">
             {formatCostShort(totalCost)}
           </span>
@@ -83,8 +100,12 @@ export default function CostEstimator({ inputText = '', systemPrompt = '', model
 
       <div className="mt-2">
         <div className="flex justify-between text-[10px] mb-1">
-          <span className="dark:text-text-muted text-gray-400">Context window</span>
-          <span className={`font-medium ${isOverLimit ? 'text-error' : isNearLimit ? 'text-warning' : 'dark:text-text-muted text-gray-400'}`}>
+          <span className="dark:text-text-muted text-gray-400">
+            Context window
+          </span>
+          <span
+            className={`font-medium ${isOverLimit ? "text-error" : isNearLimit ? "text-warning" : "dark:text-text-muted text-gray-400"}`}
+          >
             {Math.round(ratio * 100)}%
           </span>
         </div>
@@ -92,15 +113,15 @@ export default function CostEstimator({ inputText = '', systemPrompt = '', model
           <div
             className={`h-full rounded-full transition-all duration-300 ${
               isOverLimit
-                ? 'bg-error'
+                ? "bg-error"
                 : isNearLimit
-                  ? 'bg-warning'
-                  : 'bg-accent'
+                  ? "bg-warning"
+                  : "bg-accent"
             }`}
             style={{ width: `${Math.min(ratio * 100, 100)}%` }}
           />
         </div>
       </div>
     </div>
-  )
+  );
 }

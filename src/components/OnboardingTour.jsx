@@ -14,7 +14,7 @@
 //   • Responsive repositioning on resize
 // ============================================================
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   ChevronRight,
   ChevronLeft,
@@ -26,75 +26,75 @@ import {
   Workflow,
   Sun,
   Settings,
-} from 'lucide-react'
+} from "lucide-react";
 
 const TOUR_STEPS = [
   {
     target: null, // Welcome step — no target, centered modal
-    title: 'Welcome to iloveAgents! 🎉',
+    title: "Welcome to iloveAgents! 🎉",
     description:
       "Let's take a quick tour to help you get the most out of the platform. It only takes 30 seconds!",
     icon: Compass,
-    position: 'center',
+    position: "center",
   },
   {
     target: '[data-tour="sidebar-agents"]',
-    title: 'Browse Agents',
+    title: "Browse Agents",
     description:
-      'Explore 100+ AI agents organized by category. Click any agent to open it and start using it right away.',
+      "Explore 100+ AI agents organized by category. Click any agent to open it and start using it right away.",
     icon: Bot,
-    position: 'right',
+    position: "right",
   },
   {
-    target: '#agent-search',
-    title: 'Search & Filter',
+    target: "#agent-search",
+    title: "Search & Filter",
     description:
       'Quickly find agents by name, description, or category. Pro tip: press "/" to focus the search bar instantly.',
     icon: Search,
-    position: 'bottom',
+    position: "bottom",
   },
   {
-    target: '#nav-battle-link',
-    title: 'Battle Mode ⚔️',
+    target: "#nav-battle-link",
+    title: "Battle Mode ⚔️",
     description:
-      'Pit two agents against each other on the same prompt and vote for the best result. A fun way to compare!',
+      "Pit two agents against each other on the same prompt and vote for the best result. A fun way to compare!",
     icon: Swords,
-    position: 'bottom',
+    position: "bottom",
   },
   {
-    target: '#nav-workflows-link',
-    title: 'Workflows',
+    target: "#nav-workflows-link",
+    title: "Workflows",
     description:
-      'Chain multiple agents together into automated pipelines. The output of one agent feeds into the next.',
+      "Chain multiple agents together into automated pipelines. The output of one agent feeds into the next.",
     icon: Workflow,
-    position: 'bottom',
+    position: "bottom",
   },
   {
-    target: '#nav-theme-toggle',
-    title: 'Theme Toggle',
+    target: "#nav-theme-toggle",
+    title: "Theme Toggle",
     description:
-      'Switch between dark and light mode for your preferred experience. Your choice is saved automatically.',
+      "Switch between dark and light mode for your preferred experience. Your choice is saved automatically.",
     icon: Sun,
-    position: 'bottom',
+    position: "bottom",
   },
   {
-    target: '#nav-settings-link',
-    title: 'Settings & API Keys',
+    target: "#nav-settings-link",
+    title: "Settings & API Keys",
     description:
-      'Save your API keys once in Settings and use all agents instantly. Supports OpenAI, Anthropic, and Gemini.',
+      "Save your API keys once in Settings and use all agents instantly. Supports OpenAI, Anthropic, and Gemini.",
     icon: Settings,
-    position: 'bottom',
+    position: "bottom",
   },
-]
+];
 
-const SPOTLIGHT_PADDING = 8
-const TOOLTIP_GAP = 16
+const SPOTLIGHT_PADDING = 8;
+const TOOLTIP_GAP = 16;
 
 function getElementRect(selector) {
-  if (!selector) return null
-  const el = document.querySelector(selector)
-  if (!el) return null
-  const rect = el.getBoundingClientRect()
+  if (!selector) return null;
+  const el = document.querySelector(selector);
+  if (!el) return null;
+  const rect = el.getBoundingClientRect();
   return {
     top: rect.top,
     left: rect.left,
@@ -103,256 +103,255 @@ function getElementRect(selector) {
     bottom: rect.bottom,
     right: rect.right,
     element: el,
-  }
+  };
 }
 
 function getSpotlightClipPath(rect) {
-  if (!rect) return 'none'
+  if (!rect) return "none";
 
-  const pad = SPOTLIGHT_PADDING
-  const x = rect.left - pad
-  const y = rect.top - pad
-  const w = rect.width + pad * 2
-  const h = rect.height + pad * 2
-  const r = 12 // border-radius of the cutout
+  const pad = SPOTLIGHT_PADDING;
+  const x = rect.left - pad;
+  const y = rect.top - pad;
+  const w = rect.width + pad * 2;
+  const h = rect.height + pad * 2;
+  const r = 12; // border-radius of the cutout
 
   // Create a polygon with a rectangular hole (using the evenodd fill rule on an SVG-based approach)
   // We use inset() with round for a cleaner spotlight
-  return `inset(${y}px ${window.innerWidth - (x + w)}px ${window.innerHeight - (y + h)}px ${x}px round ${r}px)`
+  return `inset(${y}px ${window.innerWidth - (x + w)}px ${window.innerHeight - (y + h)}px ${x}px round ${r}px)`;
 }
 
 function getTooltipPosition(targetRect, position, tooltipRef) {
-  const tooltip = tooltipRef?.current
-  const tooltipWidth = tooltip?.offsetWidth || 360
-  const tooltipHeight = tooltip?.offsetHeight || 200
-  const gap = TOOLTIP_GAP
-  const pad = SPOTLIGHT_PADDING
+  const tooltip = tooltipRef?.current;
+  const tooltipWidth = tooltip?.offsetWidth || 360;
+  const tooltipHeight = tooltip?.offsetHeight || 200;
+  const gap = TOOLTIP_GAP;
+  const pad = SPOTLIGHT_PADDING;
 
-  if (!targetRect || position === 'center') {
+  if (!targetRect || position === "center") {
     return {
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-    }
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+    };
   }
 
-  let top, left
+  let top, left;
 
   switch (position) {
-    case 'right': {
-      top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2
-      left = targetRect.right + pad + gap
+    case "right": {
+      top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2;
+      left = targetRect.right + pad + gap;
       // If overflows right, put it on the left
       if (left + tooltipWidth > window.innerWidth - 20) {
-        left = targetRect.left - pad - gap - tooltipWidth
+        left = targetRect.left - pad - gap - tooltipWidth;
       }
-      break
+      break;
     }
-    case 'bottom': {
-      top = targetRect.bottom + pad + gap
-      left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2
+    case "bottom": {
+      top = targetRect.bottom + pad + gap;
+      left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2;
       // If overflows bottom, put it on top
       if (top + tooltipHeight > window.innerHeight - 20) {
-        top = targetRect.top - pad - gap - tooltipHeight
+        top = targetRect.top - pad - gap - tooltipHeight;
       }
-      break
+      break;
     }
-    case 'left': {
-      top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2
-      left = targetRect.left - pad - gap - tooltipWidth
+    case "left": {
+      top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2;
+      left = targetRect.left - pad - gap - tooltipWidth;
       if (left < 20) {
-        left = targetRect.right + pad + gap
+        left = targetRect.right + pad + gap;
       }
-      break
+      break;
     }
-    case 'top': {
-      top = targetRect.top - pad - gap - tooltipHeight
-      left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2
+    case "top": {
+      top = targetRect.top - pad - gap - tooltipHeight;
+      left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2;
       if (top < 20) {
-        top = targetRect.bottom + pad + gap
+        top = targetRect.bottom + pad + gap;
       }
-      break
+      break;
     }
     default:
-      top = targetRect.bottom + pad + gap
-      left = targetRect.left
+      top = targetRect.bottom + pad + gap;
+      left = targetRect.left;
   }
 
   // Clamp to viewport
-  top = Math.max(20, Math.min(top, window.innerHeight - tooltipHeight - 20))
-  left = Math.max(20, Math.min(left, window.innerWidth - tooltipWidth - 20))
+  top = Math.max(20, Math.min(top, window.innerHeight - tooltipHeight - 20));
+  left = Math.max(20, Math.min(left, window.innerWidth - tooltipWidth - 20));
 
   return {
     top: `${top}px`,
     left: `${left}px`,
-    transform: 'none',
-  }
+    transform: "none",
+  };
 }
 
-export default function OnboardingTour({
-  isActive,
-  onEnd,
-  setSidebarOpen,
-}) {
-  const [currentStep, setCurrentStep] = useState(0)
-  const [targetRect, setTargetRect] = useState(null)
-  const [tooltipStyle, setTooltipStyle] = useState({})
-  const [isAnimating, setIsAnimating] = useState(false)
-  const tooltipRef = useRef(null)
-  const resizeTimerRef = useRef(null)
+export default function OnboardingTour({ isActive, onEnd, setSidebarOpen }) {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [targetRect, setTargetRect] = useState(null);
+  const [tooltipStyle, setTooltipStyle] = useState({});
+  const [isAnimating, setIsAnimating] = useState(false);
+  const tooltipRef = useRef(null);
+  const resizeTimerRef = useRef(null);
 
-  const step = TOUR_STEPS[currentStep]
+  const step = TOUR_STEPS[currentStep];
 
   // ── Measure target element & position tooltip ──
   const measureAndPosition = useCallback(() => {
-    if (!isActive || !step) return
+    if (!isActive || !step) return;
 
     if (step.target) {
-      const rect = getElementRect(step.target)
-      setTargetRect(rect)
+      const rect = getElementRect(step.target);
+      setTargetRect(rect);
 
       if (rect) {
         // Scroll element into view
         rect.element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-          inline: 'center',
-        })
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
 
         // Position tooltip after a small delay for scroll
         requestAnimationFrame(() => {
-          const updatedRect = getElementRect(step.target)
-          setTargetRect(updatedRect)
+          const updatedRect = getElementRect(step.target);
+          setTargetRect(updatedRect);
           setTooltipStyle(
-            getTooltipPosition(updatedRect, step.position, tooltipRef)
-          )
-        })
+            getTooltipPosition(updatedRect, step.position, tooltipRef),
+          );
+        });
       }
     } else {
-      setTargetRect(null)
-      setTooltipStyle(getTooltipPosition(null, 'center', tooltipRef))
+      setTargetRect(null);
+      setTooltipStyle(getTooltipPosition(null, "center", tooltipRef));
     }
-  }, [isActive, step])
+  }, [isActive, step]);
 
   // ── Open sidebar for step 1 (Browse Agents) ──
   useEffect(() => {
-    if (!isActive) return
+    if (!isActive) return;
 
     if (currentStep === 1 && setSidebarOpen) {
       // On large screens the sidebar is always visible, on small screens we need to open it
       if (window.innerWidth < 1024) {
-        setSidebarOpen(true)
+        setSidebarOpen(true);
       }
     }
-  }, [currentStep, isActive, setSidebarOpen])
+  }, [currentStep, isActive, setSidebarOpen]);
 
   // ── Re-measure on step change ──
   useEffect(() => {
-    if (!isActive) return
+    if (!isActive) return;
 
-    setIsAnimating(true)
+    setIsAnimating(true);
     const timer = setTimeout(() => {
-      measureAndPosition()
-      setIsAnimating(false)
-    }, 100)
+      measureAndPosition();
+      setIsAnimating(false);
+    }, 100);
 
-    return () => clearTimeout(timer)
-  }, [currentStep, isActive, measureAndPosition])
+    return () => clearTimeout(timer);
+  }, [currentStep, isActive, measureAndPosition]);
 
   // ── Re-measure on resize ──
   useEffect(() => {
-    if (!isActive) return
+    if (!isActive) return;
 
     const handleResize = () => {
-      clearTimeout(resizeTimerRef.current)
-      resizeTimerRef.current = setTimeout(measureAndPosition, 150)
-    }
+      clearTimeout(resizeTimerRef.current);
+      resizeTimerRef.current = setTimeout(measureAndPosition, 150);
+    };
 
-    window.addEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize)
-      clearTimeout(resizeTimerRef.current)
-    }
-  }, [isActive, measureAndPosition])
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimerRef.current);
+    };
+  }, [isActive, measureAndPosition]);
 
   // ── Keyboard navigation ──
   useEffect(() => {
-    if (!isActive) return
+    if (!isActive) return;
 
     const handleKeyDown = (e) => {
       switch (e.key) {
-        case 'ArrowRight':
-        case 'ArrowDown':
-          e.preventDefault()
-          goNext()
-          break
-        case 'ArrowLeft':
-        case 'ArrowUp':
-          e.preventDefault()
-          goPrev()
-          break
-        case 'Escape':
-          e.preventDefault()
-          handleSkip()
-          break
+        case "ArrowRight":
+        case "ArrowDown":
+          e.preventDefault();
+          goNext();
+          break;
+        case "ArrowLeft":
+        case "ArrowUp":
+          e.preventDefault();
+          goPrev();
+          break;
+        case "Escape":
+          e.preventDefault();
+          handleSkip();
+          break;
       }
-    }
+    };
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isActive, currentStep])
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isActive, currentStep]);
 
   // ── Reset step when tour starts ──
   useEffect(() => {
     if (isActive) {
-      setCurrentStep(0)
+      setCurrentStep(0);
     }
-  }, [isActive])
+  }, [isActive]);
 
   const goNext = () => {
     if (currentStep < TOUR_STEPS.length - 1) {
-      setCurrentStep((s) => s + 1)
+      setCurrentStep((s) => s + 1);
     } else {
-      handleFinish()
+      handleFinish();
     }
-  }
+  };
 
   const goPrev = () => {
     if (currentStep > 0) {
-      setCurrentStep((s) => s - 1)
+      setCurrentStep((s) => s - 1);
     }
-  }
+  };
 
   const handleSkip = () => {
     if (setSidebarOpen && window.innerWidth < 1024) {
-      setSidebarOpen(false)
+      setSidebarOpen(false);
     }
-    onEnd()
-  }
+    onEnd();
+  };
 
   const handleFinish = () => {
     if (setSidebarOpen && window.innerWidth < 1024) {
-      setSidebarOpen(false)
+      setSidebarOpen(false);
     }
-    onEnd()
-  }
+    onEnd();
+  };
 
-  if (!isActive) return null
+  if (!isActive) return null;
 
-  const isFirstStep = currentStep === 0
-  const isLastStep = currentStep === TOUR_STEPS.length - 1
-  const StepIcon = step.icon
+  const isFirstStep = currentStep === 0;
+  const isLastStep = currentStep === TOUR_STEPS.length - 1;
+  const StepIcon = step.icon;
 
   return (
-    <div className="onboarding-overlay-wrapper" aria-modal="true" role="dialog" aria-label="Onboarding tour">
+    <div
+      className="onboarding-overlay-wrapper"
+      aria-modal="true"
+      role="dialog"
+      aria-label="Onboarding tour"
+    >
       {/* ── Dark overlay with spotlight cutout ── */}
       <div
         className="fixed inset-0 z-[200] transition-all duration-500 ease-out"
         style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.65)',
-          clipPath: targetRect
-            ? getSpotlightClipPath(targetRect)
-            : 'none',
+          backgroundColor: "rgba(0, 0, 0, 0.65)",
+          clipPath: targetRect ? getSpotlightClipPath(targetRect) : "none",
         }}
         onClick={handleSkip}
       />
@@ -361,7 +360,7 @@ export default function OnboardingTour({
       {targetRect && (
         <div
           className="fixed inset-0 z-[199]"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}
           onClick={handleSkip}
         />
       )}
@@ -383,7 +382,7 @@ export default function OnboardingTour({
       {!targetRect && !step.target && (
         <div
           className="fixed inset-0 z-[200]"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.65)" }}
           onClick={handleSkip}
         />
       )}
@@ -392,7 +391,9 @@ export default function OnboardingTour({
       <div
         ref={tooltipRef}
         className={`fixed z-[202] w-[340px] sm:w-[380px] onboarding-tooltip ${
-          isAnimating ? 'onboarding-tooltip-entering' : 'onboarding-tooltip-visible'
+          isAnimating
+            ? "onboarding-tooltip-entering"
+            : "onboarding-tooltip-visible"
         }`}
         style={tooltipStyle}
         onClick={(e) => e.stopPropagation()}
@@ -448,10 +449,10 @@ export default function OnboardingTour({
                   key={idx}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
                     idx === currentStep
-                      ? 'w-6 bg-gradient-to-r from-indigo-500 to-violet-500'
+                      ? "w-6 bg-gradient-to-r from-indigo-500 to-violet-500"
                       : idx < currentStep
-                        ? 'w-1.5 bg-indigo-400/50'
-                        : 'w-1.5 bg-gray-300 dark:bg-white/15'
+                        ? "w-1.5 bg-indigo-400/50"
+                        : "w-1.5 bg-gray-300 dark:bg-white/15"
                   }`}
                 />
               ))}
@@ -507,5 +508,5 @@ export default function OnboardingTour({
         </div>
       </div>
     </div>
-  )
+  );
 }

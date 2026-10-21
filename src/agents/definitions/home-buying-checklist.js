@@ -1,32 +1,39 @@
 const homeBuyingChecklist = {
-  id: 'home-buying-checklist',
-  name: 'Home Buying Checklist Generator',
-  description: 'Generates a complete property viewing checklist based on property type, building age, and location.',
-  category: 'Business',
-  icon: 'ClipboardList',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "home-buying-checklist",
+  name: "Home Buying Checklist Generator",
+  description:
+    "Generates a complete property viewing checklist based on property type, building age, and location.",
+  category: "Business",
+  icon: "ClipboardList",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'property_type',
-      label: 'Property Type',
-      type: 'select',
-      options: ['Apartment', 'Independent House', 'Townhouse', 'Villa', 'Studio'],
+      id: "property_type",
+      label: "Property Type",
+      type: "select",
+      options: [
+        "Apartment",
+        "Independent House",
+        "Townhouse",
+        "Villa",
+        "Studio",
+      ],
       required: false,
     },
     {
-      id: 'building_age',
-      label: 'Age of Building',
-      type: 'select',
-      options: ['0–5 years', '5–15 years', '15–30 years', '30+ years'],
+      id: "building_age",
+      label: "Age of Building",
+      type: "select",
+      options: ["0–5 years", "5–15 years", "15–30 years", "30+ years"],
       required: false,
     },
     {
-      id: 'location',
-      label: 'Location (City or Region)',
-      type: 'text',
-      placeholder: 'e.g. Mumbai, London, New York...',
+      id: "location",
+      label: "Location (City or Region)",
+      type: "text",
+      placeholder: "e.g. Mumbai, London, New York...",
       required: true,
     },
   ],
@@ -62,7 +69,7 @@ Rules:
 - Minimum 5 items per section
 - Write in plain English — the reader is a first-time buyer, not an engineer
 - End with a short "Red Flags" section listing 5 deal-breakers that should make a buyer walk away`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default homeBuyingChecklist;

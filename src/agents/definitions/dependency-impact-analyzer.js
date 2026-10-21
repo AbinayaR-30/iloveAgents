@@ -23,7 +23,8 @@ export default {
       id: "package_name",
       label: "Package / Dependency Name",
       type: "text",
-      placeholder: "e.g., react, @tanstack/react-query, lodash, django, pydantic...",
+      placeholder:
+        "e.g., react, @tanstack/react-query, lodash, django, pydantic...",
       required: true,
     },
     {
@@ -42,7 +43,8 @@ export default {
     },
     {
       id: "project_context",
-      label: "Project Context / Manifest (package.json, requirements.txt, or usage summary)",
+      label:
+        "Project Context / Manifest (package.json, requirements.txt, or usage summary)",
       type: "textarea",
       placeholder:
         "Paste relevant manifest dependencies, peer dependencies, runtime environment (Node 18+, Python 3.11), or key files/modules using this dependency...",

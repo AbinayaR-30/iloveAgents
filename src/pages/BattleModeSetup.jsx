@@ -16,10 +16,10 @@ import AgentCardSkeleton from "../components/AgentCardSkeleton";
 
 // Input validation constants - prevent LLM calls with excessively long inputs
 const INPUT_LIMITS = {
-  text: 2000,      // Standard text field max
+  text: 2000, // Standard text field max
   textarea: 10000, // Textarea/description max
-  code: 50000,     // Code input max (allow more for actual code)
-  select: 1000,    // Select option max
+  code: 50000, // Code input max (allow more for actual code)
+  select: 1000, // Select option max
   multiselect: 5000, // Combined multiselect options max
 };
 
@@ -135,9 +135,7 @@ function InputField({ input, value, onChange }) {
   }
 
   if (input.type === "multiselect") {
-    const selected = Array.isArray(value)
-      ? value
-      : input.defaultValue ?? [];
+    const selected = Array.isArray(value) ? value : (input.defaultValue ?? []);
     const toggle = (opt) => {
       const next = selected.includes(opt)
         ? selected.filter((s) => s !== opt)
@@ -155,9 +153,10 @@ function InputField({ input, value, onChange }) {
                 type="button"
                 onClick={() => toggle(opt)}
                 className={`px-3 py-1 rounded-full text-xs font-medium border transition-all duration-150
-                  ${active
-                    ? "bg-yellow-400/20 border-yellow-400/60 text-yellow-300"
-                    : "bg-gray-800/60 border-gray-700 dark:text-text-muted text-gray-500 hover:border-gray-500 hover:text-gray-300"
+                  ${
+                    active
+                      ? "bg-yellow-400/20 border-yellow-400/60 text-yellow-300"
+                      : "bg-gray-800/60 border-gray-700 dark:text-text-muted text-gray-500 hover:border-gray-500 hover:text-gray-300"
                   }`}
               >
                 {opt}
@@ -186,7 +185,13 @@ function InputField({ input, value, onChange }) {
           className={`${baseClass} ${borderClass} font-mono text-xs leading-relaxed`}
         />
         <div className="flex items-center justify-between mt-1 text-xs">
-          <div className={validation.valid ? "text-gray-500" : "text-red-400 flex items-center gap-1"}>
+          <div
+            className={
+              validation.valid
+                ? "text-gray-500"
+                : "text-red-400 flex items-center gap-1"
+            }
+          >
             {!validation.valid && (
               <>
                 <AlertCircle size={12} />
@@ -194,7 +199,9 @@ function InputField({ input, value, onChange }) {
               </>
             )}
             {validation.valid && validation.length > 0 && (
-              <span className="text-gray-500">{validation.length}/{validation.limit} characters</span>
+              <span className="text-gray-500">
+                {validation.length}/{validation.limit} characters
+              </span>
             )}
           </div>
         </div>
@@ -281,7 +288,8 @@ export default function BattleModeSetup() {
         return validateInput(inp, val).valid;
       }
       // For required fields, must have value and pass validation
-      if (Array.isArray(val)) return val.length > 0 && validateInput(inp, val).valid;
+      if (Array.isArray(val))
+        return val.length > 0 && validateInput(inp, val).valid;
       const hasValue = val && String(val).trim().length > 0;
       return hasValue && validateInput(inp, val).valid;
     });
@@ -295,13 +303,10 @@ export default function BattleModeSetup() {
 
   return (
     <div className="min-h-screen dark:bg-surface bg-gray-50 text-white battle-page-transition">
-
       <main className="pt-20 px-4 pb-12 max-w-4xl mx-auto">
         {/* Back */}
         <button
-          onClick={() =>
-            step === 2 ? setStep(1) : navigate("/battle")
-          }
+          onClick={() => (step === 2 ? setStep(1) : navigate("/battle"))}
           className="flex items-center gap-1.5 text-xs font-medium dark:text-text-secondary dark:text-text-muted dark:text-text-muted text-gray-500
             hover:text-white transition-all duration-200 hover:gap-2 mb-8"
         >
@@ -327,9 +332,10 @@ export default function BattleModeSetup() {
             <div key={s} className="flex items-center gap-3">
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border transition-all duration-200
-                  ${step >= s
-                    ? "bg-yellow-400/20 border-yellow-400/60 text-yellow-300"
-                    : "bg-gray-800 border-gray-700 dark:text-text-muted dark:text-text-muted text-gray-500"
+                  ${
+                    step >= s
+                      ? "bg-yellow-400/20 border-yellow-400/60 text-yellow-300"
+                      : "bg-gray-800 border-gray-700 dark:text-text-muted dark:text-text-muted text-gray-500"
                   }`}
               >
                 {s}
@@ -435,7 +441,10 @@ export default function BattleModeSetup() {
             {/* API Keys */}
             <div className="rounded-xl border dark:border-border border-gray-200 bg-gray-900/40 p-6">
               <div className="flex items-center gap-2 mb-5">
-                <Key size={14} className="dark:text-text-secondary dark:text-text-muted dark:text-text-muted text-gray-500" />
+                <Key
+                  size={14}
+                  className="dark:text-text-secondary dark:text-text-muted dark:text-text-muted text-gray-500"
+                />
                 <h2 className="text-sm font-bold dark:text-text-primary dark:text-text-primary text-gray-900 uppercase tracking-wider">
                   API Keys
                 </h2>
@@ -500,9 +509,10 @@ export default function BattleModeSetup() {
               disabled={!canSubmit}
               className={`w-full flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl
                 text-sm font-bold transition-all duration-200 active:scale-95 border
-                ${canSubmit
-                  ? "bg-gradient-to-r from-yellow-500 to-amber-500 text-gray-950 hover:from-yellow-400 hover:to-amber-400 hover:shadow-xl hover:shadow-yellow-500/40 border-yellow-400/20 shadow-lg shadow-yellow-500/20"
-                  : "bg-gray-800 dark:text-text-muted dark:text-text-muted text-gray-500 border-gray-700 cursor-not-allowed"
+                ${
+                  canSubmit
+                    ? "bg-gradient-to-r from-yellow-500 to-amber-500 text-gray-950 hover:from-yellow-400 hover:to-amber-400 hover:shadow-xl hover:shadow-yellow-500/40 border-yellow-400/20 shadow-lg shadow-yellow-500/20"
+                    : "bg-gray-800 dark:text-text-muted dark:text-text-muted text-gray-500 border-gray-700 cursor-not-allowed"
                 }`}
             >
               <Swords size={18} />

@@ -46,7 +46,8 @@ export default {
       id: "location",
       label: "Location",
       type: "text",
-      placeholder: "e.g. Downtown Austin TX, Koramangala Bengaluru, Dubai Marina",
+      placeholder:
+        "e.g. Downtown Austin TX, Koramangala Bengaluru, Dubai Marina",
       required: true,
     },
     {

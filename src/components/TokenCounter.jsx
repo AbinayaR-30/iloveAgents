@@ -1,22 +1,24 @@
-import { useTokenCounter } from '../lib/useTokenCounter'
-import { getContextWindow } from '../lib/modelPricing'
+import { useTokenCounter } from "../lib/useTokenCounter";
+import { getContextWindow } from "../lib/modelPricing";
 
-export default function TokenCounter({ value = '', modelId = '' }) {
-  const { tokens, isEstimating } = useTokenCounter(value)
-  const contextWindow = getContextWindow(modelId)
+export default function TokenCounter({ value = "", modelId = "" }) {
+  const { tokens, isEstimating } = useTokenCounter(value);
+  const contextWindow = getContextWindow(modelId);
 
-  const ratio = contextWindow > 0 ? tokens / contextWindow : 0
-  const isNearLimit = ratio > 0.7
-  const isOverLimit = ratio > 0.95
+  const ratio = contextWindow > 0 ? tokens / contextWindow : 0;
+  const isNearLimit = ratio > 0.7;
+  const isOverLimit = ratio > 0.95;
 
   const colorClass = isOverLimit
-    ? 'text-error'
+    ? "text-error"
     : isNearLimit
-      ? 'text-warning'
-      : 'dark:text-text-muted text-gray-400'
+      ? "text-warning"
+      : "dark:text-text-muted text-gray-400";
 
   return (
-    <span className={`inline-flex items-center gap-1 text-[11px] font-medium transition-colors ${colorClass}`}>
+    <span
+      className={`inline-flex items-center gap-1 text-[11px] font-medium transition-colors ${colorClass}`}
+    >
       <svg
         width="10"
         height="10"
@@ -38,10 +40,8 @@ export default function TokenCounter({ value = '', modelId = '' }) {
         )}
       </span>
       {contextWindow > 0 && (
-        <span className="opacity-60">
-          / {contextWindow.toLocaleString()}
-        </span>
+        <span className="opacity-60">/ {contextWindow.toLocaleString()}</span>
       )}
     </span>
-  )
+  );
 }

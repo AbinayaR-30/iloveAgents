@@ -3,8 +3,8 @@
  * No UI here. Used by BatchModeRunner.jsx.
  */
 
-import { runAgent } from './llmAdapter'
-import { recordAnalyticsRun } from './useAnalytics'
+import { runAgent } from "./llmAdapter";
+import { recordAnalyticsRun } from "./useAnalytics";
 
 /**
  * Parse pasted multi-line text into batch items.
@@ -12,9 +12,9 @@ import { recordAnalyticsRun } from './useAnalytics'
  */
 export function parsePastedLines(raw) {
   return raw
-    .split('\n')
+    .split("\n")
     .map((line) => line.trim())
-    .filter((line) => line.length > 0)
+    .filter((line) => line.length > 0);
 }
 
 /**
@@ -23,55 +23,55 @@ export function parsePastedLines(raw) {
  * Returns { headers: string[]|null, rows: string[][] }
  */
 export function parseCSV(text) {
-  const rows = []
-  let row = []
-  let field = ''
-  let inQuotes = false
+  const rows = [];
+  let row = [];
+  let field = "";
+  let inQuotes = false;
 
   const pushField = () => {
-    row.push(field)
-    field = ''
-  }
+    row.push(field);
+    field = "";
+  };
   const pushRow = () => {
-    pushField()
-    rows.push(row)
-    row = []
-  }
+    pushField();
+    rows.push(row);
+    row = [];
+  };
 
   for (let i = 0; i < text.length; i++) {
-    const char = text[i]
-    const next = text[i + 1]
+    const char = text[i];
+    const next = text[i + 1];
 
     if (inQuotes) {
       if (char === '"' && next === '"') {
-        field += '"'
-        i++
+        field += '"';
+        i++;
       } else if (char === '"') {
-        inQuotes = false
+        inQuotes = false;
       } else {
-        field += char
+        field += char;
       }
     } else {
       if (char === '"') {
-        inQuotes = true
-      } else if (char === ',') {
-        pushField()
-      } else if (char === '\r') {
+        inQuotes = true;
+      } else if (char === ",") {
+        pushField();
+      } else if (char === "\r") {
         // skip, \n will trigger row end
-      } else if (char === '\n') {
-        pushRow()
+      } else if (char === "\n") {
+        pushRow();
       } else {
-        field += char
+        field += char;
       }
     }
   }
 
   if (field.length > 0 || row.length > 0) {
-    pushRow()
+    pushRow();
   }
 
-  const nonEmptyRows = rows.filter((r) => r.some((cell) => cell.trim() !== ''))
-  return { rows: nonEmptyRows }
+  const nonEmptyRows = rows.filter((r) => r.some((cell) => cell.trim() !== ""));
+  return { rows: nonEmptyRows };
 }
 
 /**
@@ -94,23 +94,31 @@ export function parseCSV(text) {
  * batch field value into the fixed inputs and formatting the same way
  * AgentRunner's buildUserMessage does.
  */
-export function buildBatchUserMessage(agent, fixedInputs, batchFieldId, itemValue) {
-  const parts = []
+export function buildBatchUserMessage(
+  agent,
+  fixedInputs,
+  batchFieldId,
+  itemValue,
+) {
+  const parts = [];
   agent.inputs.forEach((input) => {
-    const val = input.id === batchFieldId ? itemValue : fixedInputs[input.id]
-    if (!val || (Array.isArray(val) && val.length === 0)) return
+    const val = input.id === batchFieldId ? itemValue : fixedInputs[input.id];
+    if (!val || (Array.isArray(val) && val.length === 0)) return;
 
-    const sanitizedVal = typeof val === 'string' ? val.trim() : val
-    if (sanitizedVal === '') return
+    const sanitizedVal = typeof val === "string" ? val.trim() : val;
+    if (sanitizedVal === "") return;
 
     parts.push(
       Array.isArray(sanitizedVal)
-        ? `${input.label}: ${sanitizedVal.join(', ')}`
-        : `${input.label}: ${sanitizedVal}`
-    )
-  })
+        ? `${input.label}: ${sanitizedVal.join(", ")}`
+        : `${input.label}: ${sanitizedVal}`,
+    );
+  });
 
-  return parts.join('\n\n').trim().replace(/\n{3,}/g, '\n\n')
+  return parts
+    .join("\n\n")
+    .trim()
+    .replace(/\n{3,}/g, "\n\n");
 }
 
 /**
@@ -143,23 +151,28 @@ export async function runBatch({
   onItemUpdate,
   signal,
 }) {
-  let cursor = 0
+  let cursor = 0;
 
   async function worker() {
     while (cursor < items.length) {
-      if (signal?.aborted) return
-      const index = cursor++
-      const itemValue = items[index]
+      if (signal?.aborted) return;
+      const index = cursor++;
+      const itemValue = items[index];
 
-      onItemUpdate(index, { status: 'running' })
+      onItemUpdate(index, { status: "running" });
 
       try {
-        const userMessage = buildBatchUserMessage(agent, fixedInputs, batchFieldId, itemValue)
+        const userMessage = buildBatchUserMessage(
+          agent,
+          fixedInputs,
+          batchFieldId,
+          itemValue,
+        );
         const result = await runAgent(
           { provider, model, apiKey, systemPrompt, userMessage },
-          { signal }
-        )
-        if (signal?.aborted) return
+          { signal },
+        );
+        if (signal?.aborted) return;
         recordAnalyticsRun({
           agentId: agent.id,
           agentName: agent.name,
@@ -167,18 +180,18 @@ export async function runBatch({
           provider,
           model,
           duration: result.duration,
-        })
-        onItemUpdate(index, { status: 'done', output: result.content })
+        });
+        onItemUpdate(index, { status: "done", output: result.content });
       } catch (err) {
-        if (signal?.aborted) return
+        if (signal?.aborted) return;
         onItemUpdate(index, {
-          status: 'failed',
-          error: err?.message || err?.detail || 'Failed to process this item.',
-        })
+          status: "failed",
+          error: err?.message || err?.detail || "Failed to process this item.",
+        });
       }
     }
   }
 
-  const workerCount = Math.min(concurrency, items.length)
-  await Promise.all(Array.from({ length: workerCount }, () => worker()))
+  const workerCount = Math.min(concurrency, items.length);
+  await Promise.all(Array.from({ length: workerCount }, () => worker()));
 }

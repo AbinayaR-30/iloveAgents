@@ -1,45 +1,37 @@
 export default {
-  id: 'error-message-writer',
-  name: 'Error Message Writer',
+  id: "error-message-writer",
+  name: "Error Message Writer",
   description:
-    'Paste a raw stack trace or error log and get a plain English explanation plus actionable fix suggestions.',
-  category: 'Engineering',
-  icon: 'AlertTriangle',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o-mini',
+    "Paste a raw stack trace or error log and get a plain English explanation plus actionable fix suggestions.",
+  category: "Engineering",
+  icon: "AlertTriangle",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o-mini",
 
   inputs: [
     {
-      id: 'error',
-      label: 'Error / Stack Trace',
-      type: 'code',
+      id: "error",
+      label: "Error / Stack Trace",
+      type: "code",
       placeholder:
-        'Paste your raw error output, stack trace, or exception log here...',
+        "Paste your raw error output, stack trace, or exception log here...",
       required: true,
     },
 
     {
-      id: 'language',
-      label: 'Language / Runtime',
-      type: 'select',
+      id: "language",
+      label: "Language / Runtime",
+      type: "select",
       required: true,
-      options: [
-        'JavaScript',
-        'Python',
-        'Java',
-        'Go',
-        'Rust',
-        'Other',
-      ],
+      options: ["JavaScript", "Python", "Java", "Go", "Rust", "Other"],
     },
 
     {
-      id: 'context',
-      label: 'Context (optional)',
-      type: 'textarea',
-      placeholder:
-        'What was the code trying to do when this error occurred?',
+      id: "context",
+      label: "Context (optional)",
+      type: "textarea",
+      placeholder: "What was the code trying to do when this error occurred?",
       required: false,
     },
   ],
@@ -66,5 +58,5 @@ If this error might be shown to an end user, suggest a friendly, non-technical m
 List 2-4 common mistakes that lead to this kind of error, with brief explanations.
 
 Keep explanations practical and actionable. Use markdown formatting, code blocks, and bullet points as appropriate.`,
-  outputType: 'markdown',
-}
+  outputType: "markdown",
+};

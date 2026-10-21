@@ -1,32 +1,34 @@
 const codeMigrationGuideGenerator = {
-  id: 'code-migration-guide',
-  name: 'Code Migration Guide Generator',
-  description: 'Generate a step-by-step checklist, identify common pitfalls, and highlight breaking changes for tech stack migrations.',
-  category: 'Engineering',
-  icon: 'ArrowRightLeft',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "code-migration-guide",
+  name: "Code Migration Guide Generator",
+  description:
+    "Generate a step-by-step checklist, identify common pitfalls, and highlight breaking changes for tech stack migrations.",
+  category: "Engineering",
+  icon: "ArrowRightLeft",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'sourceTech',
-      label: 'Source Technology / Version',
-      type: 'text',
-      placeholder: 'e.g., React 17, Vue 2, Express.js...',
+      id: "sourceTech",
+      label: "Source Technology / Version",
+      type: "text",
+      placeholder: "e.g., React 17, Vue 2, Express.js...",
       required: true,
     },
     {
-      id: 'targetTech',
-      label: 'Target Technology / Version',
-      type: 'text',
-      placeholder: 'e.g., React 18, Vue 3, NestJS...',
+      id: "targetTech",
+      label: "Target Technology / Version",
+      type: "text",
+      placeholder: "e.g., React 18, Vue 3, NestJS...",
       required: true,
     },
     {
-      id: 'codebaseDescription',
-      label: 'Codebase Description (Size, Architecture, Core Libraries)',
-      type: 'textarea',
-      placeholder: 'e.g., A large SPA with Redux, React Router v5, and styled-components...',
+      id: "codebaseDescription",
+      label: "Codebase Description (Size, Architecture, Core Libraries)",
+      type: "textarea",
+      placeholder:
+        "e.g., A large SPA with Redux, React Router v5, and styled-components...",
       required: true,
     },
   ],
@@ -49,7 +51,7 @@ List the most frequent issues developers face during this specific migration and
 
 ### 💥 Breaking Changes to Watch Out For
 Highlight critical breaking changes between {{sourceTech}} and {{targetTech}} that will directly impact the described codebase.`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default codeMigrationGuideGenerator;

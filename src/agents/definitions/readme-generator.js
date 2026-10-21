@@ -13,7 +13,8 @@ export default {
     repoUrl: "https://github.com/AditthyaSS/iloveAgents",
     projectDescription:
       "Open-source platform where developers can run AI agents directly in the browser. Community-built, bring your own API key. Supports OpenAI, Anthropic, and Google Gemini.",
-    techStack: "React 18, Vite 6, Tailwind CSS, React Router, Lucide React, Supabase",
+    techStack:
+      "React 18, Vite 6, Tailwind CSS, React Router, Lucide React, Supabase",
     sections: [
       "Project Overview",
       "Features",
@@ -43,8 +44,7 @@ export default {
       id: "techStack",
       label: "Tech stack (optional)",
       type: "text",
-      placeholder:
-        "e.g. Next.js, TypeScript, PostgreSQL, Prisma, Tailwind CSS",
+      placeholder: "e.g. Next.js, TypeScript, PostgreSQL, Prisma, Tailwind CSS",
     },
     {
       id: "sections",

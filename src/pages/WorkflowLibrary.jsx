@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Plus,
   Search,
@@ -10,16 +10,21 @@ import {
   Loader2,
   TrendingUp,
   X,
-} from 'lucide-react'
-import { useAgents } from '../lib/useAgents'
-import { fetchWorkflows, subscribeToAllWorkflows } from '../hooks/useWorkflows'
-import { supabase } from '../lib/supabase'
-import { useDocumentTitle } from '../lib/useDocumentTitle'
+} from "lucide-react";
+import { useAgents } from "../lib/useAgents";
+import { fetchWorkflows, subscribeToAllWorkflows } from "../hooks/useWorkflows";
+import { supabase } from "../lib/supabase";
+import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 function AgentPill({ agentId }) {
-  const { agents } = useAgents()
-  const agent = agents.find((a) => a.id === agentId)
-  if (!agent) return <span className="text-[11px] dark:text-text-muted text-gray-400">{agentId}</span>
+  const { agents } = useAgents();
+  const agent = agents.find((a) => a.id === agentId);
+  if (!agent)
+    return (
+      <span className="text-[11px] dark:text-text-muted text-gray-400">
+        {agentId}
+      </span>
+    );
   return (
     <span
       className="text-[11px] font-medium px-2 py-0.5 rounded-md
@@ -28,11 +33,11 @@ function AgentPill({ agentId }) {
     >
       {agent.name}
     </span>
-  )
+  );
 }
 
 function WorkflowCard({ workflow, onRun, onView, onFork }) {
-  const usageCount = workflow.usage_count ?? 0
+  const usageCount = workflow.usage_count ?? 0;
 
   return (
     <div
@@ -44,9 +49,11 @@ function WorkflowCard({ workflow, onRun, onView, onFork }) {
         hover:-translate-y-0.5"
     >
       {/* Hover gradient overlay — signature cyan→indigo→rose theme */}
-      <div className="pointer-events-none absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300
+      <div
+        className="pointer-events-none absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300
         bg-gradient-to-br from-cyan-400/8 via-indigo-400/8 to-rose-400/8
-        dark:from-cyan-500/10 dark:via-indigo-500/10 dark:to-rose-500/10" />
+        dark:from-cyan-500/10 dark:via-indigo-500/10 dark:to-rose-500/10"
+      />
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -66,7 +73,10 @@ function WorkflowCard({ workflow, onRun, onView, onFork }) {
         </div>
         {/* Usage Count */}
         <div className="flex items-center gap-1 flex-shrink-0 ml-2">
-          <TrendingUp size={11} className="dark:text-text-muted text-gray-400" />
+          <TrendingUp
+            size={11}
+            className="dark:text-text-muted text-gray-400"
+          />
           <span className="text-[11px] font-medium dark:text-text-muted text-gray-400">
             {usageCount}
           </span>
@@ -79,7 +89,10 @@ function WorkflowCard({ workflow, onRun, onView, onFork }) {
           <span key={agentId + index} className="flex items-center gap-1">
             <AgentPill agentId={agentId} />
             {index < workflow.agents.length - 1 && (
-              <ArrowRight size={10} className="dark:text-text-muted text-gray-400 flex-shrink-0" />
+              <ArrowRight
+                size={10}
+                className="dark:text-text-muted text-gray-400 flex-shrink-0"
+              />
             )}
           </span>
         ))}
@@ -107,89 +120,94 @@ function WorkflowCard({ workflow, onRun, onView, onFork }) {
           Details
         </button>
         <button
-  id={`fork-workflow-${workflow.id}`}
-  onClick={() => onFork(workflow)}
-  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors
+          id={`fork-workflow-${workflow.id}`}
+          onClick={() => onFork(workflow)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors
     dark:bg-surface-input dark:border-border dark:text-text-secondary dark:hover:text-text-primary
     bg-gray-100 border border-gray-200 text-gray-600 hover:text-gray-900"
->
-  <GitBranch size={12} />
-  Fork
-</button>
+        >
+          <GitBranch size={12} />
+          Fork
+        </button>
         <span className="ml-auto text-[11px] dark:text-text-muted text-gray-400">
-          {(workflow.agents ?? []).length} agent{workflow.agents?.length !== 1 ? 's' : ''}
+          {(workflow.agents ?? []).length} agent
+          {workflow.agents?.length !== 1 ? "s" : ""}
         </span>
       </div>
     </div>
-  )
+  );
 }
 
 export default function WorkflowLibrary() {
-  const navigate = useNavigate()
-  useDocumentTitle('Workflow Library')
-  const { agents } = useAgents()
-  const [workflows, setWorkflows] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate();
+  useDocumentTitle("Workflow Library");
+  const { agents } = useAgents();
+  const [workflows, setWorkflows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Initial fetch
   useEffect(() => {
-    let mounted = true
-    setLoading(true)
+    let mounted = true;
+    setLoading(true);
     fetchWorkflows().then(({ data, error: fetchError }) => {
-      if (!mounted) return
+      if (!mounted) return;
       if (fetchError) {
-        setError('Failed to load workflows. Check your Supabase connection.')
+        setError("Failed to load workflows. Check your Supabase connection.");
       } else {
-        setWorkflows(data)
+        setWorkflows(data);
       }
-      setLoading(false)
-    })
-    return () => { mounted = false }
-  }, [])
+      setLoading(false);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Realtime: update usage counts on any workflow update
   useEffect(() => {
     const channel = subscribeToAllWorkflows((payload) => {
       setWorkflows((prev) =>
         prev.map((w) =>
-          w.id === payload.new.id ? { ...w, usage_count: payload.new.usage_count } : w
-        )
-      )
-    })
-    return () => supabase.removeChannel(channel)
-  }, [])
+          w.id === payload.new.id
+            ? { ...w, usage_count: payload.new.usage_count }
+            : w,
+        ),
+      );
+    });
+    return () => supabase.removeChannel(channel);
+  }, []);
 
   const filtered = useMemo(() => {
-      const query = searchQuery.trim().toLowerCase()
-      if (!query) return workflows
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return workflows;
 
-      return workflows.filter((w) => {
-        const titleMatch = w.title?.toLowerCase().includes(query)
-        const descriptionMatch = w.description?.toLowerCase().includes(query)
-        const categoryMatch = (w.agents ?? []).some((agentId) => {
-          const agent = agents.find((a) => a.id === agentId)
-          return agent?.category?.toLowerCase().includes(query)
-        })
-        return titleMatch || descriptionMatch || categoryMatch
-      })
-    }, [workflows, searchQuery, agents])
+    return workflows.filter((w) => {
+      const titleMatch = w.title?.toLowerCase().includes(query);
+      const descriptionMatch = w.description?.toLowerCase().includes(query);
+      const categoryMatch = (w.agents ?? []).some((agentId) => {
+        const agent = agents.find((a) => a.id === agentId);
+        return agent?.category?.toLowerCase().includes(query);
+      });
+      return titleMatch || descriptionMatch || categoryMatch;
+    });
+  }, [workflows, searchQuery, agents]);
 
   const handleRun = (workflow) => {
-    navigate(`/workflows/${workflow.id}/run`, { state: { workflow } })
-  }
+    navigate(`/workflows/${workflow.id}/run`, { state: { workflow } });
+  };
 
   const handleView = (workflow) => {
-    navigate(`/workflows/${workflow.id}`)
-  }
+    navigate(`/workflows/${workflow.id}`);
+  };
   const handleFork = (workflow) => {
-  navigate('/workflows/build', {
-    state: {
-      forkedWorkflow: workflow,
-    },
-  })
-}
+    navigate("/workflows/build", {
+      state: {
+        forkedWorkflow: workflow,
+      },
+    });
+  };
 
   return (
     <div className="animate-fade-in">
@@ -205,7 +223,7 @@ export default function WorkflowLibrary() {
         </div>
         <button
           id="build-workflow-btn"
-          onClick={() => navigate('/workflows/build')}
+          onClick={() => navigate("/workflows/build")}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white
             bg-accent hover:bg-accent-hover transition-all duration-200 active:scale-[0.97]
             shadow-md shadow-accent/20"
@@ -219,12 +237,17 @@ export default function WorkflowLibrary() {
       {/* Search */}
       <div className="relative max-w-md mb-6 group">
         {/* Gradient glow ring — matches navbar/sidebar theme */}
-        <div className="pointer-events-none absolute -inset-[1.5px] rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300
+        <div
+          className="pointer-events-none absolute -inset-[1.5px] rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-300
           bg-gradient-to-r from-cyan-400/60 via-indigo-400/60 to-rose-400/60
-          dark:from-cyan-500/50 dark:via-indigo-500/50 dark:to-rose-500/50 blur-[2px]" />
+          dark:from-cyan-500/50 dark:via-indigo-500/50 dark:to-rose-500/50 blur-[2px]"
+        />
 
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-          <Search size={14} className="dark:text-text-muted text-gray-400 group-focus-within:text-accent transition-colors duration-200" />
+          <Search
+            size={14}
+            className="dark:text-text-muted text-gray-400 group-focus-within:text-accent transition-colors duration-200"
+          />
         </div>
         <input
           id="workflow-search"
@@ -242,7 +265,7 @@ export default function WorkflowLibrary() {
         />
         {searchQuery && (
           <button
-            onClick={() => setSearchQuery('')}
+            onClick={() => setSearchQuery("")}
             className="absolute inset-y-0 right-0 pr-4 flex items-center z-10
               dark:text-text-muted text-gray-400 hover:text-accent transition-colors duration-200"
           >
@@ -255,13 +278,17 @@ export default function WorkflowLibrary() {
       {loading && (
         <div className="flex flex-col items-center justify-center py-20 gap-3">
           <Loader2 size={24} className="animate-spin text-accent" />
-          <p className="text-sm dark:text-text-secondary text-gray-500">Loading workflows...</p>
+          <p className="text-sm dark:text-text-secondary text-gray-500">
+            Loading workflows...
+          </p>
         </div>
       )}
 
       {error && !loading && (
-        <div className="rounded-lg border p-6 text-center
-          bg-red-500/5 border-red-500/20 animate-fade-in">
+        <div
+          className="rounded-lg border p-6 text-center
+          bg-red-500/5 border-red-500/20 animate-fade-in"
+        >
           <p className="text-sm text-red-400 mb-3">{error}</p>
           <p className="text-xs dark:text-text-muted text-gray-400">
             Make sure your Supabase credentials are configured in .env.local
@@ -270,22 +297,24 @@ export default function WorkflowLibrary() {
       )}
 
       {!loading && !error && filtered.length === 0 && (
-        <div className="text-center py-20 rounded-xl border
-          dark:bg-surface-card dark:border-border bg-white border-gray-200 animate-fade-in">
+        <div
+          className="text-center py-20 rounded-xl border
+          dark:bg-surface-card dark:border-border bg-white border-gray-200 animate-fade-in"
+        >
           <div className="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
             <GitBranch size={24} className="text-accent" />
           </div>
           <h3 className="text-sm font-semibold dark:text-text-primary text-gray-900 mb-1">
-            {searchQuery ? 'No workflows found' : 'No workflows yet'}
+            {searchQuery ? "No workflows found" : "No workflows yet"}
           </h3>
           <p className="text-xs dark:text-text-secondary text-gray-500 mb-4">
             {searchQuery
-              ? 'Try a different search term'
-              : 'Be the first to build a community workflow'}
+              ? "Try a different search term"
+              : "Be the first to build a community workflow"}
           </p>
           {!searchQuery && (
             <button
-              onClick={() => navigate('/workflows/build')}
+              onClick={() => navigate("/workflows/build")}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white
                 bg-accent hover:bg-accent-hover transition-all duration-200"
             >
@@ -300,10 +329,11 @@ export default function WorkflowLibrary() {
         <>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-semibold uppercase tracking-wider dark:text-text-muted text-gray-400">
-              {searchQuery ? 'Matching Workflows' : 'All Workflows'}
+              {searchQuery ? "Matching Workflows" : "All Workflows"}
             </h2>
             <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-accent/10 text-accent">
-              {filtered.length} {filtered.length === 1 ? 'workflow' : 'workflows'}
+              {filtered.length}{" "}
+              {filtered.length === 1 ? "workflow" : "workflows"}
             </span>
           </div>
 
@@ -326,5 +356,5 @@ export default function WorkflowLibrary() {
         </>
       )}
     </div>
-  )
+  );
 }

@@ -141,4 +141,3 @@ Rules:
 - Recommendations must be specific and actionable, not generic advice.`,
   outputType: "markdown",
 };
-

@@ -1,62 +1,61 @@
 const dsaProblemExplainer = {
-  id: 'dsa-problem-explainer',
+  id: "dsa-problem-explainer",
 
-  name: 'DSA Problem Explainer',
+  name: "DSA Problem Explainer",
 
   description:
-    'Explains DSA problems with intuition, optimized approaches, dry runs, interview insights, and complexity analysis.',
+    "Explains DSA problems with intuition, optimized approaches, dry runs, interview insights, and complexity analysis.",
 
-  category: 'Education',
+  category: "Education",
 
-  icon: 'Brain',
+  icon: "Brain",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'gemini',
+  defaultProvider: "gemini",
 
-  model: 'gemini-1.5-pro',
+  model: "gemini-1.5-pro",
 
   inputs: [
     {
-      id: 'problem_statement',
-      label: 'DSA Question',
-      type: 'textarea',
-      placeholder: 'Paste your DSA problem here...',
+      id: "problem_statement",
+      label: "DSA Question",
+      type: "textarea",
+      placeholder: "Paste your DSA problem here...",
       required: true,
     },
 
     {
-      id: 'example_input',
-      label: 'Example Input',
-      type: 'textarea',
-      placeholder: 'Optional example input...',
+      id: "example_input",
+      label: "Example Input",
+      type: "textarea",
+      placeholder: "Optional example input...",
       required: false,
     },
 
     {
-      id: 'example_output',
-      label: 'Example Output',
-      type: 'textarea',
-      placeholder: 'Optional example output...',
+      id: "example_output",
+      label: "Example Output",
+      type: "textarea",
+      placeholder: "Optional example output...",
       required: false,
     },
 
     {
-      id: 'example_explanation',
-      label: 'Explanation',
-      type: 'textarea',
-      placeholder:
-        'Optional explanation similar to LeetCode examples...',
+      id: "example_explanation",
+      label: "Explanation",
+      type: "textarea",
+      placeholder: "Optional explanation similar to LeetCode examples...",
       required: false,
     },
 
     {
-  id: 'constraints',
-  label: 'Constraints',
-  type: 'textarea',
-  placeholder: 'Optional problem constraints...',
-  required: false,
-},
+      id: "constraints",
+      label: "Constraints",
+      type: "textarea",
+      placeholder: "Optional problem constraints...",
+      required: false,
+    },
   ],
 
   systemPrompt: `
@@ -138,7 +137,7 @@ Summarize the main learning points from the problem.
 Use markdown formatting throughout the response.
 `,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default dsaProblemExplainer;

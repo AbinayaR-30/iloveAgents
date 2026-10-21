@@ -1,9 +1,18 @@
-import { Link } from 'react-router-dom'
-import { Sparkles, Github, GitPullRequest, ArrowRight, PlusCircle } from 'lucide-react'
+import { Link } from "react-router-dom";
+import {
+  Sparkles,
+  Github,
+  GitPullRequest,
+  ArrowRight,
+  PlusCircle,
+} from "lucide-react";
 
 export default function AboutCta() {
   return (
-    <section aria-labelledby="about-cta-title" className="relative overflow-hidden rounded-3xl border border-indigo-500/30 dark:border-indigo-500/20 bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 p-8 sm:p-12 text-white text-center shadow-2xl">
+    <section
+      aria-labelledby="about-cta-title"
+      className="relative overflow-hidden rounded-3xl border border-indigo-500/30 dark:border-indigo-500/20 bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 p-8 sm:p-12 text-white text-center shadow-2xl"
+    >
       {/* Glow overlays */}
       <div className="pointer-events-none absolute -top-20 -left-20 h-60 w-60 rounded-full bg-white/10 blur-2xl" />
       <div className="pointer-events-none absolute -bottom-20 -right-20 h-60 w-60 rounded-full bg-pink-500/20 blur-2xl" />
@@ -14,12 +23,16 @@ export default function AboutCta() {
           <span>Join 100+ Community Contributors</span>
         </div>
 
-        <h2 id="about-cta-title" className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+        <h2
+          id="about-cta-title"
+          className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight"
+        >
           Ready to Shape the Future of Open AI Tools?
         </h2>
 
         <p className="text-sm sm:text-base text-indigo-100 max-w-2xl mx-auto leading-relaxed">
-          Whether you want to add a 5-minute agent, polish UI components, or fix open issues — your contributions power this platform.
+          Whether you want to add a 5-minute agent, polish UI components, or fix
+          open issues — your contributions power this platform.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -53,5 +66,5 @@ export default function AboutCta() {
         </div>
       </div>
     </section>
-  )
+  );
 }

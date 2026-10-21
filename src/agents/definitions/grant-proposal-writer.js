@@ -30,8 +30,7 @@ export default {
       id: "organization",
       label: "Your organization or institution",
       type: "text",
-      placeholder:
-        "e.g. IIT Madras / GreenWater NGO / Independent researcher",
+      placeholder: "e.g. IIT Madras / GreenWater NGO / Independent researcher",
     },
     {
       id: "fundingBody",

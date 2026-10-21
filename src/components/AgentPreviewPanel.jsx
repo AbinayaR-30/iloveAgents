@@ -102,9 +102,15 @@ export default function AgentPreviewPanel({ agent }) {
             </span>
           </div>
           {promptOpen ? (
-            <ChevronDown size={14} className="dark:text-text-muted text-gray-400" />
+            <ChevronDown
+              size={14}
+              className="dark:text-text-muted text-gray-400"
+            />
           ) : (
-            <ChevronRight size={14} className="dark:text-text-muted text-gray-400" />
+            <ChevronRight
+              size={14}
+              className="dark:text-text-muted text-gray-400"
+            />
           )}
         </button>
         {promptOpen && (

@@ -1,12 +1,13 @@
 const k8sManifestSecurityAuditOptimizer = {
-  id: 'k8s-manifest-security-audit-optimizer',
-  name: 'Kubernetes Manifest Security Audit & Optimizer Agent',
-  description: 'Audit Kubernetes YAML configurations for security vulnerabilities, container misconfigurations, and performance bottlenecks, and generate optimized manifests.',
-  category: 'DevOps',
-  icon: 'ShieldCheck',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "k8s-manifest-security-audit-optimizer",
+  name: "Kubernetes Manifest Security Audit & Optimizer Agent",
+  description:
+    "Audit Kubernetes YAML configurations for security vulnerabilities, container misconfigurations, and performance bottlenecks, and generate optimized manifests.",
+  category: "DevOps",
+  icon: "ShieldCheck",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   exampleInputs: {
     kubernetesYaml: `apiVersion: apps/v1
 kind: Deployment
@@ -31,35 +32,35 @@ spec:
         - containerPort: 80
         securityContext:
           privileged: true`,
-    targetEnv: 'Production',
-    strictness: 'Baseline (Enforce PodSecurityStandards Baseline)',
+    targetEnv: "Production",
+    strictness: "Baseline (Enforce PodSecurityStandards Baseline)",
   },
   inputs: [
     {
-      id: 'kubernetesYaml',
-      label: 'Kubernetes YAML',
-      type: 'textarea',
-      placeholder: 'Paste your raw Kubernetes configuration YAML here...',
+      id: "kubernetesYaml",
+      label: "Kubernetes YAML",
+      type: "textarea",
+      placeholder: "Paste your raw Kubernetes configuration YAML here...",
       required: true,
     },
     {
-      id: 'targetEnv',
-      label: 'Target Environment',
-      type: 'select',
-      options: ['Production', 'Staging', 'Development'],
-      defaultValue: 'Production',
+      id: "targetEnv",
+      label: "Target Environment",
+      type: "select",
+      options: ["Production", "Staging", "Development"],
+      defaultValue: "Production",
       required: true,
     },
     {
-      id: 'strictness',
-      label: 'Strictness Level',
-      type: 'select',
+      id: "strictness",
+      label: "Strictness Level",
+      type: "select",
       options: [
-        'Strict (Enforce PodSecurityStandards Restricted)',
-        'Baseline (Enforce PodSecurityStandards Baseline)',
-        'Insecure/Loose'
+        "Strict (Enforce PodSecurityStandards Restricted)",
+        "Baseline (Enforce PodSecurityStandards Baseline)",
+        "Insecure/Loose",
       ],
-      defaultValue: 'Baseline (Enforce PodSecurityStandards Baseline)',
+      defaultValue: "Baseline (Enforce PodSecurityStandards Baseline)",
       required: true,
     },
   ],
@@ -100,7 +101,7 @@ Provide the fully optimized, secure, copy-paste-ready Kubernetes manifest YAML c
 [Optimized Kubernetes YAML configuration]
 \`\`\`
 `,
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default k8sManifestSecurityAuditOptimizer;

@@ -7,138 +7,135 @@
 
 const PROVIDER_CONFIGS = {
   openai: {
-    url: 'https://api.openai.com/v1/chat/completions',
+    url: "https://api.openai.com/v1/chat/completions",
     buildHeaders: (apiKey) => ({
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     }),
     buildBody: (model, systemPrompt, userMessage) => ({
       model,
       messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userMessage },
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage },
       ],
       max_tokens: 4096,
     }),
     buildStreamBody: (model, systemPrompt, userMessage) => ({
       model,
       messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userMessage },
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage },
       ],
       max_tokens: 4096,
       stream: true,
     }),
     parseResponse: (data) => ({
-      content: data.choices?.[0]?.message?.content || '',
+      content: data.choices?.[0]?.message?.content || "",
       tokens:
-        (data.usage?.prompt_tokens || 0) +
-        (data.usage?.completion_tokens || 0),
+        (data.usage?.prompt_tokens || 0) + (data.usage?.completion_tokens || 0),
     }),
     /**
      * Parse an SSE line from OpenAI streaming.
      * Returns { content, done } or null if the line should be skipped.
      */
     parseStreamChunk: (line) => {
-      if (line === 'data: [DONE]') return { content: '', done: true }
-      if (!line.startsWith('data: ')) return null
+      if (line === "data: [DONE]") return { content: "", done: true };
+      if (!line.startsWith("data: ")) return null;
       try {
-        const json = JSON.parse(line.slice(6))
-        const delta = json.choices?.[0]?.delta?.content || ''
-        const finished = json.choices?.[0]?.finish_reason === 'stop'
-        return { content: delta, done: finished }
+        const json = JSON.parse(line.slice(6));
+        const delta = json.choices?.[0]?.delta?.content || "";
+        const finished = json.choices?.[0]?.finish_reason === "stop";
+        return { content: delta, done: finished };
       } catch {
-        return null
+        return null;
       }
     },
   },
 
   openrouter: {
-    url: 'https://openrouter.ai/api/v1/chat/completions',
+    url: "https://openrouter.ai/api/v1/chat/completions",
     buildHeaders: (apiKey) => ({
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
-      'HTTP-Referer': 'https://iloveagents.ai',
-      'X-Title': 'ILoveAgents',
+      "HTTP-Referer": "https://iloveagents.ai",
+      "X-Title": "ILoveAgents",
     }),
     buildBody: (model, systemPrompt, userMessage) => ({
       model,
       messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userMessage },
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage },
       ],
       max_tokens: 4096,
     }),
     buildStreamBody: (model, systemPrompt, userMessage) => ({
       model,
       messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userMessage },
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage },
       ],
       max_tokens: 4096,
       stream: true,
     }),
     parseResponse: (data) => ({
-      content: data.choices?.[0]?.message?.content || '',
+      content: data.choices?.[0]?.message?.content || "",
       tokens:
-        (data.usage?.prompt_tokens || 0) +
-        (data.usage?.completion_tokens || 0),
+        (data.usage?.prompt_tokens || 0) + (data.usage?.completion_tokens || 0),
     }),
     parseStreamChunk: (line) => {
-      if (line === 'data: [DONE]') return { content: '', done: true }
-      if (!line.startsWith('data: ')) return null
+      if (line === "data: [DONE]") return { content: "", done: true };
+      if (!line.startsWith("data: ")) return null;
       try {
-        const json = JSON.parse(line.slice(6))
-        const delta = json.choices?.[0]?.delta?.content || ''
-        const finished = json.choices?.[0]?.finish_reason === 'stop'
-        return { content: delta, done: finished }
+        const json = JSON.parse(line.slice(6));
+        const delta = json.choices?.[0]?.delta?.content || "";
+        const finished = json.choices?.[0]?.finish_reason === "stop";
+        return { content: delta, done: finished };
       } catch {
-        return null
+        return null;
       }
     },
   },
 
   anthropic: {
-    url: 'https://api.anthropic.com/v1/messages',
+    url: "https://api.anthropic.com/v1/messages",
     buildHeaders: (apiKey) => ({
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true",
     }),
     buildBody: (model, systemPrompt, userMessage) => ({
       model,
       max_tokens: 4096,
       system: systemPrompt,
-      messages: [{ role: 'user', content: userMessage }],
+      messages: [{ role: "user", content: userMessage }],
     }),
     buildStreamBody: (model, systemPrompt, userMessage) => ({
       model,
       max_tokens: 4096,
       system: systemPrompt,
-      messages: [{ role: 'user', content: userMessage }],
+      messages: [{ role: "user", content: userMessage }],
       stream: true,
     }),
     parseResponse: (data) => ({
-      content: data.content?.[0]?.text || '',
+      content: data.content?.[0]?.text || "",
       tokens:
-        (data.usage?.input_tokens || 0) +
-        (data.usage?.output_tokens || 0),
+        (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
     }),
     parseStreamChunk: (line) => {
-      if (!line.startsWith('data: ')) return null
+      if (!line.startsWith("data: ")) return null;
       try {
-        const json = JSON.parse(line.slice(6))
-        if (json.type === 'content_block_delta') {
-          return { content: json.delta?.text || '', done: false }
+        const json = JSON.parse(line.slice(6));
+        if (json.type === "content_block_delta") {
+          return { content: json.delta?.text || "", done: false };
         }
-        if (json.type === 'message_stop') {
-          return { content: '', done: true }
+        if (json.type === "message_stop") {
+          return { content: "", done: true };
         }
         // message_start, content_block_start, etc. — skip
-        return null
+        return null;
       } catch {
-        return null
+        return null;
       }
     },
   },
@@ -149,50 +146,49 @@ const PROVIDER_CONFIGS = {
     streamUrl: (model, apiKey) =>
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`,
     buildHeaders: () => ({
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     }),
     buildBody: (_model, systemPrompt, userMessage) => ({
       contents: [
         {
-          parts: [{ text: systemPrompt + '\n\n' + userMessage }],
+          parts: [{ text: systemPrompt + "\n\n" + userMessage }],
         },
       ],
     }),
     buildStreamBody: (_model, systemPrompt, userMessage) => ({
       contents: [
         {
-          parts: [{ text: systemPrompt + '\n\n' + userMessage }],
+          parts: [{ text: systemPrompt + "\n\n" + userMessage }],
         },
       ],
     }),
     parseResponse: (data) => ({
-      content:
-        data.candidates?.[0]?.content?.parts?.[0]?.text || '',
+      content: data.candidates?.[0]?.content?.parts?.[0]?.text || "",
       tokens:
         (data.usageMetadata?.promptTokenCount || 0) +
         (data.usageMetadata?.candidatesTokenCount || 0),
     }),
     parseStreamChunk: (line) => {
-      if (!line.startsWith('data: ')) return null
+      if (!line.startsWith("data: ")) return null;
       try {
-        const json = JSON.parse(line.slice(6))
-        const text = json.candidates?.[0]?.content?.parts?.[0]?.text || ''
-        const finished = json.candidates?.[0]?.finishReason === 'STOP'
-        return { content: text, done: finished }
+        const json = JSON.parse(line.slice(6));
+        const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        const finished = json.candidates?.[0]?.finishReason === "STOP";
+        return { content: text, done: finished };
       } catch {
-        return null
+        return null;
       }
     },
   },
-}
+};
 
 const ERROR_MESSAGES = {
-  401: 'invalid_api_key', // We'll use a key to help downstream logic
-  403: 'Access forbidden. Your API key may not have the required permissions.',
-  429: 'Rate limit hit. Wait a moment and try again.',
-  500: 'The API server encountered an error. Try again shortly.',
-  502: 'Bad gateway — the API is temporarily unavailable.',
-  503: 'The API service is temporarily unavailable. Try again in a minute.',
+  401: "invalid_api_key", // We'll use a key to help downstream logic
+  403: "Access forbidden. Your API key may not have the required permissions.",
+  429: "Rate limit hit. Wait a moment and try again.",
+  500: "The API server encountered an error. Try again shortly.",
+  502: "Bad gateway — the API is temporarily unavailable.",
+  503: "The API service is temporarily unavailable. Try again in a minute.",
 };
 
 /**
@@ -200,7 +196,7 @@ const ERROR_MESSAGES = {
  */
 async function handleErrorResponse(response, provider = "unknown") {
   const errorKey = ERROR_MESSAGES[response.status] || null;
-  let detail = '';
+  let detail = "";
   try {
     const errBody = await response.json();
     detail = errBody?.error?.message || JSON.stringify(errBody);
@@ -208,24 +204,24 @@ async function handleErrorResponse(response, provider = "unknown") {
     // Could not parse error body
   }
 
-  if (errorKey === 'invalid_api_key') {
+  if (errorKey === "invalid_api_key") {
     const message = detail
       ? `Invalid API key for ${provider}: ${detail}`
-      : `Invalid API key for ${provider}. Please check your API key in Settings.`
-    const err = new Error(message)
-    err.type = 'invalid_api_key'
-    err.provider = provider
-    err.detail = detail || 'No additional details'
-    throw err
+      : `Invalid API key for ${provider}. Please check your API key in Settings.`;
+    const err = new Error(message);
+    err.type = "invalid_api_key";
+    err.provider = provider;
+    err.detail = detail || "No additional details";
+    throw err;
   }
 
   const friendlyMessage =
-    typeof ERROR_MESSAGES[response.status] === 'string'
+    typeof ERROR_MESSAGES[response.status] === "string"
       ? ERROR_MESSAGES[response.status]
       : `API returned status ${response.status}. Please check your configuration.`;
 
   throw new Error(
-    detail ? `${friendlyMessage}\n\nDetails: ${detail}` : friendlyMessage
+    detail ? `${friendlyMessage}\n\nDetails: ${detail}` : friendlyMessage,
   );
 }
 /**
@@ -239,56 +235,57 @@ async function handleErrorResponse(response, provider = "unknown") {
  * @param {string} params.userMessage
  * @returns {Promise<{content: string, tokens: number, duration: number}>}
  */
-export async function runAgent({ provider, model, apiKey, systemPrompt, userMessage }, options = {})  {
-  const config = PROVIDER_CONFIGS[provider]
+export async function runAgent(
+  { provider, model, apiKey, systemPrompt, userMessage },
+  options = {},
+) {
+  const config = PROVIDER_CONFIGS[provider];
   const { signal } = options || {};
 
   if (!config) {
-    throw new Error(`Unsupported provider: ${provider}`)
+    throw new Error(`Unsupported provider: ${provider}`);
   }
 
-  if (!apiKey || apiKey.trim() === '') {
-    throw new Error('Please provide an API key to run this agent.')
+  if (!apiKey || apiKey.trim() === "") {
+    throw new Error("Please provide an API key to run this agent.");
   }
 
   const url =
-    typeof config.url === 'function'
-      ? config.url(model, apiKey)
-      : config.url
+    typeof config.url === "function" ? config.url(model, apiKey) : config.url;
 
-  const headers = config.buildHeaders(apiKey)
-  const body = config.buildBody(model, systemPrompt, userMessage)
+  const headers = config.buildHeaders(apiKey);
+  const body = config.buildBody(model, systemPrompt, userMessage);
 
-  const startTime = performance.now()
+  const startTime = performance.now();
 
   try {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers,
       body: JSON.stringify(body),
       signal,
-    })
+    });
 
     if (!response.ok) {
-      await handleErrorResponse(response, provider)
+      await handleErrorResponse(response, provider);
     }
 
-    const data = await response.json()
-    const parsed = config.parseResponse(data)
-    const duration = Math.round(performance.now() - startTime)
+    const data = await response.json();
+    const parsed = config.parseResponse(data);
+    const duration = Math.round(performance.now() - startTime);
 
     return {
       content: parsed.content,
       tokens: parsed.tokens,
       duration,
-    }
+    };
   } catch (error) {
-    if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+    if (error.name === "TypeError" && error.message === "Failed to fetch") {
       throw new Error(
-        "Couldn't reach the API. Check your internet connection and try again."
-      )
+        "Couldn't reach the API. Check your internet connection and try again.",
+      );
     }
-    throw error
+    throw error;
   }
 }
 
@@ -306,106 +303,115 @@ export async function runAgent({ provider, model, apiKey, systemPrompt, userMess
  * @param {AbortSignal} [params.signal] — optional AbortSignal to cancel streaming
  * @returns {Promise<{content: string, duration: number}>}
  */
-export async function streamAgent({ provider, model, apiKey, systemPrompt, userMessage, onChunk, signal }) {
-  const config = PROVIDER_CONFIGS[provider]
+export async function streamAgent({
+  provider,
+  model,
+  apiKey,
+  systemPrompt,
+  userMessage,
+  onChunk,
+  signal,
+}) {
+  const config = PROVIDER_CONFIGS[provider];
 
   if (!config) {
-    throw new Error(`Unsupported provider: ${provider}`)
+    throw new Error(`Unsupported provider: ${provider}`);
   }
 
-  if (!apiKey || apiKey.trim() === '') {
-    throw new Error('Please provide an API key to run this agent.')
+  if (!apiKey || apiKey.trim() === "") {
+    throw new Error("Please provide an API key to run this agent.");
   }
 
   // Determine the streaming URL
-  let url
-  if (provider === 'gemini') {
-    url = config.streamUrl(model, apiKey)
+  let url;
+  if (provider === "gemini") {
+    url = config.streamUrl(model, apiKey);
   } else {
-    url = typeof config.url === 'function' ? config.url(model, apiKey) : config.url
+    url =
+      typeof config.url === "function" ? config.url(model, apiKey) : config.url;
   }
 
-  const headers = config.buildHeaders(apiKey)
-  const body = config.buildStreamBody(model, systemPrompt, userMessage)
+  const headers = config.buildHeaders(apiKey);
+  const body = config.buildStreamBody(model, systemPrompt, userMessage);
 
-  const startTime = performance.now()
-  let fullContent = ''
+  const startTime = performance.now();
+  let fullContent = "";
 
   try {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers,
       body: JSON.stringify(body),
       signal,
-    })
+    });
 
     if (!response.ok) {
-      await handleErrorResponse(response, provider)
+      await handleErrorResponse(response, provider);
     }
 
-    if (!response.body || typeof response.body.getReader !== 'function') {
+    if (!response.body || typeof response.body.getReader !== "function") {
       throw new Error(
-        'Streaming is not supported by this response. Please try again.'
-      )
+        "Streaming is not supported by this response. Please try again.",
+      );
     }
 
-    const reader = response.body.getReader()
-    const decoder = new TextDecoder()
-    let buffer = ''
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
 
     while (true) {
-      const { done, value } = await reader.read()
-      if (done) break
+      const { done, value } = await reader.read();
+      if (done) break;
 
-      buffer += decoder.decode(value, { stream: true })
+      buffer += decoder.decode(value, { stream: true });
 
       // Process complete lines from the buffer
-      const lines = buffer.split('\n')
+      const lines = buffer.split("\n");
       // Keep the last (potentially incomplete) line in the buffer
-      buffer = lines.pop() || ''
+      buffer = lines.pop() || "";
 
       for (const line of lines) {
-        const trimmed = line.trim()
-        if (!trimmed) continue
+        const trimmed = line.trim();
+        if (!trimmed) continue;
 
-        const parsed = config.parseStreamChunk(trimmed)
-        if (!parsed) continue
+        const parsed = config.parseStreamChunk(trimmed);
+        if (!parsed) continue;
 
         if (parsed.content) {
-          fullContent += parsed.content
-          onChunk(parsed.content)
+          fullContent += parsed.content;
+          onChunk(parsed.content);
         }
 
-        if (parsed.done) break
+        if (parsed.done) break;
       }
     }
 
     // Process any remaining buffer content
     if (buffer.trim()) {
-      const parsed = config.parseStreamChunk(buffer.trim())
+      const parsed = config.parseStreamChunk(buffer.trim());
       if (parsed?.content) {
-        fullContent += parsed.content
-        onChunk(parsed.content)
+        fullContent += parsed.content;
+        onChunk(parsed.content);
       }
     }
 
-    const duration = Math.round(performance.now() - startTime)
+    const duration = Math.round(performance.now() - startTime);
 
     return {
       content: fullContent,
       duration,
-    }
+    };
   } catch (error) {
-    if (error.name === 'AbortError') {
-      const duration = Math.round(performance.now() - startTime)
-      return { content: fullContent, duration }
+    if (error.name === "AbortError") {
+      const duration = Math.round(performance.now() - startTime);
+      return { content: fullContent, duration };
     }
-    if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+    if (error.name === "TypeError" && error.message === "Failed to fetch") {
       throw new Error(
-        "Couldn't reach the API. Check your internet connection and try again."
-      )
+        "Couldn't reach the API. Check your internet connection and try again.",
+      );
     }
-    throw error
+    throw error;
   }
 }
 
@@ -418,14 +424,14 @@ export async function streamAgent({ provider, model, apiKey, systemPrompt, userM
  */
 export async function fetchGeminiModels(apiKey) {
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
-  )
-  if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  const data = await res.json()
+    `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`,
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
   return (data.models || [])
-    .filter(m => m.supportedGenerationMethods?.includes('generateContent'))
-    .map(m => ({
-      value: m.name.replace('models/', ''),
-      label: m.displayName || m.name.replace('models/', ''),
-    }))
+    .filter((m) => m.supportedGenerationMethods?.includes("generateContent"))
+    .map((m) => ({
+      value: m.name.replace("models/", ""),
+      label: m.displayName || m.name.replace("models/", ""),
+    }));
 }

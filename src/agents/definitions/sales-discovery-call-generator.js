@@ -1,76 +1,83 @@
 const salesDiscoveryCallGenerator = {
-  id: 'sales-discovery-call-generator',
+  id: "sales-discovery-call-generator",
 
-  name: 'Sales Discovery Call Script Generator',
+  name: "Sales Discovery Call Script Generator",
 
   description:
-    'Generates a complete discovery call script for sales reps with opening, qualification questions, pain point exploration, objection handling, and next steps — tailored to your product, industry, and ideal customer profile.',
+    "Generates a complete discovery call script for sales reps with opening, qualification questions, pain point exploration, objection handling, and next steps — tailored to your product, industry, and ideal customer profile.",
 
-  category: 'Sales',
+  category: "Sales",
 
-  icon: 'Phone',
+  icon: "Phone",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'gemini',
+  defaultProvider: "gemini",
 
-  model: 'gemini-1.5-pro',
+  model: "gemini-1.5-pro",
 
   inputs: [
     {
-      id: 'product_name',
-      label: 'Product / Service Name',
-      type: 'text',
-      placeholder: 'e.g. Salesforce CRM, HubSpot, Slack',
+      id: "product_name",
+      label: "Product / Service Name",
+      type: "text",
+      placeholder: "e.g. Salesforce CRM, HubSpot, Slack",
       required: true,
     },
     {
-      id: 'product_description',
-      label: 'What does your product do?',
-      type: 'textarea',
-      placeholder: 'e.g. A CRM platform that helps sales teams track leads, manage pipelines, and close deals faster.',
+      id: "product_description",
+      label: "What does your product do?",
+      type: "textarea",
+      placeholder:
+        "e.g. A CRM platform that helps sales teams track leads, manage pipelines, and close deals faster.",
       required: true,
     },
     {
-      id: 'target_industry',
-      label: 'Target Industry',
-      type: 'text',
-      placeholder: 'e.g. SaaS, Healthcare, E-commerce, Finance',
+      id: "target_industry",
+      label: "Target Industry",
+      type: "text",
+      placeholder: "e.g. SaaS, Healthcare, E-commerce, Finance",
       required: true,
     },
     {
-      id: 'ideal_customer_profile',
-      label: 'Ideal Customer Profile (ICP)',
-      type: 'textarea',
-      placeholder: 'e.g. VP of Sales at a 50-200 person B2B SaaS company struggling with pipeline visibility',
+      id: "ideal_customer_profile",
+      label: "Ideal Customer Profile (ICP)",
+      type: "textarea",
+      placeholder:
+        "e.g. VP of Sales at a 50-200 person B2B SaaS company struggling with pipeline visibility",
       required: true,
     },
     {
-      id: 'call_duration',
-      label: 'Call Duration',
-      type: 'select',
+      id: "call_duration",
+      label: "Call Duration",
+      type: "select",
       required: true,
-      options: ['15 minutes', '30 minutes', '45 minutes', '60 minutes'],
+      options: ["15 minutes", "30 minutes", "45 minutes", "60 minutes"],
     },
     {
-      id: 'sales_rep_experience',
-      label: 'Sales Rep Experience Level',
-      type: 'select',
+      id: "sales_rep_experience",
+      label: "Sales Rep Experience Level",
+      type: "select",
       required: true,
-      options: ['New (< 1 year)', 'Intermediate (1-3 years)', 'Senior (3+ years)'],
+      options: [
+        "New (< 1 year)",
+        "Intermediate (1-3 years)",
+        "Senior (3+ years)",
+      ],
     },
     {
-      id: 'key_pain_points',
-      label: 'Known Pain Points to Explore',
-      type: 'textarea',
-      placeholder: 'e.g. Manual reporting, missed follow-ups, poor lead tracking',
+      id: "key_pain_points",
+      label: "Known Pain Points to Explore",
+      type: "textarea",
+      placeholder:
+        "e.g. Manual reporting, missed follow-ups, poor lead tracking",
       required: false,
     },
     {
-      id: 'competitors',
-      label: 'Main Competitors (optional)',
-      type: 'text',
-      placeholder: 'e.g. HubSpot, Pipedrive, Zoho CRM',
+      id: "competitors",
+      label: "Main Competitors (optional)",
+      type: "text",
+      placeholder: "e.g. HubSpot, Pipedrive, Zoho CRM",
       required: false,
     },
   ],
@@ -184,7 +191,7 @@ Output Format:
 - 3-5 advanced tips specific to this industry/ICP
 `,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default salesDiscoveryCallGenerator;

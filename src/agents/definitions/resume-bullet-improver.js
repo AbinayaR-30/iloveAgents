@@ -10,8 +10,7 @@ export default {
   defaultProvider: "gemini",
   model: "gemini-3.1-flash-lite",
   exampleInputs: {
-    bullet_point:
-      "worked on a website for my college club and made it faster",
+    bullet_point: "worked on a website for my college club and made it faster",
   },
   inputs: [
     {

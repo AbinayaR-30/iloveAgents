@@ -1,28 +1,29 @@
-const fontPairingAgent= {
-  id: 'font-pairing-agent',           // lowercase, kebab-case, URL safe
-  name: 'Font Pairing Agent',
-  description: 'The agent takes in mood and industry as input and generates 3 font pairings for design',
-  category: 'Design',          // Productivity | Research | Marketing | Engineering | HR | Business | Education | Design | Product | Legal
-  icon: 'ALargeSmall',              // Any icon from lucide.dev/icons
-  provider: 'any',               // 'openai' | 'anthropic' | 'gemini' | 'any'
-  defaultProvider: 'openai',     // Only needed if provider is 'any'
-  model: 'gpt-4o',
+const fontPairingAgent = {
+  id: "font-pairing-agent", // lowercase, kebab-case, URL safe
+  name: "Font Pairing Agent",
+  description:
+    "The agent takes in mood and industry as input and generates 3 font pairings for design",
+  category: "Design", // Productivity | Research | Marketing | Engineering | HR | Business | Education | Design | Product | Legal
+  icon: "ALargeSmall", // Any icon from lucide.dev/icons
+  provider: "any", // 'openai' | 'anthropic' | 'gemini' | 'any'
+  defaultProvider: "openai", // Only needed if provider is 'any'
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'feel',
-      label: 'Feel',
-      type: 'textarea',          // text | textarea | code | select | multiselect
-      placeholder: 'example : Bold and Futuristic',
+      id: "feel",
+      label: "Feel",
+      type: "textarea", // text | textarea | code | select | multiselect
+      placeholder: "example : Bold and Futuristic",
       required: true,
     },
 
     {
-      id: 'industry',
-      label: 'Industry',
-      type: 'textarea',          // text | textarea | code | select | multiselect
-      placeholder: 'example : Finance',
+      id: "industry",
+      label: "Industry",
+      type: "textarea", // text | textarea | code | select | multiselect
+      placeholder: "example : Finance",
       required: true,
-    }
+    },
   ],
   systemPrompt: `You are a typography recommendation agent that specializes in suggesting font pairings for digital design projects.
 
@@ -88,7 +89,7 @@ Industry: Cybersecurity
 Example Behavior:
 Recommend clean, technical, modern typefaces with strong readability and professional aesthetics.`,
 
-  outputType: 'text',        // markdown | text | json
+  outputType: "text", // markdown | text | json
 };
 
 export default fontPairingAgent;

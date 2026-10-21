@@ -19,8 +19,7 @@ const graphqlSchemaGenerator = {
   exampleInputs: {
     domainDescription:
       "An e-commerce platform with users, products, categories, shopping carts and orders.",
-    entities:
-      "User, Product, Category, Cart, Order, OrderItem",
+    entities: "User, Product, Category, Cart, Order, OrderItem",
     includeMutations: "Yes",
     includeSubscriptions: "No",
   },
@@ -38,8 +37,7 @@ const graphqlSchemaGenerator = {
       id: "entities",
       label: "Entities to Include",
       type: "textarea",
-      placeholder:
-        "User, Product, Order, Category, Payment, Review...",
+      placeholder: "User, Product, Order, Category, Payment, Review...",
       required: true,
     },
     {

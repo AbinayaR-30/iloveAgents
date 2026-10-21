@@ -10,12 +10,12 @@ export default {
   defaultProvider: "anthropic",
   model: "claude-sonnet-4-6",
   exampleInputs: {
-  codebaseProblems:
-    "React project with repeated code, outdated dependencies, and missing test coverage.",
-  projectType: "Web Application",
-  audience: "Product Manager",
-},
-inputs: [
+    codebaseProblems:
+      "React project with repeated code, outdated dependencies, and missing test coverage.",
+    projectType: "Web Application",
+    audience: "Product Manager",
+  },
+  inputs: [
     {
       id: "codebaseProblems",
       label: "Current Codebase Problems",
@@ -64,5 +64,5 @@ Include:
 - Prioritized recommendations
 
 Keep the report professional, concise, and easy to understand.`,
-outputType:"text",
+  outputType: "text",
 };

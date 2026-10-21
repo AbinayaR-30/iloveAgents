@@ -22,13 +22,13 @@
  */
 
 const KEYS = {
-  openai:     'iloveagents_openai_key',
-  anthropic:  'iloveagents_anthropic_key',
-  gemini:     'iloveagents_gemini_key',
-  openrouter: 'iloveagents_openrouter_key',
-}
-const DEFAULT_PROVIDER_KEY = 'iloveagents_default_provider'
-const EXPIRY_MS = 8 * 60 * 60 * 1000 // 8 hours, matching useApiKey.js
+  openai: "iloveagents_openai_key",
+  anthropic: "iloveagents_anthropic_key",
+  gemini: "iloveagents_gemini_key",
+  openrouter: "iloveagents_openrouter_key",
+};
+const DEFAULT_PROVIDER_KEY = "iloveagents_default_provider";
+const EXPIRY_MS = 8 * 60 * 60 * 1000; // 8 hours, matching useApiKey.js
 
 /**
  * Read a secret from sessionStorage, honoring its expiry. Also removes any
@@ -38,25 +38,25 @@ function readSecret(storageKey) {
   // Migrate a legacy plaintext key an older version left in localStorage:
   // move its value into sessionStorage (with a fresh expiry) so the user does
   // not lose it, then remove the insecure localStorage copy.
-  const legacy = localStorage.getItem(storageKey)
+  const legacy = localStorage.getItem(storageKey);
   if (legacy !== null) {
-    localStorage.removeItem(storageKey)
-    if (legacy !== '' && sessionStorage.getItem(storageKey) === null) {
-      writeSecret(storageKey, legacy)
+    localStorage.removeItem(storageKey);
+    if (legacy !== "" && sessionStorage.getItem(storageKey) === null) {
+      writeSecret(storageKey, legacy);
     }
   }
 
-  const raw = sessionStorage.getItem(storageKey)
-  if (!raw) return ''
+  const raw = sessionStorage.getItem(storageKey);
+  if (!raw) return "";
   try {
-    const { key, expiresAt } = JSON.parse(raw)
+    const { key, expiresAt } = JSON.parse(raw);
     if (Date.now() > expiresAt) {
-      sessionStorage.removeItem(storageKey)
-      return ''
+      sessionStorage.removeItem(storageKey);
+      return "";
     }
-    return key || ''
+    return key || "";
   } catch {
-    return raw // tolerate a legacy plaintext session value
+    return raw; // tolerate a legacy plaintext session value
   }
 }
 
@@ -64,10 +64,13 @@ function readSecret(storageKey) {
  * Store a secret in sessionStorage with a fresh 8-hour expiry.
  */
 function writeSecret(storageKey, value) {
-  sessionStorage.setItem(storageKey, JSON.stringify({
-    key: value,
-    expiresAt: Date.now() + EXPIRY_MS,
-  }))
+  sessionStorage.setItem(
+    storageKey,
+    JSON.stringify({
+      key: value,
+      expiresAt: Date.now() + EXPIRY_MS,
+    }),
+  );
 }
 
 /**
@@ -76,12 +79,12 @@ function writeSecret(storageKey, value) {
  */
 export function getGlobalKeys() {
   return {
-    openai:          readSecret(KEYS.openai),
-    anthropic:       readSecret(KEYS.anthropic),
-    gemini:          readSecret(KEYS.gemini),
-    openrouter:      readSecret(KEYS.openrouter),
-    defaultProvider: localStorage.getItem(DEFAULT_PROVIDER_KEY) || '',
-  }
+    openai: readSecret(KEYS.openai),
+    anthropic: readSecret(KEYS.anthropic),
+    gemini: readSecret(KEYS.gemini),
+    openrouter: readSecret(KEYS.openrouter),
+    defaultProvider: localStorage.getItem(DEFAULT_PROVIDER_KEY) || "",
+  };
 }
 
 /**
@@ -89,12 +92,23 @@ export function getGlobalKeys() {
  * overwrite an existing saved key. To explicitly clear a key use clearGlobalKey(provider).
  * @param {{ openai?: string, anthropic?: string, gemini?: string, openrouter?: string, defaultProvider?: string }} keys
  */
-export function saveGlobalKeys({ openai, anthropic, gemini, openrouter, defaultProvider } = {}) {
-  if (openai          !== undefined && openai.trim()          !== '') writeSecret(KEYS.openai,          openai.trim())
-  if (anthropic       !== undefined && anthropic.trim()       !== '') writeSecret(KEYS.anthropic,       anthropic.trim())
-  if (gemini          !== undefined && gemini.trim()          !== '') writeSecret(KEYS.gemini,          gemini.trim())
-  if (openrouter      !== undefined && openrouter.trim()      !== '') writeSecret(KEYS.openrouter,      openrouter.trim())
-  if (defaultProvider !== undefined && defaultProvider.trim() !== '') localStorage.setItem(DEFAULT_PROVIDER_KEY, defaultProvider.trim())
+export function saveGlobalKeys({
+  openai,
+  anthropic,
+  gemini,
+  openrouter,
+  defaultProvider,
+} = {}) {
+  if (openai !== undefined && openai.trim() !== "")
+    writeSecret(KEYS.openai, openai.trim());
+  if (anthropic !== undefined && anthropic.trim() !== "")
+    writeSecret(KEYS.anthropic, anthropic.trim());
+  if (gemini !== undefined && gemini.trim() !== "")
+    writeSecret(KEYS.gemini, gemini.trim());
+  if (openrouter !== undefined && openrouter.trim() !== "")
+    writeSecret(KEYS.openrouter, openrouter.trim());
+  if (defaultProvider !== undefined && defaultProvider.trim() !== "")
+    localStorage.setItem(DEFAULT_PROVIDER_KEY, defaultProvider.trim());
 }
 
 /**
@@ -102,10 +116,10 @@ export function saveGlobalKeys({ openai, anthropic, gemini, openrouter, defaultP
  * @param {'openai' | 'anthropic' | 'gemini' | 'openrouter'} provider
  */
 export function clearGlobalKey(provider) {
-  const storageKey = KEYS[provider]
+  const storageKey = KEYS[provider];
   if (storageKey) {
-    sessionStorage.removeItem(storageKey)
-    localStorage.removeItem(storageKey) // clear any legacy leak too
+    sessionStorage.removeItem(storageKey);
+    localStorage.removeItem(storageKey); // clear any legacy leak too
   }
 }
 
@@ -114,10 +128,10 @@ export function clearGlobalKey(provider) {
  */
 export function clearAllGlobalKeys() {
   Object.values(KEYS).forEach((k) => {
-    sessionStorage.removeItem(k)
-    localStorage.removeItem(k)
-  })
-  localStorage.removeItem(DEFAULT_PROVIDER_KEY)
+    sessionStorage.removeItem(k);
+    localStorage.removeItem(k);
+  });
+  localStorage.removeItem(DEFAULT_PROVIDER_KEY);
 }
 
 /**
@@ -126,14 +140,14 @@ export function clearAllGlobalKeys() {
  */
 export function getAvailableProviders() {
   const PROVIDER_LABELS = {
-    openai:    'OpenAI',
-    anthropic: 'Anthropic',
-    gemini:    'Google Gemini',
-    openrouter: 'OpenRouter',
-  }
+    openai: "OpenAI",
+    anthropic: "Anthropic",
+    gemini: "Google Gemini",
+    openrouter: "OpenRouter",
+  };
 
-  const keys = getGlobalKeys()
+  const keys = getGlobalKeys();
   return Object.entries(PROVIDER_LABELS)
-    .filter(([id]) => keys[id] && keys[id].trim() !== '')
-    .map(([id, label]) => ({ id, label }))
+    .filter(([id]) => keys[id] && keys[id].trim() !== "")
+    .map(([id, label]) => ({ id, label }));
 }

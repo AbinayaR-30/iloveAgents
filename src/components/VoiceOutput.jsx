@@ -15,24 +15,19 @@ import { Volume2, VolumeX, Square } from "lucide-react";
 function stripMarkdown(md = "") {
   return md
     .replace(/```[a-zA-Z]*\n?([\s\S]*?)```/g, "$1") // fenced code blocks — keep content
-    .replace(/`([^`]*)`/g, "$1")        // inline code — keep content
-    .replace(/#{1,6}\s+/g, "")      // headings
+    .replace(/`([^`]*)`/g, "$1") // inline code — keep content
+    .replace(/#{1,6}\s+/g, "") // headings
     .replace(/\*{1,2}([^*]+)\*{1,2}/g, "$1") // bold / italic
     .replace(/_{1,2}([^_]+)_{1,2}/g, "$1")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // links → label only
-    .replace(/!\[.*?\]\(.*?\)/g, "")          // images
-    .replace(/^\s*[-*>|]\s*/gm, "")           // list bullets / blockquotes / table pipes
-    .replace(/\n{2,}/g, ". ")                 // paragraph breaks → pause
+    .replace(/!\[.*?\]\(.*?\)/g, "") // images
+    .replace(/^\s*[-*>|]\s*/gm, "") // list bullets / blockquotes / table pipes
+    .replace(/\n{2,}/g, ". ") // paragraph breaks → pause
     .replace(/\n/g, " ")
     .trim();
 }
 
-export default function VoiceOutput({
-  text,
-  lang,
-  rate = 1,
-  pitch = 1,
-}) {
+export default function VoiceOutput({ text, lang, rate = 1, pitch = 1 }) {
   const [status, setStatus] = useState("idle"); // "idle" | "speaking" | "paused" | "error"
   const [errorMsg, setErrorMsg] = useState("");
   const utteranceRef = useRef(null);
@@ -112,13 +107,17 @@ export default function VoiceOutput({
           !isSupported
             ? "Text-to-speech not supported in this browser"
             : isSpeaking
-            ? "Pause reading"
-            : isPaused
-            ? "Resume reading"
-            : "Read response aloud"
+              ? "Pause reading"
+              : isPaused
+                ? "Resume reading"
+                : "Read response aloud"
         }
         aria-label={
-          isSpeaking ? "Pause reading" : isPaused ? "Resume reading" : "Read response aloud"
+          isSpeaking
+            ? "Pause reading"
+            : isPaused
+              ? "Resume reading"
+              : "Read response aloud"
         }
         aria-pressed={isActive}
         className={[
@@ -127,8 +126,8 @@ export default function VoiceOutput({
           !isSupported || !text
             ? "opacity-40 cursor-not-allowed text-gray-400"
             : isActive
-            ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-600 focus-visible:ring-indigo-400"
-            : "bg-gray-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 focus-visible:ring-indigo-400 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-400",
+              ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-600 focus-visible:ring-indigo-400"
+              : "bg-gray-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 focus-visible:ring-indigo-400 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-indigo-900/40 dark:hover:text-indigo-400",
         ].join(" ")}
       >
         {isSpeaking ? (
@@ -153,10 +152,7 @@ export default function VoiceOutput({
 
       {/* Animated sound bars when speaking */}
       {isSpeaking && (
-        <span
-          aria-hidden="true"
-          className="flex items-end gap-px h-4 ml-0.5"
-        >
+        <span aria-hidden="true" className="flex items-end gap-px h-4 ml-0.5">
           {[1, 2, 3].map((i) => (
             <span
               key={i}

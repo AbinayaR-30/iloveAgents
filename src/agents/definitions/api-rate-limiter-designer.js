@@ -1,54 +1,54 @@
 const apiRateLimiterDesigner = {
-  id: 'api-rate-limiter-designer',
+  id: "api-rate-limiter-designer",
 
-  name: 'API Rate Limiter Designer',
+  name: "API Rate Limiter Designer",
 
   description:
-    'Describe your API and get a complete rate limiting strategy with algorithm recommendations, per-endpoint limits, HTTP headers, code snippets, and edge case handling.',
+    "Describe your API and get a complete rate limiting strategy with algorithm recommendations, per-endpoint limits, HTTP headers, code snippets, and edge case handling.",
 
-  category: 'Engineering',
+  category: "Engineering",
 
-  icon: 'Gauge',
+  icon: "Gauge",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'openai',
+  defaultProvider: "openai",
 
-  model: 'gpt-4o-mini',
+  model: "gpt-4o-mini",
 
   inputs: [
     {
-      id: 'api_description',
-      label: 'API Description',
-      type: 'textarea',
+      id: "api_description",
+      label: "API Description",
+      type: "textarea",
       placeholder:
-        'Describe your API endpoints and expected traffic patterns.\ne.g. REST API with /auth/login (public), /api/users (authenticated), /api/search (heavy compute), /webhooks/stripe (third-party). Expected ~50k DAU.',
+        "Describe your API endpoints and expected traffic patterns.\ne.g. REST API with /auth/login (public), /api/users (authenticated), /api/search (heavy compute), /webhooks/stripe (third-party). Expected ~50k DAU.",
       required: true,
     },
     {
-      id: 'tech_stack',
-      label: 'Tech Stack',
-      type: 'text',
-      placeholder: 'e.g. Express + Redis, FastAPI, Nginx, Kong, Cloudflare',
+      id: "tech_stack",
+      label: "Tech Stack",
+      type: "text",
+      placeholder: "e.g. Express + Redis, FastAPI, Nginx, Kong, Cloudflare",
       required: false,
     },
     {
-      id: 'rate_limit_goal',
-      label: 'Rate Limiting Goal',
-      type: 'select',
+      id: "rate_limit_goal",
+      label: "Rate Limiting Goal",
+      type: "select",
       options: [
-        'Prevent abuse',
-        'Protect resources',
-        'Tiered pricing',
-        'All of the above',
+        "Prevent abuse",
+        "Protect resources",
+        "Tiered pricing",
+        "All of the above",
       ],
       required: true,
     },
     {
-      id: 'expected_requests',
-      label: 'Expected Requests Per Day',
-      type: 'text',
-      placeholder: 'e.g. 500,000 requests/day or unknown',
+      id: "expected_requests",
+      label: "Expected Requests Per Day",
+      type: "text",
+      placeholder: "e.g. 500,000 requests/day or unknown",
       required: false,
     },
   ],
@@ -156,7 +156,7 @@ Rules:
 - If no tech stack is specified, default to Express.js + Redis (ioredis + rate-limit-redis)
 - Include both the happy path and the 429 error response in the code`,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };
 
 export default apiRateLimiterDesigner;

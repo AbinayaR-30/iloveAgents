@@ -1,83 +1,81 @@
 export default {
-  id: 'web3-whitepaper-writer',
-  createdAt: '2026-05-27',
-  name: 'Web3 Whitepaper Writer',
+  id: "web3-whitepaper-writer",
+  createdAt: "2026-05-27",
+  name: "Web3 Whitepaper Writer",
   description:
-    'Generate a structured, professional blockchain project whitepaper draft from your project details, tokenomics, and team background.',
-  category: 'Web3',
-  icon: 'FileText',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+    "Generate a structured, professional blockchain project whitepaper draft from your project details, tokenomics, and team background.",
+  category: "Web3",
+  icon: "FileText",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   exampleInputs: {
-    project_name: 'DecentraVault',
+    project_name: "DecentraVault",
     problem:
-      'Traditional cloud storage is centralized, expensive, and vulnerable to data breaches and censorship. Users have no true ownership of their data.',
+      "Traditional cloud storage is centralized, expensive, and vulnerable to data breaches and censorship. Users have no true ownership of their data.",
     solution:
-      'DecentraVault uses a decentralized peer-to-peer storage network where users rent out unused disk space and earn tokens. Data is encrypted, sharded, and distributed across nodes for maximum security and availability.',
+      "DecentraVault uses a decentralized peer-to-peer storage network where users rent out unused disk space and earn tokens. Data is encrypted, sharded, and distributed across nodes for maximum security and availability.",
     tokenomics:
-      'Token: DVT (DecentraVault Token)\nTotal Supply: 100,000,000 DVT\nDistribution:\n- 40% — Storage provider rewards\n- 20% — Team & advisors (2-year vesting)\n- 20% — Public sale\n- 10% — Ecosystem fund\n- 10% — Reserve\nUtility: Pay for storage, stake to become a validator, governance voting.',
+      "Token: DVT (DecentraVault Token)\nTotal Supply: 100,000,000 DVT\nDistribution:\n- 40% — Storage provider rewards\n- 20% — Team & advisors (2-year vesting)\n- 20% — Public sale\n- 10% — Ecosystem fund\n- 10% — Reserve\nUtility: Pay for storage, stake to become a validator, governance voting.",
     tech_stack:
-      'Built on Ethereum L2 (Arbitrum). Smart contracts in Solidity. IPFS-inspired sharding protocol. AES-256 encryption. Node software in Go.',
-    team:
-      'Alice Chen — CEO, ex-AWS engineer, 8 years distributed systems\nBob Patel — CTO, PhD in cryptography, ex-Chainlink\nSara Kim — CMO, previously led growth at Polygon',
+      "Built on Ethereum L2 (Arbitrum). Smart contracts in Solidity. IPFS-inspired sharding protocol. AES-256 encryption. Node software in Go.",
+    team: "Alice Chen — CEO, ex-AWS engineer, 8 years distributed systems\nBob Patel — CTO, PhD in cryptography, ex-Chainlink\nSara Kim — CMO, previously led growth at Polygon",
     target_audience:
-      'Individual users, enterprises, and developers who need decentralized, censorship-resistant, affordable cloud storage.',
+      "Individual users, enterprises, and developers who need decentralized, censorship-resistant, affordable cloud storage.",
   },
   inputs: [
     {
-      id: 'project_name',
-      label: 'Project Name',
-      type: 'text',
-      placeholder: 'e.g. DecentraVault, ChainPay, MetaLend...',
+      id: "project_name",
+      label: "Project Name",
+      type: "text",
+      placeholder: "e.g. DecentraVault, ChainPay, MetaLend...",
       required: true,
     },
     {
-      id: 'problem',
-      label: 'Problem Being Solved',
-      type: 'textarea',
+      id: "problem",
+      label: "Problem Being Solved",
+      type: "textarea",
       placeholder:
-        'Describe the real-world problem your project addresses...\n\ne.g. Traditional cloud storage is centralized and vulnerable to censorship and data breaches.',
+        "Describe the real-world problem your project addresses...\n\ne.g. Traditional cloud storage is centralized and vulnerable to censorship and data breaches.",
       required: true,
     },
     {
-      id: 'solution',
-      label: 'Your Solution',
-      type: 'textarea',
+      id: "solution",
+      label: "Your Solution",
+      type: "textarea",
       placeholder:
-        'Explain how your project solves the problem...\n\ne.g. A decentralized peer-to-peer storage network where users rent unused disk space and earn tokens.',
+        "Explain how your project solves the problem...\n\ne.g. A decentralized peer-to-peer storage network where users rent unused disk space and earn tokens.",
       required: true,
     },
     {
-      id: 'tokenomics',
-      label: 'Tokenomics',
-      type: 'textarea',
+      id: "tokenomics",
+      label: "Tokenomics",
+      type: "textarea",
       placeholder:
-        'Describe your token model...\n\ne.g.\nToken: XYZ\nTotal Supply: 100,000,000\nDistribution: 40% rewards, 20% team, 20% public sale\nUtility: governance, staking, payments',
+        "Describe your token model...\n\ne.g.\nToken: XYZ\nTotal Supply: 100,000,000\nDistribution: 40% rewards, 20% team, 20% public sale\nUtility: governance, staking, payments",
       required: true,
     },
     {
-      id: 'tech_stack',
-      label: 'Technology Stack',
-      type: 'textarea',
+      id: "tech_stack",
+      label: "Technology Stack",
+      type: "textarea",
       placeholder:
-        'e.g. Built on Ethereum L2. Smart contracts in Solidity. ZK-proofs for privacy.',
+        "e.g. Built on Ethereum L2. Smart contracts in Solidity. ZK-proofs for privacy.",
       required: false,
     },
     {
-      id: 'team',
-      label: 'Team Background',
-      type: 'textarea',
+      id: "team",
+      label: "Team Background",
+      type: "textarea",
       placeholder:
-        'List key team members and their experience...\n\ne.g.\nAlice — CEO, ex-Google engineer\nBob — CTO, PhD cryptography',
+        "List key team members and their experience...\n\ne.g.\nAlice — CEO, ex-Google engineer\nBob — CTO, PhD cryptography",
       required: false,
     },
     {
-      id: 'target_audience',
-      label: 'Target Audience',
-      type: 'text',
-      placeholder:
-        'e.g. DeFi users, enterprises, developers, NFT creators...',
+      id: "target_audience",
+      label: "Target Audience",
+      type: "text",
+      placeholder: "e.g. DeFi users, enterprises, developers, NFT creators...",
       required: false,
     },
   ],
@@ -196,5 +194,5 @@ WRITING RULES:
 - Roadmap should be realistic — do not promise too much too fast
 - Legal disclaimer must always be included regardless of inputs
 - Output must be clean markdown, ready to paste into a document`,
-  outputType: 'markdown',
+  outputType: "markdown",
 };

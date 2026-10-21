@@ -14,7 +14,8 @@ export default {
       "Sarah Chen — VP of Engineering at ScaleOps (Series B, 120 employees). Previously led platform teams at Stripe and Datadog. Posts frequently about developer productivity and reducing deployment friction. Recently shared an article about how her team cut CI/CD pipeline times by 60%.",
     product_details:
       "DevFlow — an AI-powered developer workflow platform that automates code review, test generation, and deployment pipelines. Integrates with GitHub, GitLab, and Jira. Customers typically see 40% faster release cycles.",
-    outreach_reason: "She's actively solving the exact problem our product addresses and her company is at the right stage to adopt new dev tools.",
+    outreach_reason:
+      "She's actively solving the exact problem our product addresses and her company is at the right stage to adopt new dev tools.",
     tone: "Conversational",
   },
   inputs: [

@@ -19,8 +19,7 @@ export default {
   model: "gpt-4o",
 
   exampleInputs: {
-    medications:
-      "Warfarin\nIbuprofen\nAspirin",
+    medications: "Warfarin\nIbuprofen\nAspirin",
   },
 
   inputs: [

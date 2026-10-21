@@ -1,32 +1,34 @@
 export default {
-  id: 'pr-description-generator',
-  name: 'Pull Request Description Generator',
-  description: 'Turn a diff summary or bullet points of changes into a full, structured PR description with summary, changes list, testing instructions, and a screenshots section.',
-  category: 'Engineering',
-  icon: 'GitPullRequest',
-  provider: 'any',
-  defaultProvider: 'openai',
-  model: 'gpt-4o',
+  id: "pr-description-generator",
+  name: "Pull Request Description Generator",
+  description:
+    "Turn a diff summary or bullet points of changes into a full, structured PR description with summary, changes list, testing instructions, and a screenshots section.",
+  category: "Engineering",
+  icon: "GitPullRequest",
+  provider: "any",
+  defaultProvider: "openai",
+  model: "gpt-4o",
   inputs: [
     {
-      id: 'changes',
-      label: 'Changes Summary',
-      type: 'textarea',
-      placeholder: 'e.g. added login page, fixed session bug, updated readme...',
+      id: "changes",
+      label: "Changes Summary",
+      type: "textarea",
+      placeholder:
+        "e.g. added login page, fixed session bug, updated readme...",
       required: true,
     },
     {
-      id: 'pr_title',
-      label: 'PR Title (optional)',
-      type: 'text',
-      placeholder: 'e.g. feat: add user authentication flow',
+      id: "pr_title",
+      label: "PR Title (optional)",
+      type: "text",
+      placeholder: "e.g. feat: add user authentication flow",
       required: false,
     },
     {
-      id: 'issue_ref',
-      label: 'Related Issue / Ticket (optional)',
-      type: 'text',
-      placeholder: 'e.g. Closes #42',
+      id: "issue_ref",
+      label: "Related Issue / Ticket (optional)",
+      type: "text",
+      placeholder: "e.g. Closes #42",
       required: false,
     },
   ],
@@ -55,6 +57,5 @@ A placeholder section:
 Any caveats, follow-up tasks, or context reviewers should know.
 
 Be specific and professional. Use the provided PR title and issue reference if given.`,
-  outputType: 'markdown',
-}
-
+  outputType: "markdown",
+};

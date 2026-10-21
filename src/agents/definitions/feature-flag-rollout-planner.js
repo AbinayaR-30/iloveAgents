@@ -1,78 +1,77 @@
 export default {
-  id: 'feature-flag-rollout-planner',
+  id: "feature-flag-rollout-planner",
 
-  createdAt: '2026-09-22',
+  createdAt: "2026-09-22",
 
-  name: 'Feature Flag Rollout Planner',
+  name: "Feature Flag Rollout Planner",
 
   description:
-    'Describe a feature and its risk tolerance to get a staged rollout plan with percentage ramps, guardrail metrics, kill-switch criteria, rollback steps, and flag-cleanup reminders.',
+    "Describe a feature and its risk tolerance to get a staged rollout plan with percentage ramps, guardrail metrics, kill-switch criteria, rollback steps, and flag-cleanup reminders.",
 
-  category: 'Engineering',
+  category: "Engineering",
 
-  icon: 'Flag',
+  icon: "Flag",
 
-  provider: 'any',
+  provider: "any",
 
-  defaultProvider: 'openai',
+  defaultProvider: "openai",
 
-  model: 'gpt-4o-mini',
+  model: "gpt-4o-mini",
 
   exampleInputs: {
     featureDescription:
-      'New checkout flow that changes payment confirmation and order creation for web users.',
-    riskTolerance: 'Medium',
+      "New checkout flow that changes payment confirmation and order creation for web users.",
+    riskTolerance: "Medium",
     currentRollout:
-      'Currently disabled. Initial rollout will target internal users.',
+      "Currently disabled. Initial rollout will target internal users.",
     audience:
-      'Web users, approximately 50,000 daily active users. Payments are revenue-critical.',
+      "Web users, approximately 50,000 daily active users. Payments are revenue-critical.",
     guardrailMetrics:
-      'Payment success rate, checkout error rate, p95 latency, order creation failures, support tickets.',
+      "Payment success rate, checkout error rate, p95 latency, order creation failures, support tickets.",
   },
 
   inputs: [
     {
-      id: 'featureDescription',
-      label: 'Feature Description',
-      type: 'textarea',
+      id: "featureDescription",
+      label: "Feature Description",
+      type: "textarea",
       placeholder:
-        'Describe the feature, affected user journeys, dependencies, and expected behavior...',
+        "Describe the feature, affected user journeys, dependencies, and expected behavior...",
       required: true,
     },
 
     {
-      id: 'riskTolerance',
-      label: 'Risk Tolerance',
-      type: 'select',
-      options: ['Low', 'Medium', 'High'],
-      defaultValue: 'Medium',
+      id: "riskTolerance",
+      label: "Risk Tolerance",
+      type: "select",
+      options: ["Low", "Medium", "High"],
+      defaultValue: "Medium",
       required: true,
     },
 
     {
-      id: 'currentRollout',
-      label: 'Current Rollout',
-      type: 'text',
-      placeholder:
-        'e.g. Disabled, 5%, 10% internal users, or 25% of traffic',
+      id: "currentRollout",
+      label: "Current Rollout",
+      type: "text",
+      placeholder: "e.g. Disabled, 5%, 10% internal users, or 25% of traffic",
       required: false,
     },
 
     {
-      id: 'audience',
-      label: 'Target Audience / Traffic Context',
-      type: 'textarea',
+      id: "audience",
+      label: "Target Audience / Traffic Context",
+      type: "textarea",
       placeholder:
-        'Describe the target users, traffic volume, geography, platform, or other rollout context...',
+        "Describe the target users, traffic volume, geography, platform, or other rollout context...",
       required: false,
     },
 
     {
-      id: 'guardrailMetrics',
-      label: 'Available Guardrail Metrics',
-      type: 'textarea',
+      id: "guardrailMetrics",
+      label: "Available Guardrail Metrics",
+      type: "textarea",
       placeholder:
-        'e.g. error rate, p95 latency, conversion rate, crash rate, payment failures, support tickets...',
+        "e.g. error rate, p95 latency, conversion rate, crash rate, payment failures, support tickets...",
       required: false,
     },
   ],
@@ -233,5 +232,5 @@ Rules:
 - Consider both technical and user/business impact.
 - For high-risk features, recommend additional validation and smaller exposure increments.`,
 
-  outputType: 'markdown',
+  outputType: "markdown",
 };

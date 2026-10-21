@@ -19,7 +19,7 @@ export default {
       id: "sample",
       label: "JSON sample or description",
       type: "code",
-      placeholder: 'Paste a JSON object/array, or describe the fields...',
+      placeholder: "Paste a JSON object/array, or describe the fields...",
       required: true,
     },
     {

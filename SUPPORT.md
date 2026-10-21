@@ -51,4 +51,4 @@ The best projects are built by people who stick around. Hope to see you here for
 
 ---
 
-*I genuinely enjoy helping. Do not hesitate to ask. — [@AditthyaSS](https://github.com/AditthyaSS)*
+_I genuinely enjoy helping. Do not hesitate to ask. — [@AditthyaSS](https://github.com/AditthyaSS)_
